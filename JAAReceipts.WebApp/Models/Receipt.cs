@@ -8,7 +8,9 @@ namespace JAAReceipts.WebApp.Models
     public class Receipt
     {
         [Key]
-        public int ReceiptID { get; set; }
+        public long ReceiptID { get; set; }
+
+        public Guid ReceiptNumber { get; set; }
 
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
@@ -18,9 +20,10 @@ namespace JAAReceipts.WebApp.Models
 
         public virtual PaymentType PaymentType { get; set; }
 
-        //public int PaymentTypeID { get; set; }
+        public int PaymentTypeID { get; set; }
 
         [Display(Name = "Total Amount")]
+        [DisplayFormat(DataFormatString = "{0:C}", ApplyFormatInEditMode = true)]
         public decimal TotalAmount { get; set; }
 
         [Display(Name = "Bank Account Number")]
@@ -46,8 +49,16 @@ namespace JAAReceipts.WebApp.Models
         [Display(Name = "Additional Information")]
         public string? AdditionalInfo { get; set; }
 
-#nullable disable 
+        public long ChequeNumber { get; set; }
+
+        public int LastFourDigits { get; set; }
+
+#nullable disable
 
         public virtual ICollection<ReceiptItem> ReceiptItems { get; set; }
+
+        //public int ReceiptItemsID { get; set; }
+
+
     }
 }

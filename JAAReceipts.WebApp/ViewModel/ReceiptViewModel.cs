@@ -14,8 +14,21 @@ namespace JAAReceipts.WebApp.ViewModel
 
         public List<Service> AllServices { get; set; }
 
+        public List<Service> ServicesOnReceipt { get; set; }
+        public Service ServiceID { get; set; }
+
         public Receipt Receipt { get; set; }
 
+        public IQueryable<Receipt> Receipts { get; set; }
+
         public List<DocumentType> AllDocumentTypes { get; set; }
+
+        public List<PaymentType> AllPaymentTypes { get; set; }
+
+        public String ItemsOnReceipt { get; set; }
+
+        public Guid GUID { get; set; }
+
+        public DateTime Date { get; set; }
     }
 }

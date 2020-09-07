@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
   <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -28,6 +29,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TypeScriptToolsVersion>3.9</TypeScriptToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -55,6 +57,9 @@
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Mozzarella.NetStandard11, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mozzarella.2.0.1\lib\netstandard1.1\Mozzarella.NetStandard11.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -139,6 +144,42 @@
     <Compile Include="Migrations\202008311842138_Initial.designer.cs">
       <DependentUpon>202008311842138_Initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202009011627116_PaymentTypeID.cs" />
+    <Compile Include="Migrations\202009011627116_PaymentTypeID.designer.cs">
+      <DependentUpon>202009011627116_PaymentTypeID.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202009011635197_PaymentTypes.cs" />
+    <Compile Include="Migrations\202009011635197_PaymentTypes.designer.cs">
+      <DependentUpon>202009011635197_PaymentTypes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202009012254033_RemoveReceiptItems.cs" />
+    <Compile Include="Migrations\202009012254033_RemoveReceiptItems.designer.cs">
+      <DependentUpon>202009012254033_RemoveReceiptItems.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202009020427139_ReceiptItem.cs" />
+    <Compile Include="Migrations\202009020427139_ReceiptItem.designer.cs">
+      <DependentUpon>202009020427139_ReceiptItem.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202009020431314_Receipts2.cs" />
+    <Compile Include="Migrations\202009020431314_Receipts2.designer.cs">
+      <DependentUpon>202009020431314_Receipts2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202009021744003_LongId.cs" />
+    <Compile Include="Migrations\202009021744003_LongId.designer.cs">
+      <DependentUpon>202009021744003_LongId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202009051849330_ReceiptNumberAndQuantity.cs" />
+    <Compile Include="Migrations\202009051849330_ReceiptNumberAndQuantity.designer.cs">
+      <DependentUpon>202009051849330_ReceiptNumberAndQuantity.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202009061745548_ChequeNumberAndLastFourDigits.cs" />
+    <Compile Include="Migrations\202009061745548_ChequeNumberAndLastFourDigits.designer.cs">
+      <DependentUpon>202009061745548_ChequeNumberAndLastFourDigits.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202009070128090_BunchOfStuff.cs" />
+    <Compile Include="Migrations\202009070128090_BunchOfStuff.designer.cs">
+      <DependentUpon>202009070128090_BunchOfStuff.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\DocumentType.cs" />
     <Compile Include="Models\ErrorViewModel.cs" />
@@ -175,6 +216,8 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\Receipts.JS" />
+    <Content Include="Scripts\ReceiptTable.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -200,6 +243,9 @@
     <Content Include="Views\Receipts\Edit.cshtml" />
     <Content Include="Views\Receipts\Index.cshtml" />
     <Content Include="Views\Receipts\View.cshtml" />
+    <Content Include="Views\Receipts\Complete.cshtml" />
+    <Content Include="Views\Receipts\CompleteInvoice.cshtml" />
+    <Content Include="Views\Receipts\CompleteAssetDisposal.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -221,12 +267,43 @@
     <EmbeddedResource Include="Migrations\202008311842138_Initial.resx">
       <DependentUpon>202008311842138_Initial.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202009011627116_PaymentTypeID.resx">
+      <DependentUpon>202009011627116_PaymentTypeID.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202009011635197_PaymentTypes.resx">
+      <DependentUpon>202009011635197_PaymentTypes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202009012254033_RemoveReceiptItems.resx">
+      <DependentUpon>202009012254033_RemoveReceiptItems.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202009020427139_ReceiptItem.resx">
+      <DependentUpon>202009020427139_ReceiptItem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202009020431314_Receipts2.resx">
+      <DependentUpon>202009020431314_Receipts2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202009021744003_LongId.resx">
+      <DependentUpon>202009021744003_LongId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202009051849330_ReceiptNumberAndQuantity.resx">
+      <DependentUpon>202009051849330_ReceiptNumberAndQuantity.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202009061745548_ChequeNumberAndLastFourDigits.resx">
+      <DependentUpon>202009061745548_ChequeNumberAndLastFourDigits.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202009070128090_BunchOfStuff.resx">
+      <DependentUpon>202009070128090_BunchOfStuff.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">

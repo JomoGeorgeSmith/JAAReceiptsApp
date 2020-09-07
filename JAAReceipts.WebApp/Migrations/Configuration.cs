@@ -15,6 +15,10 @@
             AutomaticMigrationsEnabled = false;
         }
 
+
+        //This one is being called 
+
+
         //protected override void Seed(JAAReceipts.WebApp.Data.JAAReceiptsContext context)
         //{
         //    //  This method will be called after migrating to the latest version.
@@ -23,7 +27,7 @@
         //    //  to avoid creating duplicate seed data.
         //}
 
-        protected override void Seed(JAAReceipts.WebApp.Data.JAAReceiptsContext context)
+        protected override void Seed(JAAReceiptsContext context)
         {
             var receiptTypeCategories = new List<ReceiptTypeCategory>
             {
@@ -73,28 +77,43 @@
                 new Service {ServiceID = 6 , RecieptTypeID = 1 , Description = "Driving Lesson - Pick up And Drop off" , Cost = 0} ,
                 new Service {ServiceID = 7 , RecieptTypeID = 1 , Description = "Driving Lesson - Driving Academy Registration" , Cost = 0} ,
                 new Service {ServiceID = 8 , RecieptTypeID = 1 , Description = "Driving Lesson - Road Code Booklet" , Cost = 0} ,
-                new Service {ServiceID = 8 , RecieptTypeID = 2 , Description = "Driver Improvement Program - Individual" , Cost = 0} ,
-                new Service {ServiceID = 9 , RecieptTypeID = 2 , Description = "Driver Improvement Program - Company" , Cost = 0} ,
-                new Service {ServiceID = 10 , RecieptTypeID = 3 , Description = "Vehicle Registration - 6 Months" , Cost = 0} ,
-                new Service {ServiceID = 11 , RecieptTypeID = 3 , Description = "Vehicle Registration - 12 Months" , Cost = 0} ,
-                new Service {ServiceID = 10 , RecieptTypeID = 4 , Description = "Fitness Fee Service" , Cost = 0} ,
-                new Service {ServiceID = 11 , RecieptTypeID = 5 , Description = "Fitness Renewal Service" , Cost = 0} ,
-                new Service {ServiceID = 12 , RecieptTypeID = 6 , Description = "Asset Disposal" , Cost = 0} ,
-                new Service {ServiceID = 13 , RecieptTypeID = 7 , Description = "Chauffer Service" , Cost = 0} ,
-                new Service {ServiceID = 14 , RecieptTypeID = 8 , Description = "Valet Service" , Cost = 0} ,
-                new Service {ServiceID = 15 , RecieptTypeID = 9 , Description = "Shuttle Service" , Cost = 0} ,
-                new Service {ServiceID = 16 , RecieptTypeID = 10 , Description = "Fleet Service" , Cost = 0} ,
-                new Service {ServiceID = 17 , RecieptTypeID = 11 , Description = "Airport Transportation Service" , Cost = 0} ,
-                new Service {ServiceID = 18 , RecieptTypeID = 12 , Description = "Black Card Membership" , Cost = 0} ,
-                new Service {ServiceID = 19 , RecieptTypeID = 13 , Description = "Platinum Card Membership" , Cost = 0} ,
-                new Service {ServiceID = 20 , RecieptTypeID = 14 , Description = "Gold Card Mebership" , Cost = 0} ,
-                new Service {ServiceID = 21 , RecieptTypeID = 15 , Description = "Silver Card Membership" , Cost = 0} ,
-                new Service {ServiceID = 22 , RecieptTypeID = 16 , Description = "Membership Renewal" , Cost = 0} ,
-                new Service {ServiceID = 23 , RecieptTypeID = 17 , Description = "Invoice" , Cost = 0} ,
+                new Service {ServiceID = 9 , RecieptTypeID = 1 , Description = "Driver Improvement Program - Individual" , Cost = 0} ,
+                new Service {ServiceID = 10 , RecieptTypeID = 1 , Description = "Driver Improvement Program - Company" , Cost = 0} ,
+                new Service {ServiceID = 11 , RecieptTypeID = 2 , Description = "Vehicle Registration - 6 Months" , Cost = 0} ,
+                new Service {ServiceID = 12 , RecieptTypeID = 2 , Description = "Vehicle Registration - 12 Months" , Cost = 0} ,
+                new Service {ServiceID = 13 , RecieptTypeID = 2 , Description = "Fitness Fee Service" , Cost = 0} ,
+                new Service {ServiceID = 14 , RecieptTypeID = 2 , Description = "Fitness Renewal Service" , Cost = 0} ,
+                new Service {ServiceID = 15 , RecieptTypeID = 3 , Description = "Asset Disposal" , Cost = 0} ,
+                new Service {ServiceID = 16 , RecieptTypeID = 4 , Description = "Chauffer Service" , Cost = 0} ,
+                new Service {ServiceID = 17 , RecieptTypeID = 4 , Description = "Valet Service" , Cost = 0} ,
+                new Service {ServiceID = 18 , RecieptTypeID = 4 , Description = "Shuttle Service" , Cost = 0} ,
+                new Service {ServiceID = 19 , RecieptTypeID = 4 , Description = "Fleet Service" , Cost = 0} ,
+                new Service {ServiceID = 20 , RecieptTypeID = 4 , Description = "Airport Transportation Service" , Cost = 0} ,
+                new Service {ServiceID = 21 , RecieptTypeID = 5 , Description = "Black Card Membership" , Cost = 0} ,
+                new Service {ServiceID = 22 , RecieptTypeID = 5 , Description = "Platinum Card Membership" , Cost = 0} ,
+                new Service {ServiceID = 23 , RecieptTypeID = 5 , Description = "Gold Card Mebership" , Cost = 0} ,
+                new Service {ServiceID = 24 , RecieptTypeID = 5 , Description = "Silver Card Membership" , Cost = 0} ,
+                new Service {ServiceID = 25 , RecieptTypeID = 5 , Description = "Membership Renewal" , Cost = 0} ,
+                new Service {ServiceID = 26 , RecieptTypeID = 6 , Description = "Invoice" , Cost = 0} ,
 
             };
 
             services.ForEach(s => context.Service.Add(s));
+            context.SaveChanges();
+
+            var paymentTypes = new List<PaymentType>
+                {
+                    new PaymentType {PaymentTypeID = 1 , Description = "Cash"},
+                    new PaymentType {PaymentTypeID = 2 , Description = "Credit Card Walk In"},
+                    new PaymentType {PaymentTypeID = 3 , Description = "Credit Card Internet"},
+                    new PaymentType {PaymentTypeID = 4 , Description = "Debit Card"},
+                    new PaymentType {PaymentTypeID = 5 , Description = "Direct Debit JN Bank"},
+                    new PaymentType {PaymentTypeID = 6 , Description = "Direct Debit BNS"},
+                    new PaymentType {PaymentTypeID = 8 , Description = "Direct Deposit JN Cheque"},
+                    new PaymentType {PaymentTypeID = 9 , Description = "Cheque"}
+                };
+
+            paymentTypes.ForEach(p => context.PaymentType.Add(p));
             context.SaveChanges();
         }
     }

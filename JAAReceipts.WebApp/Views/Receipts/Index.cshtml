@@ -1,5 +1,5 @@
-﻿@model IEnumerable<JAAReceipts.WebApp.Models.Receipt>
-
+﻿
+@model IEnumerable<JAAReceipts.WebApp.ViewModel.ReceiptViewModel>
 @{
     ViewBag.Title = "Index";
 }
@@ -12,70 +12,97 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.DocumentType.Description)
+            @* @Html.DisplayNameFor(model => model.ItemsOnReceipt)*@
+            Receipt Description
+        </th>
+
+        <th>
+           @* @Html.DisplayNameFor(model => model.Receipt.PaymentType)*@
+            Payment Type
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Date)
+            @*@Html.DisplayNameFor(model => model.Receipt.ReceivedFrom)*@
+            Received From
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.TotalAmount)
+           @* @Html.DisplayNameFor(model => model.Receipt.AdditionalInfo)*@
+            Additional Information
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.BankAccountNumber)
+            @*@Html.DisplayNameFor(model => model.Receipt.BankAccountNumber)*@
+            Bank Account Number
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.IncomeAccountNumber)
+           @* @Html.DisplayNameFor(model => model.Receipt.IncomeAccountNumber)*@
+            Income Account Number
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.LineOfBusinessAccountNumber)
+            @*@Html.DisplayNameFor(model => model.Receipt.LineOfBusinessAccountNumber)*@
+            Line Of Business Account Number
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ReceiptCode)
+           @* @Html.DisplayNameFor(model => model.Receipt.DocumentType.Description)*@
+            Document Type
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ReceivedFrom)
+            @*@Html.DisplayNameFor(model => model.Receipt.ReceiptCode)*@
+            Receipt Code
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.AdditionalInfo)
+          @* @Html.DisplayNameFor(model => model.Receipt.Date)*@
+            Date
+        </th>
+        <th>
+            @*@Html.DisplayNameFor(model => model.Receipt.TotalAmount)*@
+            Total Amount
         </th>
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.DocumentType.Description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Date)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.TotalAmount)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.BankAccountNumber)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.IncomeAccountNumber)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LineOfBusinessAccountNumber)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ReceiptCode)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ReceivedFrom)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.AdditionalInfo)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ReceiptID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ReceiptID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ReceiptID })
-        </td>
-    </tr>
-}
+
+    @foreach (var item in Model)
+    {
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.ItemsOnReceipt)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Receipt.PaymentType.Description)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Receipt.ReceivedFrom)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Receipt.AdditionalInfo)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Receipt.BankAccountNumber)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Receipt.IncomeAccountNumber)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Receipt.LineOfBusinessAccountNumber)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Receipt.DocumentType.Description)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Receipt.ReceiptCode)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Receipt.Date)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Receipt.TotalAmount)
+    </td>
+    <td>
+        @Html.ActionLink("Edit", "Edit", new { id = item.Receipt.ReceiptID }) |
+        @Html.ActionLink("Details", "Details", new { id = item.Receipt.ReceiptID }) |
+        @Html.ActionLink("Delete", "Delete", new { id = item.Receipt.ReceiptID })
+    </td>
+</tr>
+    }
 
 </table>
+

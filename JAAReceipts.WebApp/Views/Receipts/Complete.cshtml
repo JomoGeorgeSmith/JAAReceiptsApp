@@ -1,0 +1,156 @@
+﻿@model JAAReceipts.WebApp.ViewModel.ReceiptViewModel
+
+@{
+    ViewBag.Title = "Complete";
+}
+
+<h2>Complete</h2>
+
+<div>
+    <h4>Receipt</h4>
+    <hr />
+    <dl class="dl-horizontal">
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Receipt.ReceivedFrom)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Receipt.ReceivedFrom)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Receipt.ReceiptNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Receipt.ReceiptNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Receipt.Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Receipt.Date)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Receipt.TotalAmount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Receipt.TotalAmount)
+        </dd>
+
+        <dt>
+            @*@Html.DisplayNameFor(model => model.Receipt.PaymentType.Description)*@
+            Payment Type
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Receipt.PaymentType.Description)
+
+            @if (Model.Receipt.PaymentTypeID == 2 || Model.Receipt.PaymentTypeID == 3 || Model.Receipt.PaymentTypeID == 4)
+            {
+                @Html.Display(" - Last Four Digits ")
+                @Html.DisplayFor(model => model.Receipt.LastFourDigits)
+            }
+
+
+            @if (Model.Receipt.PaymentTypeID == 7 || Model.Receipt.PaymentTypeID == 8)
+            {
+                @Html.Display(" - Number  ")
+                @Html.DisplayFor(model => model.Receipt.ChequeNumber)
+            }
+
+        </dd>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        @*<dt>
+            @Html.DisplayNameFor(model => model.Receipt.AdditionalInfo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Receipt.AdditionalInfo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Receipt.ChequeNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Receipt.ChequeNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Receipt.LastFourDigits)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Receipt.LastFourDigits)
+        </dd>*@
+
+    </dl>
+
+
+    <table class="table">
+        <tr>
+            <th>
+                @* @Html.DisplayNameFor(model => model.ItemsOnReceipt)*@
+                Service
+            </th>
+
+            <th>
+                @* @Html.DisplayNameFor(model => model.Receipt.PaymentType)*@
+                Quantity
+            </th>
+
+            <th>
+                @* @Html.DisplayNameFor(model => model.Receipt.PaymentType)*@
+                Amount
+            </th>
+            <th></th>
+        </tr>
+
+
+        @foreach (var item in Model.Receipt.ReceiptItems)
+        {
+
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Service.Description)
+        </td>
+
+        <td>
+            @Html.DisplayFor(modelItem => item.Quantity)
+        </td>
+
+        <td>
+            @Html.DisplayFor(modelItem => item.Amount)
+        </td>
+
+    </tr>
+        }
+
+    </table>
+
+
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Receipt.ReceiptID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
