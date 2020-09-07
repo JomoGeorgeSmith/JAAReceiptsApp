@@ -1,0 +1,81 @@
+﻿@model IEnumerable<JAAReceipts.WebApp.Models.Receipt>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.DocumentType.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TotalAmount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BankAccountNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IncomeAccountNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LineOfBusinessAccountNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ReceiptCode)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ReceivedFrom)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AdditionalInfo)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.DocumentType.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Date)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TotalAmount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BankAccountNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IncomeAccountNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LineOfBusinessAccountNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ReceiptCode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ReceivedFrom)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AdditionalInfo)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ReceiptID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ReceiptID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ReceiptID })
+        </td>
+    </tr>
+}
+
+</table>

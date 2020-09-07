@@ -1,0 +1,44 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Data.Entity;
+using System.Data.Entity.ModelConfiguration.Conventions;
+
+namespace JAAReceipts.Web.Models
+{
+    public class JAAReceiptsContext : DbContext
+    {
+
+        public JAAReceiptsContext() : base("JAAReceiptsContext")
+        {
+        }
+
+        public DbSet<Receipt> Receipt { get; set;  }
+
+        public DbSet<ReceiptItem> ReceiptItem { get; set; }
+
+        public DbSet<PaymentType> PaymentType { get; set; }
+
+        public DbSet<DocumentType> DocumentType { get; set; }
+
+        public DbSet<Service> Service { get; set; }
+
+        public DbSet<ReceiptType> ReceiptType { get; set; }
+
+        public DbSet<ReceiptTypeCategory> ReceiptTypeCategory { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+        }
+
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) 
+        //{
+        //    optionsBuilder.UseSqlServer("Data Source = (localdb)\\MSSQLLocalDB; " +
+        //        "Initial Catalog = JAAReceipts; Integrated Security = True; " +
+        //        "Connect Timeout = 30; Encrypt = False; " +
+        //        "TrustServerCertificate = False; " +
+        //        "ApplicationIntent = ReadWrite; MultiSubnetFailover = False");
+        //}
+    }
+}
