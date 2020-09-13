@@ -7,32 +7,43 @@
             var ReceiptTypeID = $('#categoryDropDownList').val();
             var obj = { ReceiptTypeID: ReceiptTypeID };
 
+
+            //Invoice
             if (ReceiptTypeID == 6 ) {
                 $("#QuantityDiv").css("visibility", "hidden")
                 $("#QuantityDiv").css("display", "none")
+
                 $("#AdditionalInfoDiv").css("visibility", "visible")
                 $("#AdditionalInfoDiv").css("display", "")
+
                 $("#lblAdditionalInfo").text("Invoice Number");
                 $("#lblSecondColumn").text("Invoice Number");
+
+                $("#CustomerIDDiv").css("visibility", "visible")
+                $("#CustomerIDDiv").css("display", "")
             }
 
             else if (ReceiptTypeID == 3)
             {
                 $("#QuantityDiv").css("visibility", "hidden")
                 $("#QuantityDiv").css("display", "none")
+
                 $("#AdditionalInfoDiv").css("visibility", "visible")
                 $("#AdditionalInfoDiv").css("display", "")
-                //$("#AdditionalInfoDiv").show();
+
                 $("#lblAdditionalInfo").text("Additional Info");
                 $("#lblSecondColumn").text("Additonal Info");
             }
             else {
                 $("#QuantityDiv").css("visibility", "visible")
                 $("#QuantityDiv").css("display", "")
-                //$("#QuantityDiv").show();
+
                 $("#AdditionalInfoDiv").css("visibility", "hidden")
                 $("#AdditionalInfoDiv").css("display", "none")
-                //$("#AdditionalInfoDiv").hide();
+
+
+                $("#CustomerIDDiv").css("visibility", "hidden")
+                $("#CustomerIDDiv").css("display", "none")
             }
       
             AjaxCall('/Receipts/GetServices', JSON.stringify(obj), 'POST').done(function (response) {
@@ -42,19 +53,25 @@
                     options += '<option value="Select">Select</option>';
                     for (var i = 0; i < response.length; i++) {
                         options += '<option value="' + response[i].ServiceID + '">' + JSON.stringify(response[i].Description) + '</option>';
-                        
+
                     }
-                    //$('#serviceDropDownList').append(options);
+
                     $('#serviceDropDownList').html(options);
 
+                    //Asset Disposal
                     if (ReceiptTypeID == 3) {
                         $('#serviceDropDownList').val(15);
                     }
 
+                    //Invoice 
                     if (ReceiptTypeID == 6) {
                         $('#serviceDropDownList').val(26);
                     }
 
+                    //Wrecker Service
+                    if (ReceiptTypeID == 37) {
+                        $('#serviceDropDownList').val(158);
+                    }
 
                 }
             }).fail(function (error) {
@@ -128,6 +145,7 @@ function CustomAdd() {
     //ClearBoxes();    
 }
 
+
 function CustomSubmit() {
     $.ajax(
         {
@@ -170,12 +188,80 @@ function CustomSubmit() {
     );
 }
 
-$('#serviceDropDownList').on("change", function () {
+
+//var serviceID = $('#serviceDropDownList').val()
+
+function GetAmountForService() {
+
     var serviceID = $('#serviceDropDownList').val();
     $("#txtQuantity").val("");
     $("#txtAmount").val("");
 
-    if (serviceID == 1 || serviceID == 4 ) {
+    var obj = { ServiceID: serviceID };
+
+    AjaxCall('/Receipts/GetAmountForService', JSON.stringify(obj), 'POST').done(function (response) {
+        if (response.length > 0) {
+            for (var i = 0; i < response.length; i++) {
+                var cost = response[i].Cost
+                $("#txtAmount").val(cost);
+                $("#txtQuantity").val("1");
+            }
+        }
+
+
+    }).fail(function (error) {
+        alert(error.StatusText);
+    });
+
+    function AjaxCall(url, data, type) {
+        return $.ajax({
+            url: url,
+            type: type ? type : 'GET',
+            data: data,
+            contentType: 'application/json'
+
+        });
+    }
+
+}
+
+$('#serviceDropDownList').on("change", function (evt) {
+    var serviceID = $('#serviceDropDownList').val();
+    $("#txtQuantity").val("");
+    $("#txtAmount").val("");
+
+    var obj = { ServiceID: serviceID };
+
+    //As long as we arent dealing with Invoices or Asset Disposal 
+    if (serviceID != 26 || serviceID != 15) {
+
+        AjaxCall('/Receipts/GetAmountForService', JSON.stringify(obj), 'POST').done(function (response) {
+            if (response.length > 0) {
+                for (var i = 0; i < response.length; i++) {
+                    var cost = response[i].Cost
+                    $("#txtAmount").val(cost);
+                    $("#txtQuantity").val("1");
+                }
+            }
+
+
+        }).fail(function (error) {
+            alert(error.StatusText);
+        });
+
+        function AjaxCall(url, data, type) {
+            return $.ajax({
+                url: url,
+                type: type ? type : 'GET',
+                data: data,
+                contentType: 'application/json'
+
+            });
+        }
+
+    }
+
+    if (serviceID == 1 || serviceID == 3 ) {
         $("#QuantityDiv").css("visibility", "hidden");
         $("#QuantityDiv").css("display", "none");
         $("#txtQuantity").val("10");
@@ -185,7 +271,6 @@ $('#serviceDropDownList').on("change", function () {
     else if (serviceID == 26 || serviceID == 15) {
         $("#QuantityDiv").css("visibility", "hidden");
         $("#QuantityDiv").css("display", "none");
- 
 
     }
 
@@ -194,6 +279,8 @@ $('#serviceDropDownList').on("change", function () {
         $("#QuantityDiv").css("display", "")
         $("#txtQuantity").val("");
     }
+
+    evt.stopImmediatePropagation();
 });
 
 
@@ -230,3 +317,35 @@ $('#paymentTypeDropDownList').on("change", function (evt) {
 });
 
 
+$('#txtQuantity').on("change", function (evt) {
+
+    var quantity = parseInt($('#txtQuantity').val());
+
+    if (quantity == 1) {
+
+        GetAmountForService();
+    }
+    else {
+
+        var amountForService = parseInt($('#txtAmount').val());
+
+        var value = quantity * amountForService;
+
+        $('#txtAmount').val(value.toString());
+    }
+
+
+    evt.stopImmediatePropagation();
+});
+
+
+//$('#txtQuantity').keyup(function (evt) {
+//    var quantity = parseInt($('#txtQuantity').val());
+//    var amountForService = parseInt($('#txtAmount').val());
+
+//    var value = quantity * amountForService;
+
+//    $('#txtAmount').val(value.toString());
+
+//    evt.stopImmediatePropagation();
+//});

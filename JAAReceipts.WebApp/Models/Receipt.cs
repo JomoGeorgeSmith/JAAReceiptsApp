@@ -10,7 +10,7 @@ namespace JAAReceipts.WebApp.Models
         [Key]
         public long ReceiptID { get; set; }
 
-        public Guid ReceiptNumber { get; set; }
+        //public string ReceiptNumber { get; set; }
 
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
@@ -52,6 +52,10 @@ namespace JAAReceipts.WebApp.Models
         public long ChequeNumber { get; set; }
 
         public int LastFourDigits { get; set; }
+
+        public string? CustomerID { get; set; }
+
+        public string? ReceiptNumber { get; set; }
 
 #nullable disable
 

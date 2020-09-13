@@ -141,12 +141,9 @@ namespace JAAReceipts.WebApp.Views
                 //sb.Append(s.Description + " " + " + " + " ");
                 sr[i] = s.Description;
                 i++;
-
             }
 
             // i = 0;
-
-
             //var servicesFormatted = sb.ToString();
             var servicesFormatted2 = sb.AppendJoin(" + ", sr);
             return (servicesFormatted2.ToString());
@@ -317,9 +314,18 @@ namespace JAAReceipts.WebApp.Views
                 receipt.ChequeNumber = Convert.ToInt32(Request.Form["Receipt.ChequeNumber"]);
             }
 
-            receipt.ReceiptNumber = NewGUID();
+            //Invoice
+            if (Convert.ToInt32(form["ServiceID"]) == 26)
+            {
+                receipt.CustomerID = Convert.ToString(Request.Form["Receipt.CustomerID"]);
+            }
 
-           //var services = form["ServiceID"].Split(',');
+
+            //receipt.ReceiptNumber = GenerateReceiptNumber(receipt.ReceiptID);
+
+            //db.SaveChanges();
+
+            //var services = form["ServiceID"].Split(',');
 
             ReceiptItem[] items = new ReceiptItem[ServicesFromView.Count];
 
@@ -392,9 +398,14 @@ namespace JAAReceipts.WebApp.Views
                 db.Receipt.Add(receipt);            
                 db.ReceiptItem.AddRange(ReceiptItems);
                 db.SaveChanges();
+
+                receipt.ReceiptNumber = GenerateReceiptNumber(receipt.ReceiptID);
+
+                db.SaveChanges();
+
                 //return RedirectToAction("Index");   
-                
-                if(invoice == true)
+
+                if (invoice == true)
                 {
                     return RedirectToAction("CompleteInvoice", new { id = receipt.ReceiptID });
                 }
@@ -438,6 +449,25 @@ namespace JAAReceipts.WebApp.Views
         public string GetReceiptCode()
         {
             return "98878";
+        }
+
+        public static int Count; 
+
+        public string GenerateReceiptNumber(long receiptId)
+        {
+            //var date = DateTime.Now.ToString(("yyyy’-‘MM’-‘dd’"));
+            //var date = DateTime.Now.ToString(("yyyy-MM-dd"));
+            //var date = DateTime.Now.ToString(("MM"));
+
+            var year = DateTime.Now.ToString(("yyyy"));
+            var month = DateTime.Now.ToString(("MM"));
+            var day = DateTime.Now.ToString(("dd"));
+
+            var sb = new StringBuilder();
+            sb.Append(year + month + day + receiptId.ToString());
+            //sb.Append(date + " - " + receiptId.ToString());
+            var ReceiptNumber = sb.ToString();
+            return ReceiptNumber;                         
         }
 
         // GET: Receipts/Edit/5
@@ -587,6 +617,28 @@ namespace JAAReceipts.WebApp.Views
             return Json(services, JsonRequestBehavior.AllowGet);
         }
 
+        //[HttpPost]
+        //public JsonResult GetAmountForService([Microsoft.AspNetCore.Mvc.FromBody] string serviceID)
+        //{
+        //    var id = int.Parse(serviceID);
+        //    //Service service = new Service();
+        //    var service = db.Service.Where(s => s.ServiceID == id);
+        //    //SelectList servicesForcategory = new SelectList(services, "ServiceID", "Description" , "Cost");
+        //    return Json(service, JsonRequestBehavior.AllowGet);
+        //}
+
+        [HttpPost]
+        public JsonResult GetAmountForService(string serviceID)
+        {
+            var id = int.Parse(serviceID);
+            //Service service = new Service();
+            var service = db.Service.Where(s => s.ServiceID == id);
+            //SelectList servicesForcategory = new SelectList(services, "ServiceID", "Description" , "Cost");
+            return Json(service, JsonRequestBehavior.AllowGet);
+        }
+
+        //[Microsoft.AspNetCore.Mvc.FromBody]
+
         [HttpPost]
         public ICollection<ReceiptItem> GetReceiptItems(string ReceiptID)
         {
@@ -646,5 +698,9 @@ namespace JAAReceipts.WebApp.Views
                 AdditionalInfoFromView.Add(i);
             }
         }
+
+
+
+
     }
 }

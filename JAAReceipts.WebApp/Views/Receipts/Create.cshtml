@@ -66,10 +66,19 @@
             <div class="form-group">
                 @Html.Label("Service")
                 @*@Html.ListBoxFor(model => model.ServiceID, Enumerable.Empty<SelectListItem>(), new { @id = "serviceDropDownList", @class = "form-control" })*@
-                @Html.DropDownListFor(model => model.ServiceID, Enumerable.Empty<SelectListItem>(), new { @id = "serviceDropDownList", @class = "form-control" })
+                @Html.DropDownListFor(model => model.ServiceID, Enumerable.Empty<SelectListItem>(), new { @id = "serviceDropDownList", @class = "form-control"  } )
                 @Html.ValidationMessageFor(model => model.AllServices, "", new { @class = "text-danger" })
             </div>
         </div>
+
+        @*<div class="col-md-4">*@
+            <div class="col-md-4" style="visibility: hidden; display:none" id="CustomerIDDiv">
+                <div class="form-group">
+                    @Html.Label("Customer ID")
+                    @Html.EditorFor(model => model.Receipt.CustomerID, new { htmlAttributes = new { @class = "form-control", @id = "txtCustomerID", @name = "txtCustomerID" }  }  )
+                </div>
+            </div>
+        @*</div>*@
 
         @*<div class="col-md-4">
             <div class="form-group">
