@@ -13,6 +13,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Mozzarella;
 using Microsoft.Ajax.Utilities;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 
 //using JAAReceipts.WebApp.Migrations;
 
@@ -270,44 +271,43 @@ namespace JAAReceipts.WebApp.Views
             return View(viewModel);
         }
 
-        public Guid NewGUID()
-        {
-            Guid g = Guid.NewGuid();
-           // currentReceiptNumber = g;
-            return g;
-        }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(FormCollection form)
         {
-            //dont forget to remove parameter 
             Receipt receipt = new Receipt();
-
-            //receipt.Date = Convert.ToDateTime(Request.Form["Receipt.Date"]);
 
             receipt.Date = Convert.ToDateTime(DateTime.Now);
             receipt.AdditionalInfo = Convert.ToString(Request.Form["Receipt.AdditionalInfo"]);
-            //receipt.BankAccountNumber = Convert.ToInt32(Request.Form["Receipt.BankAccountNumber"]);
-            receipt.BankAccountNumber = Convert.ToInt32(GetBankAccountNumber());
-            //receipt.IncomeAccountNumber = Convert.ToInt32(Request.Form["Receipt.IncomeAccountNumber"]);
+
+            var bankCode = GetBankCode(Convert.ToInt32(Request.Form["Receipt.PaymentTypeID"]));
+
+            if(Convert.ToInt32(Request.Form["Receipt.PaymentTypeID"]) == 5 ||
+                Convert.ToInt32(Request.Form["Receipt.PaymentTypeID"]) == 9 ||
+                Convert.ToInt32(Request.Form["Receipt.PaymentTypeID"]) == 10 ||
+                Convert.ToInt32(Request.Form["Receipt.PaymentTypeID"]) == 11 ||
+                Convert.ToInt32(Request.Form["Receipt.PaymentTypeID"]) == 6 ||
+                Convert.ToInt32(Request.Form["Receipt.PaymentTypeID"]) == 12 ||
+                Convert.ToInt32(Request.Form["Receipt.PaymentTypeID"]) == 13)
+            {
+
+                receipt.BankAccountNumber = Convert.ToInt64(bankCode);
+
+            }
+
             receipt.IncomeAccountNumber = Convert.ToInt32(GetIncomeAccountNumber());
-            //receipt.LineOfBusinessAccountNumber = Convert.ToString(Request.Form["Receipt.LineOfBusinessAccountNumber"]);
             receipt.LineOfBusinessAccountNumber = Convert.ToString(GetLineOfBusinessAccountNumber());
-            //receipt.ReceiptCode = Convert.ToInt32(Request.Form["Receipt.ReceiptCode"]);
             receipt.ReceiptCode = Convert.ToInt32(GetReceiptCode());
             receipt.ReceivedFrom = Convert.ToString(Request.Form["Receipt.ReceivedFrom"]);
             receipt.TotalAmount = Convert.ToDecimal(Request.Form["Receipt.TotalAmount"]);
             receipt.PaymentTypeID = Convert.ToInt32(Request.Form["Receipt.PaymentTypeID"]);
             receipt.DocumentTypeID = Convert.ToInt32(Request.Form["Receipt.DocumentTypeID"]);
 
-            if (receipt.PaymentTypeID == 2 || receipt.PaymentTypeID == 3 || receipt.PaymentTypeID == 4)
+            if (receipt.PaymentTypeID == 2 || receipt.PaymentTypeID == 3 || receipt.PaymentTypeID == 4 ||receipt.PaymentTypeID == 13)
             {
                 receipt.LastFourDigits = Convert.ToInt32(Request.Form["Receipt.LastFourDigits"]);
-   
             }
-
            
             if(receipt.PaymentTypeID == 7 || receipt.PaymentTypeID == 8 )
             {
@@ -315,15 +315,12 @@ namespace JAAReceipts.WebApp.Views
             }
 
             //Invoice
-            if (Convert.ToInt32(form["ServiceID"]) == 26)
+
+            var serviceID = Convert.ToInt32(form["ServiceID"]);
+            if (serviceID == 26)
             {
                 receipt.CustomerID = Convert.ToString(Request.Form["Receipt.CustomerID"]);
             }
-
-
-            //receipt.ReceiptNumber = GenerateReceiptNumber(receipt.ReceiptID);
-
-            //db.SaveChanges();
 
             //var services = form["ServiceID"].Split(',');
 
@@ -345,7 +342,8 @@ namespace JAAReceipts.WebApp.Views
 
             for (int i = 0; i < ServicesFromView.ToArray().Length; i++)
             {
-                if (Convert.ToInt32(serv[i]) == 26 )
+                //if (Convert.ToInt32(serv[i]) == 26 || Convert.ToInt32(serv[i]) == 189)
+                if (Convert.ToInt32(serv[i]) == 26 || Convert.ToInt32(serv[i]) == 189 || Convert.ToInt32(serv[i]) == 191)
                 {
                     invoice = true;
 
@@ -403,8 +401,6 @@ namespace JAAReceipts.WebApp.Views
 
                 db.SaveChanges();
 
-                //return RedirectToAction("Index");   
-
                 if (invoice == true)
                 {
                     return RedirectToAction("CompleteInvoice", new { id = receipt.ReceiptID });
@@ -436,6 +432,28 @@ namespace JAAReceipts.WebApp.Views
             return "332211";
         }
 
+
+
+        public string GetBankCode(int paymentTypeId)
+        {
+            var bankCode = db.BankCode.Where(p => p.PaymentTypeID == paymentTypeId);
+
+
+            BankCode bk = new BankCode();
+
+            foreach(var b in bankCode)
+            {
+                bk.BankCodeID = b.BankCodeID;
+                bk.PaymentTypeID = b.PaymentTypeID;
+                bk.BankCodeNumber = b.BankCodeNumber;
+                
+            }
+
+            return bk.BankCodeNumber.ToString();
+
+
+        }
+
         public string GetIncomeAccountNumber()
         {
             return "87788";
@@ -456,16 +474,12 @@ namespace JAAReceipts.WebApp.Views
         public string GenerateReceiptNumber(long receiptId)
         {
             //var date = DateTime.Now.ToString(("yyyy’-‘MM’-‘dd’"));
-            //var date = DateTime.Now.ToString(("yyyy-MM-dd"));
-            //var date = DateTime.Now.ToString(("MM"));
-
             var year = DateTime.Now.ToString(("yyyy"));
             var month = DateTime.Now.ToString(("MM"));
             var day = DateTime.Now.ToString(("dd"));
 
             var sb = new StringBuilder();
             sb.Append(year + month + day + receiptId.ToString());
-            //sb.Append(date + " - " + receiptId.ToString());
             var ReceiptNumber = sb.ToString();
             return ReceiptNumber;                         
         }
@@ -617,27 +631,113 @@ namespace JAAReceipts.WebApp.Views
             return Json(services, JsonRequestBehavior.AllowGet);
         }
 
-        //[HttpPost]
-        //public JsonResult GetAmountForService([Microsoft.AspNetCore.Mvc.FromBody] string serviceID)
-        //{
-        //    var id = int.Parse(serviceID);
-        //    //Service service = new Service();
-        //    var service = db.Service.Where(s => s.ServiceID == id);
-        //    //SelectList servicesForcategory = new SelectList(services, "ServiceID", "Description" , "Cost");
-        //    return Json(service, JsonRequestBehavior.AllowGet);
-        //}
-
         [HttpPost]
         public JsonResult GetAmountForService(string serviceID)
         {
             var id = int.Parse(serviceID);
-            //Service service = new Service();
             var service = db.Service.Where(s => s.ServiceID == id);
-            //SelectList servicesForcategory = new SelectList(services, "ServiceID", "Description" , "Cost");
             return Json(service, JsonRequestBehavior.AllowGet);
         }
 
-        //[Microsoft.AspNetCore.Mvc.FromBody]
+
+        [HttpPost]
+        public JsonResult GetAdditionalAmountForChaeuffeurService(string additionalHours)
+        {
+            var service = db.Service.Where(s => s.ServiceID == 16);
+
+            Service serviceUpdated = new Service();
+
+            foreach(var i in service)
+            {
+
+                serviceUpdated.Cost = i.Cost;
+                serviceUpdated.Description = i.Description;
+                serviceUpdated.ServiceID = i.ServiceID;
+                serviceUpdated.RecieptTypeID = i.RecieptTypeID;
+
+            }
+
+            if (Convert.ToInt32(additionalHours) == 0)
+            {
+                return Json(serviceUpdated, JsonRequestBehavior.AllowGet);
+            }
+
+            else
+            {
+                var add = 1165;
+                var additionalAmount = serviceUpdated.Cost + (Convert.ToInt32(additionalHours) * add);
+                serviceUpdated.Cost = additionalAmount;
+                return Json(serviceUpdated, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+
+
+        [HttpPost]
+        public JsonResult GetAdditionalAmountForWhiteGloveService(string additionalHours)
+        {
+            var service = db.Service.Where(s => s.ServiceID == 18);
+
+            Service serviceUpdated = new Service();
+
+            foreach (var i in service)
+            {
+
+                serviceUpdated.Cost = i.Cost;
+                serviceUpdated.Description = i.Description;
+                serviceUpdated.ServiceID = i.ServiceID;
+                serviceUpdated.RecieptTypeID = i.RecieptTypeID;
+
+            }
+
+            if (Convert.ToInt32(additionalHours) == 0)
+            {
+                return Json(serviceUpdated, JsonRequestBehavior.AllowGet);
+            }
+
+            else
+            {
+                decimal add = 11.65m;
+                var additionalAmount = serviceUpdated.Cost + (Convert.ToInt32(additionalHours) * add);
+                serviceUpdated.Cost = additionalAmount;
+                return Json(serviceUpdated, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+
+        [HttpPost]
+        public JsonResult GetAdditionalAmountForNormalValetService(string additionalKilometeres)
+        {
+
+            var service = db.Service.Where(s => s.ServiceID == 188);
+            Service serviceUpdated = new Service();
+
+            foreach (var i in service)
+            {
+
+                serviceUpdated.Cost = i.Cost;
+                serviceUpdated.Description = i.Description;
+                serviceUpdated.ServiceID = i.ServiceID;
+                serviceUpdated.RecieptTypeID = i.RecieptTypeID;
+
+            }
+
+            if(Convert.ToInt32(additionalKilometeres) == 0 )
+            {
+                return Json(serviceUpdated, JsonRequestBehavior.AllowGet);
+            }
+
+            else
+            {
+                var add = 200;
+                decimal addKM = (Convert.ToInt32(additionalKilometeres) / 25);
+                var km = Math.Round(addKM);
+                var additionalAmount = serviceUpdated.Cost + (Convert.ToInt32(km) * add);
+                serviceUpdated.Cost = additionalAmount;
+                return Json(serviceUpdated, JsonRequestBehavior.AllowGet);
+            }
+        }
+
 
         [HttpPost]
         public ICollection<ReceiptItem> GetReceiptItems(string ReceiptID)
@@ -645,7 +745,6 @@ namespace JAAReceipts.WebApp.Views
             var id = int.Parse(ReceiptID);
             List<ReceiptItem> itemsOnReceipt = new List<ReceiptItem>();
             itemsOnReceipt = db.ReceiptItem.Where(s => s.ReceiptID == id).ToList();
-            //SelectList servicesForcategory = new SelectList(services, "ServiceID", "Description");
 
             return itemsOnReceipt;
         }

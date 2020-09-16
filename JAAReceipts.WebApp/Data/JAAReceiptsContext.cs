@@ -28,6 +28,8 @@ namespace JAAReceipts.WebApp.Data
 
         public DbSet<ReceiptTypeCategory> ReceiptTypeCategory { get; set; }
 
+        public DbSet<BankCode> BankCode { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();

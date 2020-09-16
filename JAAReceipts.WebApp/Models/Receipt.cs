@@ -26,8 +26,6 @@ namespace JAAReceipts.WebApp.Models
         [DisplayFormat(DataFormatString = "{0:C}", ApplyFormatInEditMode = true)]
         public decimal TotalAmount { get; set; }
 
-        [Display(Name = "Bank Account Number")]
-        public long BankAccountNumber { get; set; }
 
         [Display(Name = "Income Account Number")]
         public long IncomeAccountNumber { get; set; }
@@ -49,13 +47,16 @@ namespace JAAReceipts.WebApp.Models
         [Display(Name = "Additional Information")]
         public string? AdditionalInfo { get; set; }
 
-        public long ChequeNumber { get; set; }
+        public long? ChequeNumber { get; set; }
 
-        public int LastFourDigits { get; set; }
+        public int? LastFourDigits { get; set; }
 
         public string? CustomerID { get; set; }
 
         public string? ReceiptNumber { get; set; }
+
+        [Display(Name = "Bank Account Number")]
+        public long BankAccountNumber { get; set; }
 
 #nullable disable
 

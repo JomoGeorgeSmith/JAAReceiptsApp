@@ -1,15 +1,23 @@
 ﻿
     $(function () {
 
-        $('#categoryDropDownList').on("change", function () {
+        $('#categoryDropDownList').on("change", function (evt) {
             $("#txtQuantity").val("");
             $("#txtAmount").val("");
+            $("#txtHours").val("");
+            $("#txtKm").val("");
+
+            $("#HoursDiv").css("visibility", "hidden")
+            $("#HoursDiv").css("display", "none")
+
+            $("#KmDiv").css("visibility", "hidden")
+            $("#KmDiv").css("display", "none")
+
             var ReceiptTypeID = $('#categoryDropDownList').val();
             var obj = { ReceiptTypeID: ReceiptTypeID };
 
-
             //Invoice
-            if (ReceiptTypeID == 6 ) {
+            if (ReceiptTypeID == 6 || ReceiptTypeID == 40 ) {
                 $("#QuantityDiv").css("visibility", "hidden")
                 $("#QuantityDiv").css("display", "none")
 
@@ -21,6 +29,9 @@
 
                 $("#CustomerIDDiv").css("visibility", "visible")
                 $("#CustomerIDDiv").css("display", "")
+
+                $("#CustomerDiv").css("visibility", "visible")
+                $("#CustomerDiv").css("display", "")
             }
 
             else if (ReceiptTypeID == 3)
@@ -44,7 +55,18 @@
 
                 $("#CustomerIDDiv").css("visibility", "hidden")
                 $("#CustomerIDDiv").css("display", "none")
+
+                $("#CustomerDiv").css("visibility", "hidden")
+                $("#CustomerDiv").css("display", "none")
             }
+
+            //if (true) {
+
+            //}
+
+            //else {
+
+            //}
       
             AjaxCall('/Receipts/GetServices', JSON.stringify(obj), 'POST').done(function (response) {
                 if (response.length > 0) {
@@ -78,6 +100,8 @@
                 alert(error.StatusText);
             });
         });
+
+        //evt.stopImmediatePropagation();
     });
 
     function AjaxCall(url, data, type) {
@@ -188,7 +212,6 @@ function CustomSubmit() {
     );
 }
 
-
 //var serviceID = $('#serviceDropDownList').val()
 
 function GetAmountForService() {
@@ -229,6 +252,26 @@ $('#serviceDropDownList').on("change", function (evt) {
     var serviceID = $('#serviceDropDownList').val();
     $("#txtQuantity").val("");
     $("#txtAmount").val("");
+    $("#txtHours").val("");
+    $("#txtKm").val("");
+
+    var ReceiptTypeID = $('#categoryDropDownList').val();
+
+
+
+   
+
+
+
+    //else {
+
+    //    $("#HoursDiv").css("visibility", "hidden")
+    //    $("#HoursDiv").css("display", "none")
+
+    //    $("#KmDiv").css("visibility", "hidden")
+    //    $("#KmDiv").css("display", "none")
+
+    //}
 
     var obj = { ServiceID: serviceID };
 
@@ -268,9 +311,45 @@ $('#serviceDropDownList').on("change", function (evt) {
 
     }
 
-    else if (serviceID == 26 || serviceID == 15) {
+    else if (serviceID == 16 || serviceID == 18) {
+
+        $("#HoursDiv").css("visibility", "visible")
+        $("#HoursDiv").css("display", "")
+
+        $("#KmDiv").css("visibility", "hidden")
+        $("#KmDiv").css("display", "none")
+    }
+
+    else if (serviceID == 188) {
+        $("#KmDiv").css("visibility", "visible")
+        $("#KmDiv").css("display", "")
+
+        $("#HoursDiv").css("visibility", "hidden")
+        $("#HoursDiv").css("display", "none")
+
+    }
+
+    else if (serviceID == 26 || serviceID == 15 ) {
         $("#QuantityDiv").css("visibility", "hidden");
         $("#QuantityDiv").css("display", "none");
+
+    }
+    else if (serviceID == 189 || serviceID == 191) {
+
+        $("#lblAdditionalInfo").text("Invoice Number");
+        //$("#lblSecondColumn").text("Invoice Number");
+
+        $("#AdditionalInfoDiv").css("visibility", "visible")
+        $("#AdditionalInfoDiv").css("display", "")
+
+        $("#KmDiv").css("visibility", "hidden")
+        $("#KmDiv").css("display", "none")
+
+        $("#HoursDiv").css("visibility", "hidden")
+        $("#HoursDiv").css("display", "none")
+
+        $("#QuantityDiv").css("visibility", "hidden")
+        $("#QuantityDiv").css("display", "none")
 
     }
 
@@ -278,6 +357,12 @@ $('#serviceDropDownList').on("change", function (evt) {
         $("#QuantityDiv").css("visibility", "visible")
         $("#QuantityDiv").css("display", "")
         $("#txtQuantity").val("");
+
+        $("#HoursDiv").css("visibility", "hidden")
+        $("#HoursDiv").css("display", "none")
+
+        $("#KmDiv").css("visibility", "hidden")
+        $("#KmDiv").css("display", "none")
     }
 
     evt.stopImmediatePropagation();
@@ -289,7 +374,7 @@ $('#paymentTypeDropDownList').on("change", function (evt) {
     $("#txtLastFourDigits").val("");
     $("#txtChequeNumber").val("");
 
-    if (paymentTypeID == 2 || paymentTypeID == 3 || paymentTypeID == 4 ) {
+    if (paymentTypeID == 2 || paymentTypeID == 3 || paymentTypeID == 4 || paymentTypeID == 13) {
         $("#LastFourDigitsDiv").css("visibility", "visible");
         $("#LastFourDigitsDiv").css("display", "")
         $("#ChequeNumberDiv").css("visibility", "hidden");
@@ -339,13 +424,83 @@ $('#txtQuantity').on("change", function (evt) {
 });
 
 
-//$('#txtQuantity').keyup(function (evt) {
-//    var quantity = parseInt($('#txtQuantity').val());
-//    var amountForService = parseInt($('#txtAmount').val());
 
-//    var value = quantity * amountForService;
 
-//    $('#txtAmount').val(value.toString());
+$('#txtHours').on("change", function (evt) {
 
-//    evt.stopImmediatePropagation();
-//});
+    var additionalHours = $("#txtHours").val();
+    var obj = { additionalHours: additionalHours };
+    var serviceID = $('#serviceDropDownList').val();
+
+    if (serviceID == 16) {
+        AjaxCall('/Receipts/GetAdditionalAmountForChaeuffeurService', JSON.stringify(obj), 'POST').done(function (response) {
+
+            $("#txtAmount").val(response.Cost);
+
+        }).fail(function (error) {
+            alert(error.StatusText);
+        });
+
+        function AjaxCall(url, data, type) {
+            return $.ajax({
+                url: url,
+                type: type ? type : 'GET',
+                data: data,
+                contentType: 'application/json'
+
+            });
+        }
+    }
+
+    if (serviceID == 18) {
+        AjaxCall('/Receipts/GetAdditionalAmountForWhiteGloveService', JSON.stringify(obj), 'POST').done(function (response) {
+
+            $("#txtAmount").val(response.Cost);
+
+        }).fail(function (error) {
+            alert(error.StatusText);
+        });
+
+        function AjaxCall(url, data, type) {
+            return $.ajax({
+                url: url,
+                type: type ? type : 'GET',
+                data: data,
+                contentType: 'application/json'
+
+            });
+        }
+    }
+
+
+    evt.stopImmediatePropagation();
+   
+ 
+});
+
+
+$('#txtKm').on("change", function (evt) {
+
+    var additionalKilometeres = $("#txtKm").val();
+    var obj = { AdditionalKilometeres : additionalKilometeres  };
+
+    AjaxCall('/Receipts/GetAdditionalAmountForNormalValetService', JSON.stringify(obj), 'POST').done(function (response) {
+
+        $("#txtAmount").val(response.Cost);
+
+    }).fail(function (error) {
+        alert(error.StatusText);
+    });
+
+    function AjaxCall(url, data, type) {
+        return $.ajax({
+            url: url,
+            type: type ? type : 'GET',
+            data: data,
+            contentType: 'application/json'
+
+        });
+    }
+
+    evt.stopImmediatePropagation();
+});

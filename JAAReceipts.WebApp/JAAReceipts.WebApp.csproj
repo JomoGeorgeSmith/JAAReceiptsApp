@@ -306,9 +306,33 @@
     <Compile Include="Migrations\202009132257059_NullableReceiptNumber.designer.cs">
       <DependentUpon>202009132257059_NullableReceiptNumber.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202009140028147_BankCode.cs" />
+    <Compile Include="Migrations\202009140028147_BankCode.designer.cs">
+      <DependentUpon>202009140028147_BankCode.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202009140058173_BankCode2.cs" />
+    <Compile Include="Migrations\202009140058173_BankCode2.designer.cs">
+      <DependentUpon>202009140058173_BankCode2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202009142020246_NullableChequeAndLastFourDigits.cs" />
+    <Compile Include="Migrations\202009142020246_NullableChequeAndLastFourDigits.designer.cs">
+      <DependentUpon>202009142020246_NullableChequeAndLastFourDigits.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202009150253389_Currency.cs" />
+    <Compile Include="Migrations\202009150253389_Currency.designer.cs">
+      <DependentUpon>202009150253389_Currency.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202009151712340_Currency2.cs" />
+    <Compile Include="Migrations\202009151712340_Currency2.designer.cs">
+      <DependentUpon>202009151712340_Currency2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\BankCode.cs" />
+    <Compile Include="Models\CooperateClients.cs" />
+    <Compile Include="Models\Currency.cs" />
     <Compile Include="Models\DocumentType.cs" />
     <Compile Include="Models\ErrorViewModel.cs" />
+    <Compile Include="Models\IncomeAccountListing.cs" />
     <Compile Include="Models\PaymentType.cs" />
     <Compile Include="Models\Receipt.cs" />
     <Compile Include="Models\ReceiptItem.cs" />
@@ -321,6 +345,7 @@
     <Compile Include="ViewModel\ReceiptViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\bootstrap-Minty.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -428,6 +453,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202009132257059_NullableReceiptNumber.resx">
       <DependentUpon>202009132257059_NullableReceiptNumber.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202009140028147_BankCode.resx">
+      <DependentUpon>202009140028147_BankCode.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202009140058173_BankCode2.resx">
+      <DependentUpon>202009140058173_BankCode2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202009142020246_NullableChequeAndLastFourDigits.resx">
+      <DependentUpon>202009142020246_NullableChequeAndLastFourDigits.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202009150253389_Currency.resx">
+      <DependentUpon>202009150253389_Currency.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202009151712340_Currency2.resx">
+      <DependentUpon>202009151712340_Currency2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

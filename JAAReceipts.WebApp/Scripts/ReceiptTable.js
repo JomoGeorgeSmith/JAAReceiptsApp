@@ -2,17 +2,11 @@
 
 var sum = 0;
     $("body").on("click", "#btnAdd", function (evt) {
-//$("#btnAdd").click( function () {
-
 
         var txtQuantity = $("#txtQuantity");
         var txtAmount = $("#txtAmount");
         var txtAdditionalInfo = $("#AdditionalInfo");
         var service = $("#serviceDropDownList option:selected").text();
-
-        //var txtGuid = $("#txtGUIDHidden");
-        //var GUID = $("#lblReceiptNumber").text();
-        //txtGuid.text(GUID);
 
         //Get the reference of the Table's TBODY element.
         var tBody = $("#tableReceipts > TBODY")[0];
@@ -52,9 +46,11 @@ var sum = 0;
         sum += total;
              
         $("#txtTotalAmount").val(sum);
-        //$("#lblTotalLabel").html(sum.toString();
         $("#lblTotalLabel").val(sum.toString());
         $("#lblTotalLabel").text(sum.toString());
+        $("#lblTotalLabel").css("visibility", "visible")
+        $("#lblTotalAmountLabel").css("visibility", "visible")
+        
 
         ////Add Name cell.
         //var cell = $(row.insertCell(-1));
@@ -77,7 +73,7 @@ var sum = 0;
         //txtCountry.val("");
         
         evt.stopImmediatePropagation();
-        ClearBoxes();
+        //ClearBoxes();
     });
 
 

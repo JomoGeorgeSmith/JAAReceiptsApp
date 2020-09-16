@@ -96,6 +96,9 @@
                 Invoice Number
             </th>
 
+            <th>
+                Details 
+            </th>
 
             <th>
                 @* @Html.DisplayNameFor(model => model.Receipt.PaymentType)*@
@@ -108,17 +111,21 @@
         @foreach (var item in Model.Receipt.ReceiptItems)
         {
 
-            <tr>
-                <td>
-                    @*@Html.DisplayFor(modelItem => item.Service.Description)*@
-                   @Html.DisplayFor(modelItem => item.AdditionalInformation)
-                </td>
+    <tr>
+        <td>
+            @*@Html.DisplayFor(modelItem => item.Service.Description)*@
+            @Html.DisplayFor(modelItem => item.AdditionalInformation)
+        </td>
 
-                <td>
-                    @Html.DisplayFor(modelItem => item.Amount)
-                </td>
+        <th>
+            @Html.DisplayFor(modelItem => item.Service.Description)
+        </th>
 
-            </tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Amount)
+        </td>
+
+    </tr>
         }
 
     </table>

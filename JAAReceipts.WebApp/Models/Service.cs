@@ -15,6 +15,17 @@ namespace JAAReceipts.WebApp.Models
 
         public string Description { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:C}", ApplyFormatInEditMode = true)]
+        [UIHint("Currency")]
         public decimal Cost { get; set; }
+
+//#nullable enable
+
+//        public string? Currency { get; set; }
+
+//#nullable disable
+
+
+
     }
 }
