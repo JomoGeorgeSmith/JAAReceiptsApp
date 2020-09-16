@@ -12,7 +12,12 @@ namespace JAAReceipts.WebApp.Models
 
         public int ServiceID { get; set; }
 
-        public long IncomeAccount { get; set; }
+        public long IncomeAccountNumber { get; set; }
+
+#nullable enable
+        public virtual CooperateClients? CooperateClient { get; set; }
+        public int CooperateClientID { get; set; }
+#nullable disable
 
     }
 }

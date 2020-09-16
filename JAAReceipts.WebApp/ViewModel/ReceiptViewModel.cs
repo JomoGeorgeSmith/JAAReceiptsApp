@@ -27,8 +27,8 @@ namespace JAAReceipts.WebApp.ViewModel
 
         public String ItemsOnReceipt { get; set; }
 
-        public Guid GUID { get; set; }
-
         public DateTime Date { get; set; }
+
+        public List<CooperateClients> CoopererateClients { get; set; }
     }
 }

@@ -30,8 +30,8 @@
                 $("#CustomerIDDiv").css("visibility", "visible")
                 $("#CustomerIDDiv").css("display", "")
 
-                $("#CustomerDiv").css("visibility", "visible")
-                $("#CustomerDiv").css("display", "")
+                $("#cooperateClientDiv").css("visibility", "visible")
+                $("#cooperateClientDiv").css("display", "")
             }
 
             else if (ReceiptTypeID == 3)
@@ -56,8 +56,8 @@
                 $("#CustomerIDDiv").css("visibility", "hidden")
                 $("#CustomerIDDiv").css("display", "none")
 
-                $("#CustomerDiv").css("visibility", "hidden")
-                $("#CustomerDiv").css("display", "none")
+                $("#cooperateClientDiv").css("visibility", "hidden")
+                $("#cooperateClientDiv").css("display", "none")
             }
 
             //if (true) {
@@ -256,22 +256,6 @@ $('#serviceDropDownList').on("change", function (evt) {
     $("#txtKm").val("");
 
     var ReceiptTypeID = $('#categoryDropDownList').val();
-
-
-
-   
-
-
-
-    //else {
-
-    //    $("#HoursDiv").css("visibility", "hidden")
-    //    $("#HoursDiv").css("display", "none")
-
-    //    $("#KmDiv").css("visibility", "hidden")
-    //    $("#KmDiv").css("display", "none")
-
-    //}
 
     var obj = { ServiceID: serviceID };
 

@@ -55,8 +55,12 @@ namespace JAAReceipts.WebApp.Models
 
         public string? ReceiptNumber { get; set; }
 
+        public virtual  CooperateClients? CooperateClient { get; set; }
+
         [Display(Name = "Bank Account Number")]
         public long BankAccountNumber { get; set; }
+
+        public int? CooperateClientID { get; set; }
 
 #nullable disable
 

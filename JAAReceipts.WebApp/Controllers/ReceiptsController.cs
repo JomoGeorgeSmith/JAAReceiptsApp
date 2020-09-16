@@ -247,12 +247,11 @@ namespace JAAReceipts.WebApp.Views
                 viewModel.AllReceiptTypeCategories = receiptTypeCategories;
             }
 
-            //Initialize services for category
-            //var services = db.Service.ToList();
-            //if (services != null)
-            //{
-            //    viewModel.AllServices = services;
-            //}
+            var cooperateClients = db.CooperateClients.ToList();
+            if (cooperateClients != null)
+            {
+                viewModel.CoopererateClients = cooperateClients;
+            }
 
             var paymentTypes = db.PaymentType.ToList();
             if(paymentTypes != null)
@@ -321,6 +320,13 @@ namespace JAAReceipts.WebApp.Views
             {
                 receipt.CustomerID = Convert.ToString(Request.Form["Receipt.CustomerID"]);
             }
+
+            //var receiptTypeCategoryID = Convert.ToInt32(Request.Form["Receipt.ReceiptTypeCategoryID"]);
+            if (serviceID == 189 || serviceID == 191)
+            {
+                receipt.CooperateClientID= Convert.ToInt32(Request.Form["Receipt.CooperateClientID"]);
+            }
+
 
             //var services = form["ServiceID"].Split(',');
 

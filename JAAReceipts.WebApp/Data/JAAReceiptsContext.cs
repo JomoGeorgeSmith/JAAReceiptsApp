@@ -30,6 +30,11 @@ namespace JAAReceipts.WebApp.Data
 
         public DbSet<BankCode> BankCode { get; set; }
 
+        public DbSet<CooperateClients> CooperateClients { get; set; }
+
+
+
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();

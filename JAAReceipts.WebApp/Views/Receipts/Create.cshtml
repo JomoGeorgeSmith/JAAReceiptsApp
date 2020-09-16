@@ -127,10 +127,18 @@
 
     <div class="row">
 
-        <div class="col-md-4" style="visibility: hidden; display:none" id="CustomerDiv">
+        @*<div class="col-md-4" style="visibility: hidden; display:none" id="CustomerDiv">
             <div class="form-group">
-                @Html.Label("Customer")
+                @Html.Label("Cooperation")
                 @Html.EditorFor(model => model.Receipt.CustomerID, new { htmlAttributes = new { @class = "form-control", @id = "txtCustomer", @name = "txtCustomer" } })
+            </div>
+        </div>*@
+
+        <div class="col-md-4" style="visibility: hidden; display:none" id="cooperateClientDiv">
+            <div class="form-group">
+                @Html.Label("Cooperation")
+                @Html.DropDownListFor(model => model.Receipt.CooperateClientID, new SelectList(Model.CoopererateClients, "CooperateClientID", "Description"), "Please Select A Cooperation", new { @id = "cooperateClientDropDownList", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CoopererateClients, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -248,10 +256,6 @@
                 @Html.EditorFor(model => model.Receipt.ReceiptCode, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Receipt.ReceiptCode, "", new { @class = "text-danger" })
             </div>
-        </div>
-
-        <div class="form-group" style="visibility: hidden; display:none">
-            @Html.EditorFor(model => model.GUID, new { htmlAttributes = new { @class = "form-control", @id = "txtGUIDHidden" } })
         </div>
 
         <p>&nbsp;<p>
