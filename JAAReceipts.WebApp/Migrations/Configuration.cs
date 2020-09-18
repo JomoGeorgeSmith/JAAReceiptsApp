@@ -1,19 +1,23 @@
-﻿namespace JAAReceipts.WebApp.Migrations
-{
-    using System;
-    using System.Data.Entity;
-    using System.Data.Entity.Migrations;
-    using System.Linq;
-    using JAAReceipts.WebApp.Models;
-    using JAAReceipts.WebApp.Data;
-    using System.Collections.Generic;
+﻿using System;
+using System.Data.Entity;
+using System.Data.Entity.Migrations;
+using System.Linq;
+using JAAReceipts.WebApp.Models;
+using JAAReceipts.WebApp.Data;
+using System.Collections.Generic;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<JAAReceipts.WebApp.Data.JAAReceiptsContext>
+
+namespace JAAReceipts.WebApp.Migrations
+{
+
+
+    //internal sealed class Configuration : DbMigrationsConfiguration<JAAReceipts.WebApp.Data.JAAReceiptsContext>
+     internal sealed class Configuration :  System.Data.Entity.DropCreateDatabaseIfModelChanges<JAAReceiptsContext>
     {
-        public Configuration()
-        {
-            AutomaticMigrationsEnabled = false;
-        }
+        //public Configuration()
+        //{
+        //    AutomaticMigrationsEnabled = false;
+        //}
 
 
         //This one is being called
