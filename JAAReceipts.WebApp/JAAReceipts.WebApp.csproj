@@ -338,6 +338,10 @@
     <Compile Include="Migrations\202009181541049_dt.designer.cs">
       <DependentUpon>202009181541049_dt.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202009181601506_FixingSeed.cs" />
+    <Compile Include="Migrations\202009181601506_FixingSeed.designer.cs">
+      <DependentUpon>202009181601506_FixingSeed.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\BankCode.cs" />
     <Compile Include="Models\CooperateClients.cs" />
@@ -622,6 +626,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202009181541049_dt.resx">
       <DependentUpon>202009181541049_dt.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202009181601506_FixingSeed.resx">
+      <DependentUpon>202009181601506_FixingSeed.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

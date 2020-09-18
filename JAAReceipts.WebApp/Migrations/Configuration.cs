@@ -253,7 +253,7 @@ namespace JAAReceipts.WebApp.Migrations
             using (var transaction = context.Database.BeginTransaction())
             {
 
-            incomeAccount.ForEach(i => context.IncomeAccountListing.Add(i));
+            incomeAccount.ForEach(i => context.IncomeAccountListing.AddOrUpdate(i));
             context.Database.ExecuteSqlCommand(@"SET IDENTITY_INSERT dbo.IncomeAccountListing ON;");
             context.SaveChanges();
             context.Database.ExecuteSqlCommand(@"SET IDENTITY_INSERT dbo.IncomeAccountListing ON;");
