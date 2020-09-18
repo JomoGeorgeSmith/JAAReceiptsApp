@@ -32,6 +32,8 @@ namespace JAAReceipts.WebApp.Data
 
         public DbSet<CooperateClients> CooperateClients { get; set; }
 
+        public DbSet<IncomeAccountListing> IncomeAccountListing { get; set; }
+
 
 
 

@@ -30,12 +30,19 @@
                 $("#CustomerIDDiv").css("visibility", "visible")
                 $("#CustomerIDDiv").css("display", "")
 
-                $("#cooperateClientDiv").css("visibility", "visible")
-                $("#cooperateClientDiv").css("display", "")
+                $("#ServiceDiv").css("visibility", "hidden")
+                //$("#ServiceDiv").css("display", "none")
+
+                //$("#cooperateClientDiv").css("visibility", "visible")
+                //$("#cooperateClientDiv").css("display", "")
             }
 
             else if (ReceiptTypeID == 3)
             {
+
+                $("#ServiceDiv").css("visibility", "visible")
+                $("#ServiceDiv").css("display", "") 
+
                 $("#QuantityDiv").css("visibility", "hidden")
                 $("#QuantityDiv").css("display", "none")
 
@@ -46,6 +53,10 @@
                 $("#lblSecondColumn").text("Additonal Info");
             }
             else {
+
+                $("#ServiceDiv").css("visibility", "visible")
+                $("#ServiceDiv").css("display", "") 
+
                 $("#QuantityDiv").css("visibility", "visible")
                 $("#QuantityDiv").css("display", "")
 
@@ -131,6 +142,16 @@ function SupplyServiceAmount() {
 
 }
 
+//var invoiceAmounts;
+
+function SupplyInvoiceAmount() {
+    var amount = $('#txtInvoiceAmount').val();
+    //invoiceAmounts = amount;
+    amounts.push(amount);
+
+
+}
+
 var quantitites = new Array();
 
 function SupplyQuantity() {
@@ -162,6 +183,14 @@ function PushServiceId() {
 
 function CustomAdd() {
 
+    //var serviceID = $('#serviceDropDownList').val();
+
+    //if (serviceID == 6) {
+    //    SupplyInvoiceAmount();
+    //}
+    //else {
+    //    SupplyServiceAmount();
+    //}
     SupplyServiceAmount();
     SupplyServiceId();
     SupplyQuantity();
@@ -488,3 +517,72 @@ $('#txtKm').on("change", function (evt) {
 
     evt.stopImmediatePropagation();
 });
+
+
+$('#txtSendEmail').on("click", function (evt) {
+
+    var emailAdress = $("#txtEmailAdress").val();
+    var obj = { emailAdress: emailAdress  };
+
+    Email();
+    evt.stopImmediatePropagation();
+
+
+});
+
+
+
+//$('#btnEmail').click( function (evt) {
+//    var obj = {  };
+
+
+//    AjaxCall('/Receipts/Receipts', JSON.stringify(obj), 'POST').done(function (response) {
+
+
+
+//    }).fail(function (error) {
+//        alert(error.StatusText);
+//    });
+
+//    function AjaxCall(url, data, type) {
+//        return $.ajax({
+//            url: url,
+//            type: type ? type : 'GET',
+//            data: data,
+//            contentType: 'application/json'
+
+//        });
+//    }
+
+//    evt.stopImmediatePropagation();
+//});
+
+
+
+function Email() {
+
+    var receiptId = $("#txtReceiptID").val();
+    var receiptTypeId = $("#txtReceiptTypeId").val();
+    var email = $("#txtEmailAddress").val();
+    
+    var obj = { receiptId: receiptId, receiptTypeId: receiptTypeId ,email:email};
+
+    //AjaxCall('/Receipts/Email', JSON.stringify(obj), 'POST').done(function (response) {
+
+    //}).fail(function (error) {
+    //    alert(error.StatusText);
+    //});
+
+    $.ajax(
+        {
+            type: "POST",
+            url: "/Receipts/Email",
+            data: JSON.stringify(obj),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json"
+        }
+
+    );
+
+
+}

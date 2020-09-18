@@ -14,6 +14,10 @@ using System.Text;
 using Mozzarella;
 using Microsoft.Ajax.Utilities;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
+using Invoicer.Models;
+using Invoicer.Services;
+using System.Reflection.Emit;
+using System.Diagnostics;
 
 //using JAAReceipts.WebApp.Migrations;
 
@@ -181,6 +185,8 @@ namespace JAAReceipts.WebApp.Views
 
             viewModel.Receipt = receipt;
             viewModel.Receipt.ReceiptItems = GetReceiptItems(receipt.ReceiptID.ToString());
+
+            //var receiptType = db.ReceiptTypeCategory.Where(i => i.ReceiptTypeCategoryID == receipt.ReceiptItems.)
             //var l = Convert.ToInt32(receipt.ReceiptID );  
             //viewModel.ServicesOnReceipt = GetServicesOnReceipt(l);
 
@@ -276,6 +282,18 @@ namespace JAAReceipts.WebApp.Views
         public ActionResult Create(FormCollection form)
         {
             Receipt receipt = new Receipt();
+            var serviceID = Convert.ToInt32(form["ServiceID"]);
+
+            //int? cooperateClientId;
+            //try
+            //{
+            //    cooperateClientId = Convert.ToInt32(Request.Form["Receipt.CooperateClientID"]);
+            //}
+            //catch
+            //{
+            //    cooperateClientId = null;
+            //}
+            //var cooperateClientId = Convert.ToInt32(Request.Form["Receipt.CooperateClientID"]);
 
             receipt.Date = Convert.ToDateTime(DateTime.Now);
             receipt.AdditionalInfo = Convert.ToString(Request.Form["Receipt.AdditionalInfo"]);
@@ -294,8 +312,7 @@ namespace JAAReceipts.WebApp.Views
                 receipt.BankAccountNumber = Convert.ToInt64(bankCode);
 
             }
-
-            receipt.IncomeAccountNumber = Convert.ToInt32(GetIncomeAccountNumber());
+            //receipt.CooperateClientID = cooperateClientId;
             receipt.LineOfBusinessAccountNumber = Convert.ToString(GetLineOfBusinessAccountNumber());
             receipt.ReceiptCode = Convert.ToInt32(GetReceiptCode());
             receipt.ReceivedFrom = Convert.ToString(Request.Form["Receipt.ReceivedFrom"]);
@@ -314,23 +331,28 @@ namespace JAAReceipts.WebApp.Views
             }
 
             //Invoice
-
-            var serviceID = Convert.ToInt32(form["ServiceID"]);
             if (serviceID == 26)
             {
                 receipt.CustomerID = Convert.ToString(Request.Form["Receipt.CustomerID"]);
             }
 
-            //var receiptTypeCategoryID = Convert.ToInt32(Request.Form["Receipt.ReceiptTypeCategoryID"]);
-            if (serviceID == 189 || serviceID == 191)
-            {
-                receipt.CooperateClientID= Convert.ToInt32(Request.Form["Receipt.CooperateClientID"]);
-            }
+
+            //if (serviceID == 189 || serviceID == 191)
+            //{
+            //    receipt.CooperateClientID = cooperateClientId;
+            //    receipt.IncomeAccountNumber = Convert.ToInt32(GetIncomeAccountNumber(serviceID, cooperateClientId));
+            //}
+            //else
+            //{
+            //    receipt.IncomeAccountNumber = Convert.ToInt32(GetIncomeAccountNumber(serviceID , null));
+            //}
+           
+                //receipt.IncomeAccountNumber = Convert.ToInt32(GetIncomeAccountNumber(serviceID, cooperateClientId));
 
 
-            //var services = form["ServiceID"].Split(',');
+                //var services = form["ServiceID"].Split(',');
 
-            ReceiptItem[] items = new ReceiptItem[ServicesFromView.Count];
+                ReceiptItem[] items = new ReceiptItem[ServicesFromView.Count];
 
             List<ReceiptItem> ReceiptItems = new List<ReceiptItem>();
 
@@ -427,17 +449,6 @@ namespace JAAReceipts.WebApp.Views
             return View(receipt);
         }
 
-        private long GenerateId()
-        {
-            byte[] buffer = Guid.NewGuid().ToByteArray();
-            return BitConverter.ToInt64(buffer, 0);
-        }
-
-        public string GetBankAccountNumber()
-        {
-            return "332211";
-        }
-
 
 
         public string GetBankCode(int paymentTypeId)
@@ -460,9 +471,40 @@ namespace JAAReceipts.WebApp.Views
 
         }
 
-        public string GetIncomeAccountNumber()
+        public long GetIncomeAccountNumber(int serviceID , int? cooperateClientID)
         {
-            return "87788";
+
+            IncomeAccountListing incomeAccount = new IncomeAccountListing();
+
+            
+           if(cooperateClientID != null)
+            {
+                var listing = db.IncomeAccountListing.Where(i => i.CooperateClientID == cooperateClientID && i.ServiceID == serviceID);
+
+                foreach(var l in listing)
+                {
+                    incomeAccount.CooperateClientID = l.CooperateClientID;
+                    incomeAccount.IncomeAccountNumber = l.IncomeAccountNumber;
+                    incomeAccount.ServiceID = l.ServiceID;
+                    incomeAccount.IncomeAccountListingID = l.IncomeAccountListingID;
+                }
+
+                return incomeAccount.IncomeAccountNumber;
+            }
+            else
+            {
+                var listing = db.IncomeAccountListing.Where(i => i.ServiceID == serviceID && i.CooperateClientID == null);
+                foreach (var l in listing)
+                {
+                    incomeAccount.CooperateClientID = l.CooperateClientID;
+                    incomeAccount.IncomeAccountNumber = l.IncomeAccountNumber;
+                    incomeAccount.ServiceID = l.ServiceID;
+                    incomeAccount.IncomeAccountListingID = l.IncomeAccountListingID;
+                }
+
+                return incomeAccount.IncomeAccountNumber;
+            }
+
         }
 
         public string GetLineOfBusinessAccountNumber()
@@ -528,19 +570,6 @@ namespace JAAReceipts.WebApp.Views
             return View(viewModel);
         }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Edit([Bind(Include = "ReceiptID,Date,PaymentTypeID,TotalAmount,BankAccountNumber,IncomeAccountNumber,LineOfBusinessAccountNumber,DocumentTypeID,ReceiptCode,ReceivedFrom,AdditionalInfo")] Receipt receipt)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        db.Entry(receipt).State = EntityState.Modified;
-        //        db.SaveChanges();
-        //        return RedirectToAction("Index");
-        //    }
-        //    //ViewBag.DocumentTypeID = new SelectList(db.DocumentType, "DocumentTypeID", "Description", receipt.DocumentTypeID);
-        //    return View(receipt);
-        //}
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -805,7 +834,217 @@ namespace JAAReceipts.WebApp.Views
         }
 
 
+        //[HttpPost]
+        //public void Email()
+        //{
 
+        //    new InvoicerApi(SizeOption.A4, OrientationOption.Landscape, "£")
+        //        .TextColor("#CC0000")
+        //        .BackColor("#FFD6CC")
+        //        .Image(@"..\..\images\vodafone.jpg", 125, 27)
+        //        .Company(Address.Make("FROM", new string[] { "Vodafone Limited", "Vodafone House", "The Connection", "Newbury", "Berkshire RG14 2FN" }, "1471587", "569953277"))
+        //        .Client(Address.Make("BILLING TO", new string[] { "Isabella Marsh", "Overton Circle", "Little Welland", "Worcester", "WR## 2DJ" }))
+        //        .Items(new List<ItemRow> {
+        //            ItemRow.Make("Nexus 6", "Midnight Blue", (decimal)1, 20, (decimal)166.66, (decimal)199.99),
+        //            ItemRow.Make("24 Months (£22.50pm)", "100 minutes, Unlimited texts, 100 MB data 3G plan with 3GB of UK Wi-Fi", (decimal)1, 20, (decimal)360.00, (decimal)432.00),
+        //            ItemRow.Make("Special Offer", "Free case (blue)", (decimal)1, 0, (decimal)0, (decimal)0),
+        //        })
+        //        .Totals(new List<TotalRow> {
+        //            TotalRow.Make("Sub Total", (decimal)526.66),
+        //            TotalRow.Make("VAT @ 20%", (decimal)105.33),
+        //            TotalRow.Make("Total", (decimal)631.99, true),
+        //        })
+        //        .Details(new List<DetailRow> {
+        //            DetailRow.Make("PAYMENT INFORMATION", "Make all cheques payable to Vodafone UK Limited.", "", "If you have any questions concerning this invoice, contact our sales department at sales@vodafone.co.uk.", "", "Thank you for your business.")
+        //        })
+        //        .Footer("http://www.vodafone.co.uk")
+        //        .Save();
+
+
+        //}
+
+        [HttpPost]
+        public void Email(string receiptId , string receiptTypeId , string email)
+        {
+            var id = Convert.ToInt32(receiptId);
+            var r = db.Receipt.Where(r => r.ReceiptID == id);
+
+            Receipt receipt = new Receipt();
+
+            foreach(var i in r)
+            {
+                receipt.ReceiptID = i.ReceiptID;
+                receipt.PaymentTypeID = i.PaymentTypeID;
+                receipt.IncomeAccountNumber = i.IncomeAccountNumber;
+                receipt.LastFourDigits = i.LastFourDigits;
+                receipt.ReceiptCode = i.ReceiptCode;
+                receipt.ReceiptItems = i.ReceiptItems;
+                receipt.ReceivedFrom = i.ReceivedFrom;
+                receipt.TotalAmount = i.TotalAmount;
+                receipt.ReceiptNumber = i.ReceiptNumber;
+                receipt.AdditionalInfo = i.AdditionalInfo;
+                receipt.BankAccountNumber = i.BankAccountNumber;
+                receipt.ChequeNumber = i.ChequeNumber;
+                receipt.CooperateClient = i.CooperateClient;
+                receipt.Date = i.Date;
+                receipt.DocumentType = i.DocumentType;
+                receipt.LineOfBusinessAccountNumber = i.LineOfBusinessAccountNumber;          
+
+            }
+
+            //new InvoicerApi(SizeOption.A4, OrientationOption.Landscape, "$")
+            //    .TextColor("#000000")
+            //    .BackColor("#ffff30")
+            //    .Image(@"..\..\images\vodafone.jpg", 125, 27)
+            //    .Company(Address.Make("Received From", new string[] { receipt.ReceivedFrom }, "1471587", "569953277"))
+            //    .Client(Address.Make("BILLING TO", new string[] { "" }))
+            //    .Items(
+            //    new List<ItemRow> {
+
+            //        ItemRow.Make("Nexus 6", "Midnight Blue", (decimal)1, 20, (decimal)166.66, (decimal)199.99),
+            //        ItemRow.Make("24 Months (£22.50pm)", "100 minutes, Unlimited texts, 100 MB data 3G plan with 3GB of UK Wi-Fi", (decimal)1, 20, (decimal)360.00, (decimal)432.00),
+            //        ItemRow.Make("Special Offer", "Free case (blue)", (decimal)1, 0, (decimal)0, (decimal)0),
+            //    })
+            //    .Totals(new List<TotalRow> {
+            //        TotalRow.Make("Sub Total", (decimal)526.66),
+            //        TotalRow.Make("VAT @ 20%", (decimal)105.33),
+            //        TotalRow.Make("Total", (decimal)631.99, true),
+            //    })
+            //    .Details(new List<DetailRow> {
+            //        DetailRow.Make("PAYMENT INFORMATION", "Make all cheques payable to Vodafone UK Limited.", "", "If you have any questions concerning this invoice, contact our sales department at sales@vodafone.co.uk.", "", "Thank you for your business.")
+            //    })
+            //    .Footer("http://www.vodafone.co.uk")
+            //    .Save();
+
+
+            if (Convert.ToInt32(receiptTypeId) == 40 || Convert.ToInt32(receiptTypeId) == 6)
+            {
+                CreatePdfInvoice(receipt , email);
+            }
+            else if (Convert.ToInt32(receiptTypeId) == 3)
+            {
+                CreatePdfAssetDisposal(receipt , email);
+            }
+            else
+            {
+                CreatePdfNormal(receipt , email);
+            }
+
+        }
+
+        public void CreatePdfNormal(Receipt receipt , string email)
+        {
+
+            var pdf = new InvoicerApi(SizeOption.A4, OrientationOption.Landscape, "$");
+            pdf.BillingDate(receipt.Date);
+            pdf.Reference(receipt.ReceiptNumber);
+            
+            string[] addresslines = {  };
+            Address add = new Address
+            {
+                Title = "Jamaica Automobile Association",
+                CompanyNumber = "",
+                VatNumber = "",
+                AddressLines = addresslines
+
+                
+            };
+
+            pdf.Company(add);
+            pdf.TextColor("#000000");
+            pdf.BackColor("#ffffff");
+            pdf.Image(@"C:\Users\Jomo\source\repos\JAAReceipts\JAAReceipts.WebApp\images\JAA-New-logo-copy-web-black-1.png", 125, 27);
+            pdf.Company(Address.Make("Received From", new string[] { receipt.ReceivedFrom }, "1471587", "569953277"));
+            pdf.Client(Address.Make("", new string[] { "" }));
+
+            List<ItemRow> items = new List<ItemRow>();
+            List<DetailRow> detailRows = new List<DetailRow>();
+            detailRows.Add(DetailRow.Make("Additional Info"));
+            //pdf.Details(detailRows);
+
+            foreach (var i in receipt.ReceiptItems)
+            {
+                items.Add(ItemRow.Make(i.Service.Description, " ", (decimal)i.Quantity, 0, i.Service.Cost, (decimal)i.Amount));
+            }
+            pdf.Items(items);
+
+            
+
+            List<TotalRow> totalRows = new List<TotalRow>();
+            totalRows.Add(TotalRow.Make("Total Amount", receipt.TotalAmount));
+            pdf.Totals(totalRows);
+            pdf.Footer("https://www.calljaa.com/");
+            pdf.SaveAndEmail( email , "JAAPDF");
+        }
+
+        public void CreatePdfInvoice(Receipt receipt, string email)
+        {
+            
+            var pdf = new InvoicerApi("Invoice" ,SizeOption.A4, OrientationOption.Landscape , "$");
+            pdf.BillingDate(receipt.Date);
+            pdf.Reference(receipt.ReceiptNumber);
+            string[] addresslines = {  };
+            Address add = new Address
+            {
+                Title = "Jamaica Automobile Association",
+                CompanyNumber = "",
+                VatNumber = "",
+                AddressLines = addresslines
+       
+            };
+
+            pdf.Company(add);
+            pdf.TextColor("#000000");
+            pdf.BackColor("#ffffff");
+            pdf.Image(@"C:\Users\Jomo\source\repos\JAAReceipts\JAAReceipts.WebApp\images\JAA-New-logo-copy-web-black-1.png", 125, 27);
+            pdf.Company(Address.Make("Received From", new string[] { receipt.ReceivedFrom }, "1471587", "569953277"));
+            pdf.Client(Address.Make("", new string[] { "" }));
+
+            List<ItemRow> items = new List<ItemRow>();
+            List<DetailRow> detailRows = new List<DetailRow>();
+            detailRows.Add(DetailRow.Make("Additional Info"));
+            //pdf.Details(detailRows);
+
+            foreach (var i in receipt.ReceiptItems)
+            {
+                items.Add(ItemRow.Make( "Invoice: " + i.AdditionalInformation, "", 1, 0, i.Service.Cost, (decimal)i.Amount));
+            }
+            pdf.Items(items);
+
+            
+
+            List<TotalRow> totalRows = new List<TotalRow>();
+            totalRows.Add(TotalRow.Make("Total Amount", receipt.TotalAmount));
+            pdf.Totals(totalRows);
+            pdf.Footer("https://www.calljaa.com/");
+            pdf.SaveAndEmail(email, "JAAPDF");
+        }
+
+        public void CreatePdfAssetDisposal(Receipt receipt, string email)
+        {
+            var pdf = new InvoicerApi("AssetDisposal",SizeOption.A4, OrientationOption.Landscape, "$");
+            pdf.TextColor("#000000");
+            pdf.BackColor("#ffffff");
+            pdf.Image(@"\images\vodafone.jpg", 125, 27);
+            pdf.Company(Address.Make("Received From", new string[] { receipt.ReceivedFrom }, "1471587", "569953277"));
+            pdf.Client(Address.Make("", new string[] { "" }));
+
+            List<ItemRow> items = new List<ItemRow>();
+            List<DetailRow> detailRows = new List<DetailRow>();
+            detailRows.Add(DetailRow.Make("Additional Info"));
+
+            foreach (var i in receipt.ReceiptItems)
+            {
+                items.Add(ItemRow.Make(i.AdditionalInformation, i.Service.Description, (decimal)i.Quantity, 0, i.Service.Cost, (decimal)i.Amount));
+            }
+            pdf.Items(items);
+
+            List<TotalRow> totalRows = new List<TotalRow>();
+            totalRows.Add(TotalRow.Make("Total Amount", receipt.TotalAmount));
+            pdf.Totals(totalRows);
+            pdf.Footer("https://www.calljaa.com/");
+            pdf.SaveAndEmail(email, "JAAPDF");
+        }
 
     }
 }

@@ -16,7 +16,7 @@ namespace JAAReceipts.WebApp.Models
 
 #nullable enable
         public virtual CooperateClients? CooperateClient { get; set; }
-        public int CooperateClientID { get; set; }
+        public int? CooperateClientID { get; set; }
 #nullable disable
 
     }

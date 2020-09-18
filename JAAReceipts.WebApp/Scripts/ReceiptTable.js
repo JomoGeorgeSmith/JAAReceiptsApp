@@ -37,19 +37,51 @@ var sum = 0;
         }
 
         //add Amount cell
+        var serviceID = $('#serviceDropDownList').val();
         var cell = $(row.insertCell(-1));
-        cell.html(txtAmount.val());
+        //cell.html(txtAmount.val());
 
-        var amount = parseInt(txtAmount.val());
+        if (serviceID == 26) {
 
-        var total = amount;
-        sum += total;
+            cell.html("");
+            var amount = parseInt(txtAmount.val());
+
+            $("#txtTotalAmount").val(amount);
+            $("#lblTotalLabel").val(amount.toString());
+            $("#lblTotalLabel").text(amount.toString());
+
+            $("#lblTotalLabel").css("visibility", "visible")
+            $("#lblTotalAmountLabel").css("visibility", "visible")
+
+        }
+
+        else {
+
+            cell.html(txtAmount.val());
+            var amount = parseInt(txtAmount.val());
+
+            var total = amount;
+            sum += total;
+
+            $("#txtTotalAmount").val(sum);
+            $("#lblTotalLabel").val(sum.toString());
+            $("#lblTotalLabel").text(sum.toString());
+
+            $("#lblTotalLabel").css("visibility", "visible")
+            $("#lblTotalAmountLabel").css("visibility", "visible")
+
+        }
+
+        //var amount = parseInt(txtAmount.val());
+
+        //var total = amount;
+        //sum += total;
              
-        $("#txtTotalAmount").val(sum);
-        $("#lblTotalLabel").val(sum.toString());
-        $("#lblTotalLabel").text(sum.toString());
-        $("#lblTotalLabel").css("visibility", "visible")
-        $("#lblTotalAmountLabel").css("visibility", "visible")
+        //$("#txtTotalAmount").val(sum);
+        //$("#lblTotalLabel").val(sum.toString());
+        //$("#lblTotalLabel").text(sum.toString());
+        //$("#lblTotalLabel").css("visibility", "visible")
+        //$("#lblTotalAmountLabel").css("visibility", "visible")
         
 
         ////Add Name cell.

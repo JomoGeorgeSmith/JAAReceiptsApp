@@ -26,7 +26,6 @@ namespace JAAReceipts.WebApp.Models
         [DisplayFormat(DataFormatString = "{0:C}", ApplyFormatInEditMode = true)]
         public decimal TotalAmount { get; set; }
 
-
         [Display(Name = "Income Account Number")]
         public long IncomeAccountNumber { get; set; }
 
@@ -57,10 +56,12 @@ namespace JAAReceipts.WebApp.Models
 
         public virtual  CooperateClients? CooperateClient { get; set; }
 
-        [Display(Name = "Bank Account Number")]
-        public long BankAccountNumber { get; set; }
-
         public int? CooperateClientID { get; set; }
+
+        [Display(Name = "Bank Account Number")]
+        public long? BankAccountNumber { get; set; }
+
+
 
 #nullable disable
 

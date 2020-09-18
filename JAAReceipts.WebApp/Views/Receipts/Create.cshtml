@@ -11,7 +11,7 @@
     @Html.AntiForgeryToken()
 
 <div class="form-group">
-    <h4>Receipt</h4>
+    <h4></h4>
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
@@ -55,6 +55,7 @@
     </div>
 
     <div class="row">
+
         <div class="col-md-4">
             <div class="form-group">
                 @Html.Label("Category")
@@ -62,7 +63,15 @@
                 @Html.ValidationMessageFor(model => model.AllReceiptTypeCategories, "", new { @class = "text-danger" })
             </div>
         </div>
-        <div class="col-md-4">
+
+        <div class="col-md-4" style="visibility: hidden; display:none" id="CustomerIDDiv">
+            <div class="form-group">
+                @Html.Label("Customer ID")
+                @Html.EditorFor(model => model.Receipt.CustomerID, new { htmlAttributes = new { @class = "form-control", @id = "txtCustomerID", @name = "txtCustomerID" } })
+            </div>
+        </div>
+
+        <div class="col-md-4" id="ServiceDiv">
             <div class="form-group">
                 @Html.Label("Service")
                 @*@Html.ListBoxFor(model => model.ServiceID, Enumerable.Empty<SelectListItem>(), new { @id = "serviceDropDownList", @class = "form-control" })*@
@@ -71,12 +80,13 @@
             </div>
         </div>
 
+
         @*<div class="col-md-4" style="visibility: hidden; display:none" id="InvoiceIDDiv">
-                <div class="form-group">
-                    @Html.Label("Invoice Number")
-                    @Html.EditorFor(model => model.Receipt.CustomerID, new { htmlAttributes = new { @class = "form-control", @id = "txtCustomerID", @name = "txtCustomerID" } })
-                </div>
-            </div>*@
+            <div class="form-group">
+                @Html.Label("Invoice Number")
+                @Html.EditorFor(model => model.Receipt.CustomerID, new { htmlAttributes = new { @class = "form-control", @id = "txtCustomerID", @name = "txtCustomerID" } })
+            </div>
+        </div>*@
 
 
         @*<div class="col-md-4" style="visibility: hidden; display:none" id="CustomerIDDiv">
@@ -90,7 +100,7 @@
             <div class="form-group">
                 @Html.Label("Additional Hours")
                 @Html.TextBox("txtHours", null, new { id = "txtHours", @class = "form-control" })
-               
+
             </div>
         </div>*@
 
@@ -102,26 +112,26 @@
         </div>*@
 
         @*<div class="col-md-4">
-                <div class="form-group">
-                    @Html.Label("Payment Type")
-                    @Html.DropDownListFor(model => model.Receipt.PaymentTypeID, new SelectList(Model.AllPaymentTypes, "PaymentTypeID", "Description"), "Please Select A Payment Method", new { @id = "paymentTypeDropDownList", @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.AllPaymentTypes, "", new { @class = "text-danger" })
-                </div>
-            </div>*@
+            <div class="form-group">
+                @Html.Label("Payment Type")
+                @Html.DropDownListFor(model => model.Receipt.PaymentTypeID, new SelectList(Model.AllPaymentTypes, "PaymentTypeID", "Description"), "Please Select A Payment Method", new { @id = "paymentTypeDropDownList", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.AllPaymentTypes, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
 
         @*<div class="col-md-4" style="visibility: hidden; display:none" id="ChequeNumberDiv">
-                <div class="form-group">
-                    @Html.Label("Cheque Number")
-                    @Html.EditorFor(model => model.Receipt.ChequeNumber, new { htmlAttributes = new { @class = "form-control", @id = "txtChequeNumber", @name = "txtChequeNumber" } })
-                </div>
+            <div class="form-group">
+                @Html.Label("Cheque Number")
+                @Html.EditorFor(model => model.Receipt.ChequeNumber, new { htmlAttributes = new { @class = "form-control", @id = "txtChequeNumber", @name = "txtChequeNumber" } })
             </div>
+        </div>
 
-            <div class="col-md-4" style="visibility: hidden; display:none" id="LastFourDigitsDiv">
-                <div class="form-group">
-                    @Html.Label("Last Four Digits")
-                    @Html.EditorFor(model => model.Receipt.LastFourDigits, new { htmlAttributes = new { @class = "form-control", @id = "txtLastFourDigits", @name = "txtLastFourDigits" } })
-                </div>
-            </div>*@
+        <div class="col-md-4" style="visibility: hidden; display:none" id="LastFourDigitsDiv">
+            <div class="form-group">
+                @Html.Label("Last Four Digits")
+                @Html.EditorFor(model => model.Receipt.LastFourDigits, new { htmlAttributes = new { @class = "form-control", @id = "txtLastFourDigits", @name = "txtLastFourDigits" } })
+            </div>
+        </div>*@
 
     </div>
 
@@ -142,12 +152,12 @@
             </div>
         </div>
 
-        <div class="col-md-4" style="visibility: hidden; display:none" id="CustomerIDDiv">
+        @*<div class="col-md-4" style="visibility: hidden; display:none" id="CustomerIDDiv">
             <div class="form-group">
                 @Html.Label("Customer ID")
                 @Html.EditorFor(model => model.Receipt.CustomerID, new { htmlAttributes = new { @class = "form-control", @id = "txtCustomerID", @name = "txtCustomerID" } })
             </div>
-        </div>
+        </div>*@
 
         <div class="col-md-4" style="visibility: hidden; display:none" id="HoursDiv">
             <div class="form-group">
@@ -166,33 +176,41 @@
 
     </div>
 
-        <div class="row">
-            <div class="col-md-4" style="visibility: visible; display: normal" id="QuantityDiv">
-                <div class="form-group">
-                    @Html.Label("Quantity")
-                    @Html.TextBox("Quantity", null, new { id = "txtQuantity", @class = "form-control" })
-                    @*@Html.ValidationMessageFor(model => model.Receipt.ReceivedFrom, "", new { @class = "text-danger" })*@
-                </div>
+    <div class="row">
+        <div class="col-md-4" style="visibility: visible; display: normal" id="QuantityDiv">
+            <div class="form-group">
+                @Html.Label("Quantity")
+                @Html.TextBox("Quantity", null, new { id = "txtQuantity", @class = "form-control" })
+                @*@Html.ValidationMessageFor(model => model.Receipt.ReceivedFrom, "", new { @class = "text-danger" })*@
             </div>
-
-            <div class="col-md-4" style="visibility: hidden; display:none" id="AdditionalInfoDiv">
-                <div class="form-group">
-                    @Html.Label("Additional Info", new { id = "lblAdditionalInfo" })
-                    @Html.EditorFor(model => model.Receipt.AdditionalInfo, new { htmlAttributes = new { @class = "form-control", @id = "AdditionalInfo", @name = "AdditionalInfo" } })
-                    @*@Html.ValidationMessageFor(model => model.Receipt.AdditionalInfo, "", new { @class = "text-danger" })*@
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="form-group">
-                    @Html.Label("Amount")
-                    @Html.TextBox("txtAmount", null, new { id = "txtAmount", @class = "form-control" })
-                    @* @Html.TextBoxFor(model => model.Receipt.TotalAmount, new { id = "txtAmount", @class = "form-control" , Value = String.Format("{0:C}", Model.Receipt.TotalAmount) })*@
-                    @*@Html.ValidationMessageFor(model => model.Receipt.ReceivedFrom, "", new { @class = "text-danger" })*@
-                </div>
-            </div>
-
         </div>
+
+
+        <div class="col-md-4" style="visibility: hidden; display:none" id="AdditionalInfoDiv">
+            <div class="form-group">
+                @Html.Label("Additional Info", new { id = "lblAdditionalInfo" })
+                @Html.EditorFor(model => model.Receipt.AdditionalInfo, new { htmlAttributes = new { @class = "form-control", @id = "AdditionalInfo", @name = "AdditionalInfo" } })
+                @*@Html.ValidationMessageFor(model => model.Receipt.AdditionalInfo, "", new { @class = "text-danger" })*@
+            </div>
+        </div>
+
+        <div class="col-md-4" style="visibility: hidden; display:none" id="txtInvoiceAmountDiv">
+            <div class="form-group">
+                @Html.Label("Amount")
+                @Html.TextBox("txtAmount", null, new { id = "txtInvoiceAmount", @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="form-group">
+                @Html.Label("Amount")
+                @Html.TextBox("txtAmount", null, new { id = "txtAmount", @class = "form-control" })
+                @* @Html.TextBoxFor(model => model.Receipt.TotalAmount, new { id = "txtAmount", @class = "form-control" , Value = String.Format("{0:C}", Model.Receipt.TotalAmount) })*@
+                @*@Html.ValidationMessageFor(model => model.Receipt.ReceivedFrom, "", new { @class = "text-danger" })*@
+            </div>
+        </div>
+
+    </div>
 
 
         <div class="form-group">
