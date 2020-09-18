@@ -635,7 +635,7 @@
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Documents\Invoicer-master\Invoicer-master\Invoicer\Invoicer.csproj">
+    <ProjectReference Include="..\Invoicer\Invoicer.csproj">
       <Project>{e5ba227e-4afe-448a-b879-a2784b3fc97c}</Project>
       <Name>Invoicer</Name>
     </ProjectReference>

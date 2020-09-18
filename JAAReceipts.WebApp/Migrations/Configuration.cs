@@ -10,7 +10,6 @@ using System.Collections.Generic;
 namespace JAAReceipts.WebApp.Migrations
 {
 
-
     internal sealed class Configuration : DbMigrationsConfiguration<JAAReceipts.WebApp.Data.JAAReceiptsContext>
 
     {
