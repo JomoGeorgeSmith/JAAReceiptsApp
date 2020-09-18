@@ -150,15 +150,6 @@
             documentType.ForEach(d => context.DocumentType.Add(d));
             context.SaveChanges();
 
-            //var bankCode = new List<BankCode>
-            //{
-            //    new BankCode{}
-            //};
-
-            //var incomeAccount = new List<IncomeAccountListing>
-            //{
-            //    new IncomeAccountListing{IncomeAccountListingID = 3 , ServiceID = 23 , IncomeAccountNumber = 420061 , CooperateClient = null}
-            //};
 
 
 

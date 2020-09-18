@@ -11,6 +11,13 @@ namespace JAAReceipts.WebApp.Data
 {
     public class JAAReceiptsInitializer : System.Data.Entity.DropCreateDatabaseIfModelChanges<JAAReceiptsContext>
     {
+
+        //public Configuration()
+        //{
+        //    AutomaticMigrationsEnabled = false;
+        //}
+
+
         protected override void Seed( JAAReceiptsContext context)
         {
             var receiptTypeCategories = new List<ReceiptTypeCategory>
@@ -153,6 +160,8 @@ namespace JAAReceipts.WebApp.Data
                 new BankCode{BankCodeID = 6 , PaymentTypeID = 12 , BankCodeNumber = 131070},
                 new BankCode{BankCodeID = 7 , PaymentTypeID = 13 , BankCodeNumber = 188090},
             };
+            bankCode.ForEach(b => context.BankCode.Add(b));
+            context.SaveChanges();
 
             var incomeAccount = new List<IncomeAccountListing>
             {
@@ -192,6 +201,8 @@ namespace JAAReceipts.WebApp.Data
 
 
             };
+            incomeAccount.ForEach(i => context.IncomeAccountListing.Add(i));
+            context.SaveChanges();
         }
     }
 }
