@@ -8,5 +8,6 @@ namespace JAAReceipts.WebApp.Utility
 {
     public class PDFHelper
     {
+        /////
     }
 }
