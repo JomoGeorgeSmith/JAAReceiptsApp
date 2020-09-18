@@ -306,14 +306,6 @@
     <Compile Include="Migrations\202009132257059_NullableReceiptNumber.designer.cs">
       <DependentUpon>202009132257059_NullableReceiptNumber.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202009140028147_BankCode.cs" />
-    <Compile Include="Migrations\202009140028147_BankCode.designer.cs">
-      <DependentUpon>202009140028147_BankCode.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202009140058173_BankCode2.cs" />
-    <Compile Include="Migrations\202009140058173_BankCode2.designer.cs">
-      <DependentUpon>202009140058173_BankCode2.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\202009142020246_NullableChequeAndLastFourDigits.cs" />
     <Compile Include="Migrations\202009142020246_NullableChequeAndLastFourDigits.designer.cs">
       <DependentUpon>202009142020246_NullableChequeAndLastFourDigits.cs</DependentUpon>
@@ -330,10 +322,6 @@
     <Compile Include="Migrations\202009161530331_Cooperation.designer.cs">
       <DependentUpon>202009161530331_Cooperation.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202009161657231_IncomeAccountListing.cs" />
-    <Compile Include="Migrations\202009161657231_IncomeAccountListing.designer.cs">
-      <DependentUpon>202009161657231_IncomeAccountListing.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\202009161733266_fix1.cs" />
     <Compile Include="Migrations\202009161733266_fix1.designer.cs">
       <DependentUpon>202009161733266_fix1.cs</DependentUpon>
@@ -341,6 +329,14 @@
     <Compile Include="Migrations\202009161826093_fix2.cs" />
     <Compile Include="Migrations\202009161826093_fix2.designer.cs">
       <DependentUpon>202009161826093_fix2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202009181456540_testing.cs" />
+    <Compile Include="Migrations\202009181456540_testing.designer.cs">
+      <DependentUpon>202009181456540_testing.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202009181541049_dt.cs" />
+    <Compile Include="Migrations\202009181541049_dt.designer.cs">
+      <DependentUpon>202009181541049_dt.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\BankCode.cs" />
@@ -603,12 +599,6 @@
     <EmbeddedResource Include="Migrations\202009132257059_NullableReceiptNumber.resx">
       <DependentUpon>202009132257059_NullableReceiptNumber.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202009140028147_BankCode.resx">
-      <DependentUpon>202009140028147_BankCode.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202009140058173_BankCode2.resx">
-      <DependentUpon>202009140058173_BankCode2.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202009142020246_NullableChequeAndLastFourDigits.resx">
       <DependentUpon>202009142020246_NullableChequeAndLastFourDigits.cs</DependentUpon>
     </EmbeddedResource>
@@ -621,14 +611,17 @@
     <EmbeddedResource Include="Migrations\202009161530331_Cooperation.resx">
       <DependentUpon>202009161530331_Cooperation.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202009161657231_IncomeAccountListing.resx">
-      <DependentUpon>202009161657231_IncomeAccountListing.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202009161733266_fix1.resx">
       <DependentUpon>202009161733266_fix1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202009161826093_fix2.resx">
       <DependentUpon>202009161826093_fix2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202009181456540_testing.resx">
+      <DependentUpon>202009181456540_testing.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202009181541049_dt.resx">
+      <DependentUpon>202009181541049_dt.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

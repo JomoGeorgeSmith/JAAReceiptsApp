@@ -7,13 +7,13 @@ namespace JAAReceipts.WebApp.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.4.4")]
-    public sealed partial class BankCode2 : IMigrationMetadata
+    public sealed partial class testing : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(BankCode2));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(testing));
         
         string IMigrationMetadata.Id
         {
-            get { return "202009140058173_BankCode2"; }
+            get { return "202009181456540_testing"; }
         }
         
         string IMigrationMetadata.Source

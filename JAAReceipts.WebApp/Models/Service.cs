@@ -9,6 +9,7 @@ namespace JAAReceipts.WebApp.Models
    public class Service
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int ServiceID { get; set; }
 
         public int RecieptTypeID { get; set; }

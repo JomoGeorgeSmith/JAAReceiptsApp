@@ -3,7 +3,7 @@
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class BankCode2 : DbMigration
+    public partial class testing : DbMigration
     {
         public override void Up()
         {

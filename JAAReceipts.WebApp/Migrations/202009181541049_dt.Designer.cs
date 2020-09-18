@@ -7,13 +7,13 @@ namespace JAAReceipts.WebApp.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.4.4")]
-    public sealed partial class IncomeAccountListing : IMigrationMetadata
+    public sealed partial class dt : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(IncomeAccountListing));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(dt));
         
         string IMigrationMetadata.Id
         {
-            get { return "202009161657231_IncomeAccountListing"; }
+            get { return "202009181541049_dt"; }
         }
         
         string IMigrationMetadata.Source

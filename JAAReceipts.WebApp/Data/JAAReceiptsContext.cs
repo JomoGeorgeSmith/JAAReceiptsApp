@@ -14,6 +14,14 @@ namespace JAAReceipts.WebApp.Data
         {
         }
 
+        //protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        //{
+        //    base.OnModelCreating(modelBuilder);
+
+        //    var testEntityConf = modelBuilder.Entity<TestEntity>();
+        //    testEntityConf.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+        //}
+
         public DbSet<Receipt> Receipt { get; set;  }
 
         public DbSet<ReceiptItem> ReceiptItem { get; set; }

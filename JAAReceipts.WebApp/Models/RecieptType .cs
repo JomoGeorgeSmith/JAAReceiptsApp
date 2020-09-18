@@ -9,6 +9,7 @@ namespace JAAReceipts.WebApp.Models
     public class ReceiptType
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int ReceiptTypeID { get; set; }
 
         public ReceiptTypeCategory ReceiptTypeCategory { get; set; }

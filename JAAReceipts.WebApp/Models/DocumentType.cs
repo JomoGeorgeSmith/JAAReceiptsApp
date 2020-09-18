@@ -9,6 +9,7 @@ namespace JAAReceipts.WebApp.Models
     public class DocumentType
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int DocumentTypeID { get; set; }
 
         public string Description { get; set; }
