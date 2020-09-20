@@ -436,6 +436,16 @@ $('#txtQuantity').on("change", function (evt) {
     evt.stopImmediatePropagation();
 });
 
+//$('#txtCustomerID').on("change", function (evt) {
+
+//    var customerID = $('#txtCustomerID').val();
+
+//    $('#txtReceivedFrom').val(customerID.toString());
+
+
+//    evt.stopImmediatePropagation();
+//});
+
 
 
 
@@ -583,6 +593,8 @@ function Email() {
         }
 
     );
+
+    alert("Receipt Sent to " + email.toString());
 
 
 }

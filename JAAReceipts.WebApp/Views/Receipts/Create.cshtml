@@ -20,7 +20,7 @@
         <div class="col-md-4">
             <div class="form-group">
                 @Html.LabelFor(model => model.Receipt.ReceivedFrom)
-                @Html.EditorFor(model => model.Receipt.ReceivedFrom, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.Receipt.ReceivedFrom, new { htmlAttributes = new { @class = "form-control" , @id = "txtReceivedFrom"} })
                 @Html.ValidationMessageFor(model => model.Receipt.ReceivedFrom, "", new { @class = "text-danger" })
             </div>
         </div>
