@@ -39,14 +39,20 @@ namespace JAAReceipts.WebApp.Models
         [Display(Name = "Receipt Code")]
         public long  ReceiptCode { get; set; }
 
-        [Display(Name = "Recieved From ")]
+        [Display(Name = "Recieved From")]
         public string ReceivedFrom { get; set; }
 
+        public Currency Currency { get; set; }
+
+
+
 #nullable enable
+        public int? CurrencyID { get; set; }
+
         [Display(Name = "Additional Information")]
         public string? AdditionalInfo { get; set; }
 
-        public long? ChequeNumber { get; set; }
+        public string? ChequeNumber { get; set; }
 
         public int? LastFourDigits { get; set; }
 
@@ -60,8 +66,6 @@ namespace JAAReceipts.WebApp.Models
 
         [Display(Name = "Bank Account Number")]
         public long? BankAccountNumber { get; set; }
-
-
 
 #nullable disable
 

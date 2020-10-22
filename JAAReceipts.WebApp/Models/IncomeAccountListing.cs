@@ -19,8 +19,8 @@ namespace JAAReceipts.WebApp.Models
         public long IncomeAccountNumber { get; set; }
 
 #nullable enable
-        public virtual CooperateClients? CooperateClient { get; set; }
-        public int? CooperateClientID { get; set; }
+        //public virtual CooperateClients? CooperateClient { get; set; }
+        //public int? CooperateClientID { get; set; }
 #nullable disable
 
     }

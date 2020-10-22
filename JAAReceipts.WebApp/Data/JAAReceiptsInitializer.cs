@@ -18,7 +18,7 @@ namespace JAAReceipts.WebApp.Data
         //}
 
 
-        protected override void Seed( JAAReceiptsContext context)
+        protected override void Seed(JAAReceiptsContext context)
         {
             var receiptTypeCategories = new List<ReceiptTypeCategory>
             {
@@ -165,44 +165,66 @@ namespace JAAReceipts.WebApp.Data
 
             var incomeAccount = new List<IncomeAccountListing>
             {
-                new IncomeAccountListing{IncomeAccountListingID = 3 , ServiceID = 23 , IncomeAccountNumber = 420061 , CooperateClientID = null},
-                new IncomeAccountListing{IncomeAccountListingID = 4 , ServiceID = 24 , IncomeAccountNumber = 420062 , CooperateClientID = null},
-                new IncomeAccountListing{IncomeAccountListingID = 5 , ServiceID = 21 , IncomeAccountNumber = 420065 , CooperateClientID = null},
-                new IncomeAccountListing{IncomeAccountListingID = 6 , ServiceID = 15 , IncomeAccountNumber = 420130 , CooperateClientID = null},
-                new IncomeAccountListing{IncomeAccountListingID = 7 , ServiceID = 188 , IncomeAccountNumber = 420310 , CooperateClientID = null},
-                new IncomeAccountListing{IncomeAccountListingID = 9 , ServiceID = 187 , IncomeAccountNumber = 420310 , CooperateClientID = null},
-                new IncomeAccountListing{IncomeAccountListingID = 10 , ServiceID = 17 , IncomeAccountNumber = 420315 , CooperateClientID = null},
-                new IncomeAccountListing{IncomeAccountListingID = 11 , ServiceID = 16 , IncomeAccountNumber = 420316 , CooperateClientID = null},
-                new IncomeAccountListing{IncomeAccountListingID = 12 , ServiceID = 18 , IncomeAccountNumber = 420320 , CooperateClientID = null},
-                new IncomeAccountListing{IncomeAccountListingID = 13 , ServiceID = 158 , IncomeAccountNumber = 424150 , CooperateClientID = null},
-                new IncomeAccountListing{IncomeAccountListingID = 14 , ServiceID = 189 , IncomeAccountNumber = 424201 , CooperateClientID = 1},
-                new IncomeAccountListing{IncomeAccountListingID = 15 , ServiceID = 189 , IncomeAccountNumber = 424202 , CooperateClientID = 2},
-                new IncomeAccountListing{IncomeAccountListingID = 16 , ServiceID = 189 , IncomeAccountNumber = 424203 , CooperateClientID = 3},
-                new IncomeAccountListing{IncomeAccountListingID = 17 , ServiceID = 189 , IncomeAccountNumber = 424204 , CooperateClientID = 4},
-                new IncomeAccountListing{IncomeAccountListingID = 18 , ServiceID = 189 , IncomeAccountNumber = 424205 , CooperateClientID = 5},
-                new IncomeAccountListing{IncomeAccountListingID = 19 , ServiceID = 189 , IncomeAccountNumber = 424206 , CooperateClientID = 6},
-                new IncomeAccountListing{IncomeAccountListingID = 20 , ServiceID = 161 , IncomeAccountNumber = 424300, CooperateClientID = null},
-                new IncomeAccountListing{IncomeAccountListingID = 22 , ServiceID = 9 , IncomeAccountNumber = 424300, CooperateClientID = null},
-                new IncomeAccountListing{IncomeAccountListingID = 23 , ServiceID = 10 , IncomeAccountNumber = 424300, CooperateClientID = null},
-                new IncomeAccountListing{IncomeAccountListingID = 24 , ServiceID = 8 , IncomeAccountNumber = 424300, CooperateClientID = null},
-                new IncomeAccountListing{IncomeAccountListingID = 25 , ServiceID = 1 , IncomeAccountNumber = 424310, CooperateClientID = null},
-                new IncomeAccountListing{IncomeAccountListingID = 26 , ServiceID = 2 , IncomeAccountNumber = 424310, CooperateClientID = null},
-                new IncomeAccountListing{IncomeAccountListingID = 27 , ServiceID = 3 , IncomeAccountNumber = 424310, CooperateClientID = null},
-                new IncomeAccountListing{IncomeAccountListingID = 28 , ServiceID = 4 , IncomeAccountNumber = 424310, CooperateClientID = null},
-                new IncomeAccountListing{IncomeAccountListingID = 29 , ServiceID = 5 , IncomeAccountNumber = 424310, CooperateClientID = null},
-                new IncomeAccountListing{IncomeAccountListingID = 30 , ServiceID = 6 , IncomeAccountNumber = 424310, CooperateClientID = null},
-                new IncomeAccountListing{IncomeAccountListingID = 31 , ServiceID = 7 , IncomeAccountNumber = 424310, CooperateClientID = null},
-                new IncomeAccountListing{IncomeAccountListingID = 31 , ServiceID = 7 , IncomeAccountNumber = 424310, CooperateClientID = null},
-                new IncomeAccountListing{IncomeAccountListingID = 32 , ServiceID = 165 , IncomeAccountNumber = 424311, CooperateClientID = null},
-                new IncomeAccountListing{IncomeAccountListingID = 33 , ServiceID = 164 , IncomeAccountNumber = 424311, CooperateClientID = null},
-                new IncomeAccountListing{IncomeAccountListingID = 34 , ServiceID = 162 , IncomeAccountNumber = 424311, CooperateClientID = null},
-                new IncomeAccountListing{IncomeAccountListingID = 35 , ServiceID = 19 , IncomeAccountNumber = 450010, CooperateClientID = null},
-                new IncomeAccountListing{IncomeAccountListingID = 36 , ServiceID = 167 , IncomeAccountNumber = 450030, CooperateClientID = null},
+                //new IncomeAccountListing{IncomeAccountListingID = 3 , ServiceID = 23 , IncomeAccountNumber = 420061 , CooperateClientID = null},
+                //new IncomeAccountListing{IncomeAccountListingID = 4 , ServiceID = 24 , IncomeAccountNumber = 420062 , CooperateClientID = null},
+                //new IncomeAccountListing{IncomeAccountListingID = 5 , ServiceID = 21 , IncomeAccountNumber = 420065 , CooperateClientID = null},
+                //new IncomeAccountListing{IncomeAccountListingID = 6 , ServiceID = 15 , IncomeAccountNumber = 420130 , CooperateClientID = null},
+                //new IncomeAccountListing{IncomeAccountListingID = 7 , ServiceID = 188 , IncomeAccountNumber = 420310 , CooperateClientID = null},
+                //new IncomeAccountListing{IncomeAccountListingID = 9 , ServiceID = 187 , IncomeAccountNumber = 420310 , CooperateClientID = null},
+                //new IncomeAccountListing{IncomeAccountListingID = 10 , ServiceID = 17 , IncomeAccountNumber = 420315 , CooperateClientID = null},
+                //new IncomeAccountListing{IncomeAccountListingID = 11 , ServiceID = 16 , IncomeAccountNumber = 420316 , CooperateClientID = null},
+                //new IncomeAccountListing{IncomeAccountListingID = 12 , ServiceID = 18 , IncomeAccountNumber = 420320 , CooperateClientID = null},
+                //new IncomeAccountListing{IncomeAccountListingID = 13 , ServiceID = 158 , IncomeAccountNumber = 424150 , CooperateClientID = null},
+                //new IncomeAccountListing{IncomeAccountListingID = 14 , ServiceID = 189 , IncomeAccountNumber = 424201 , CooperateClientID = 1},
+                //new IncomeAccountListing{IncomeAccountListingID = 15 , ServiceID = 189 , IncomeAccountNumber = 424202 , CooperateClientID = 2},
+                //new IncomeAccountListing{IncomeAccountListingID = 16 , ServiceID = 189 , IncomeAccountNumber = 424203 , CooperateClientID = 3},
+                //new IncomeAccountListing{IncomeAccountListingID = 17 , ServiceID = 189 , IncomeAccountNumber = 424204 , CooperateClientID = 4},
+                //new IncomeAccountListing{IncomeAccountListingID = 18 , ServiceID = 189 , IncomeAccountNumber = 424205 , CooperateClientID = 5},
+                //new IncomeAccountListing{IncomeAccountListingID = 19 , ServiceID = 189 , IncomeAccountNumber = 424206 , CooperateClientID = 6},
+                //new IncomeAccountListing{IncomeAccountListingID = 20 , ServiceID = 161 , IncomeAccountNumber = 424300, CooperateClientID = null},
+                //new IncomeAccountListing{IncomeAccountListingID = 22 , ServiceID = 9 , IncomeAccountNumber = 424300, CooperateClientID = null},
+                //new IncomeAccountListing{IncomeAccountListingID = 23 , ServiceID = 10 , IncomeAccountNumber = 424300, CooperateClientID = null},
+                //new IncomeAccountListing{IncomeAccountListingID = 24 , ServiceID = 8 , IncomeAccountNumber = 424300, CooperateClientID = null},
+                //new IncomeAccountListing{IncomeAccountListingID = 25 , ServiceID = 1 , IncomeAccountNumber = 424310, CooperateClientID = null},
+                //new IncomeAccountListing{IncomeAccountListingID = 26 , ServiceID = 2 , IncomeAccountNumber = 424310, CooperateClientID = null},
+                //new IncomeAccountListing{IncomeAccountListingID = 27 , ServiceID = 3 , IncomeAccountNumber = 424310, CooperateClientID = null},
+                //new IncomeAccountListing{IncomeAccountListingID = 28 , ServiceID = 4 , IncomeAccountNumber = 424310, CooperateClientID = null},
+                //new IncomeAccountListing{IncomeAccountListingID = 29 , ServiceID = 5 , IncomeAccountNumber = 424310, CooperateClientID = null},
+                //new IncomeAccountListing{IncomeAccountListingID = 30 , ServiceID = 6 , IncomeAccountNumber = 424310, CooperateClientID = null},
+                //new IncomeAccountListing{IncomeAccountListingID = 31 , ServiceID = 7 , IncomeAccountNumber = 424310, CooperateClientID = null},
+                //new IncomeAccountListing{IncomeAccountListingID = 31 , ServiceID = 7 , IncomeAccountNumber = 424310, CooperateClientID = null},
+                //new IncomeAccountListing{IncomeAccountListingID = 32 , ServiceID = 165 , IncomeAccountNumber = 424311, CooperateClientID = null},
+                //new IncomeAccountListing{IncomeAccountListingID = 33 , ServiceID = 164 , IncomeAccountNumber = 424311, CooperateClientID = null},
+                //new IncomeAccountListing{IncomeAccountListingID = 34 , ServiceID = 162 , IncomeAccountNumber = 424311, CooperateClientID = null},
+                //new IncomeAccountListing{IncomeAccountListingID = 35 , ServiceID = 19 , IncomeAccountNumber = 450010, CooperateClientID = null},
+                //new IncomeAccountListing{IncomeAccountListingID = 36 , ServiceID = 167 , IncomeAccountNumber = 450030, CooperateClientID = null},
+                //new IncomeAccountListing{IncomeAccountListingID = 37 , ServiceID = 13 , IncomeAccountNumber = 228000, CooperateClientID = null},
+                //new IncomeAccountListing{IncomeAccountListingID = 38 , ServiceID = 12 , IncomeAccountNumber = 228000, CooperateClientID = null},
+                //new IncomeAccountListing{IncomeAccountListingID = 39 , ServiceID = 14 , IncomeAccountNumber = 228000, CooperateClientID = null},
+                //new IncomeAccountListing{IncomeAccountListingID = 40 , ServiceID = 175 , IncomeAccountNumber = 228000, CooperateClientID = null},
+                //new IncomeAccountListing{IncomeAccountListingID = 41 , ServiceID = 176 , IncomeAccountNumber = 228000, CooperateClientID = null},
+                //new IncomeAccountListing{IncomeAccountListingID = 42 , ServiceID = 178 , IncomeAccountNumber = 228000},
+                //new IncomeAccountListing{IncomeAccountListingID = 43 , ServiceID = 179 , IncomeAccountNumber = 228000},
+                //new IncomeAccountListing{IncomeAccountListingID = 44 , ServiceID = 180 , IncomeAccountNumber = 228000},
+                //new IncomeAccountListing{IncomeAccountListingID = 45 , ServiceID = 181 , IncomeAccountNumber = 228000},
+                //new IncomeAccountListing{IncomeAccountListingID = 46 , ServiceID = 182 , IncomeAccountNumber = 228000},
+                //new IncomeAccountListing{IncomeAccountListingID = 47 , ServiceID = 183 , IncomeAccountNumber = 228000},
+                //new IncomeAccountListing{IncomeAccountListingID = 48 , ServiceID = 184 , IncomeAccountNumber = 228000},
+                //new IncomeAccountListing{IncomeAccountListingID = 49 , ServiceID = 186 , IncomeAccountNumber = 228000},
+                //new IncomeAccountListing{IncomeAccountListingID = 50 , ServiceID = 11 , IncomeAccountNumber = 228000},
+                //new IncomeAccountListing{IncomeAccountListingID = 51 , ServiceID = 179 , IncomeAccountNumber = 228000},
 
 
             };
             incomeAccount.ForEach(i => context.IncomeAccountListing.Add(i));
             context.SaveChanges();
+
+
+            //var subAccount = new List<SubAccount>
+            //{ 
+            //    new SubAccount{ SubAccountID = 1 , }
+
+            //};
         }
     }
 }

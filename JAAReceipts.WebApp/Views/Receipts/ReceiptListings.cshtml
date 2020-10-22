@@ -1,0 +1,99 @@
+﻿@model IEnumerable<JAAReceipts.WebApp.Models.ReceiptListing>
+
+@{
+    ViewBag.Title = "ReceiptListings";
+}
+
+<h2>ReceiptListings</h2>
+
+<p>
+    @*@Html.ActionLink("Create New", "Create")*@
+</p>
+<table class="table">
+    <tr>
+        @*<th>
+            @Html.DisplayNameFor(model => model.BatchStatus)
+        </th>*@
+        <th>
+            @Html.DisplayNameFor(model => model.DocumentType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PeriodEntered)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PeriodPosted)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ReferneceNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TransactionDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CustomerID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AccountNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SubAccount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TransactionDetails)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DebitAmount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreditAmount)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        @*<td>
+            @Html.DisplayFor(modelItem => item.BatchStatus)
+        </td>*@
+        <td>
+            @Html.DisplayFor(modelItem => item.DocumentType)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TransactionDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TransactionDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ReferneceNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TransactionDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CustomerID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AccountNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SubAccount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TransactionDetails)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DebitAmount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreditAmount)
+        </td>
+        <td>
+            @*@Html.ActionLink("Edit", "Edit", new { id=item.ReceiptListingID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ReceiptListingID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ReceiptListingID })*@
+        </td>
+    </tr>
+}
+
+</table>

@@ -18,6 +18,7 @@ using Invoicer.Models;
 using Invoicer.Services;
 using System.Reflection.Emit;
 using System.Diagnostics;
+using System.Security.Policy;
 
 //using JAAReceipts.WebApp.Migrations;
 
@@ -29,18 +30,17 @@ namespace JAAReceipts.WebApp.Views
         ReceiptViewModel viewModel = new ReceiptViewModel();
         public Guid currentReceiptNumber = new Guid();
         public DateTime currentDateTime = new DateTime();
-
+        //public int currencyIDFromView = new int();
         public ActionResult ReceiptsViewModel()
         {
             ReceiptViewModel viewModel = new ReceiptViewModel();
             var receiptTypeCategories = db.ReceiptTypeCategory.ToList();
+            //receiptTypeCategories.OrderBy(i => i.Description) ;
             if (receiptTypeCategories != null)
             {
                 viewModel.AllReceiptTypeCategories = receiptTypeCategories;
 
             }
-
-
 
             var services = db.Service.ToList();
             if (services != null)
@@ -54,7 +54,7 @@ namespace JAAReceipts.WebApp.Views
         public ActionResult GetReceiptCategories()
         {
             var items = db.ReceiptTypeCategory.ToList();
-            if(items != null)
+            if (items != null)
             {
                 ViewBag.data = items;
             }
@@ -65,17 +65,19 @@ namespace JAAReceipts.WebApp.Views
         // GET: Receipts
         public ActionResult Index()
         {
-            var receipt = db.Receipt.Include(r => r.DocumentType)
-                .Include(r => r.ReceiptItems);
+            var receipt = db.Receipt
+                .Include(r => r.DocumentType)
+                .Include(r => r.ReceiptItems)
+                .Include(r => r.Currency);
 
             ReceiptViewModel[] vm = new ReceiptViewModel[receipt.Count()];
 
             List<ReceiptViewModel> LVM = new List<ReceiptViewModel>();
-            
+
             var count = 0;
             foreach (var i in receipt)
             {
-              
+
                 vm[count] = new ReceiptViewModel
                 {
                     Receipt = i,
@@ -83,15 +85,26 @@ namespace JAAReceipts.WebApp.Views
                 };
 
                 LVM.Add(vm[count]);
-                count++;                       
+                count++;
             }
-
-            // return View(vm.ToList());
 
             return View(LVM.ToList());
 
-            //count = 0; 
         }
+
+        public ActionResult ReceiptListings()
+        {
+            var receiptListing = PullReceiptListings();
+
+           //ReceiptViewModel LVM = new ReceiptViewModel();
+
+            //LVM.ReceiptListings.AddRange(receiptListing);
+
+           // viewModel.ReceiptListings.AddRange(receiptListing);
+
+            return View(receiptListing);
+        }
+
 
         public string GetServicesOnReceipt(int receiptId)
         {
@@ -100,7 +113,7 @@ namespace JAAReceipts.WebApp.Views
                        join t in db.ReceiptItem on c.ReceiptID equals t.ReceiptID
                        join s in db.Service on t.ServiceID equals s.ServiceID
                             where c.ReceiptID == receiptId
-                            select new { s.Description })
+                            select new { s.Description  })
              .ToList();
 
             StringBuilder sb = new StringBuilder();
@@ -265,6 +278,12 @@ namespace JAAReceipts.WebApp.Views
                 viewModel.AllPaymentTypes = paymentTypes;
             }
 
+            var currencies = db.Currency.ToList();
+            if(currencies != null)
+            {
+                viewModel.Currencies = currencies; 
+            }
+
           //  viewModel.GUID = NewGUID();
 
             //var date = new DateTime();
@@ -282,36 +301,24 @@ namespace JAAReceipts.WebApp.Views
         public ActionResult Create(FormCollection form)
         {
             Receipt receipt = new Receipt();
+            GCTRecord gctRecord = new GCTRecord(); 
+            BankCodeRecord bankCodeRecord = new BankCodeRecord();
             var serviceID = Convert.ToInt32(form["ServiceID"]);
+            bool hasGCT = false ; 
 
-            //int? cooperateClientId;
-            //try
-            //{
-            //    cooperateClientId = Convert.ToInt32(Request.Form["Receipt.CooperateClientID"]);
-            //}
-            //catch
-            //{
-            //    cooperateClientId = null;
-            //}
-            //var cooperateClientId = Convert.ToInt32(Request.Form["Receipt.CooperateClientID"]);
+            
+
+            //decimal tax = new decimal();
+
+            List<decimal> tax = new List<decimal>();
+  
 
             receipt.Date = Convert.ToDateTime(DateTime.Now);
             receipt.AdditionalInfo = Convert.ToString(Request.Form["Receipt.AdditionalInfo"]);
-
+            receipt.CurrencyID = currencyIDFromView;
             var bankCode = GetBankCode(Convert.ToInt32(Request.Form["Receipt.PaymentTypeID"]));
+            receipt.BankAccountNumber = Convert.ToInt64(bankCode);
 
-            if(Convert.ToInt32(Request.Form["Receipt.PaymentTypeID"]) == 5 ||
-                Convert.ToInt32(Request.Form["Receipt.PaymentTypeID"]) == 9 ||
-                Convert.ToInt32(Request.Form["Receipt.PaymentTypeID"]) == 10 ||
-                Convert.ToInt32(Request.Form["Receipt.PaymentTypeID"]) == 11 ||
-                Convert.ToInt32(Request.Form["Receipt.PaymentTypeID"]) == 6 ||
-                Convert.ToInt32(Request.Form["Receipt.PaymentTypeID"]) == 12 ||
-                Convert.ToInt32(Request.Form["Receipt.PaymentTypeID"]) == 13)
-            {
-
-                receipt.BankAccountNumber = Convert.ToInt64(bankCode);
-
-            }
             //receipt.CooperateClientID = cooperateClientId;
             receipt.LineOfBusinessAccountNumber = Convert.ToString(GetLineOfBusinessAccountNumber());
             receipt.ReceiptCode = Convert.ToInt32(GetReceiptCode());
@@ -320,14 +327,16 @@ namespace JAAReceipts.WebApp.Views
             receipt.PaymentTypeID = Convert.ToInt32(Request.Form["Receipt.PaymentTypeID"]);
             receipt.DocumentTypeID = Convert.ToInt32(Request.Form["Receipt.DocumentTypeID"]);
 
-            if (receipt.PaymentTypeID == 2 || receipt.PaymentTypeID == 3 || receipt.PaymentTypeID == 4 ||receipt.PaymentTypeID == 13)
+            if (receipt.PaymentTypeID == 2 || receipt.PaymentTypeID == 3 ||
+                receipt.PaymentTypeID == 4 || receipt.PaymentTypeID == 5 ||
+                 receipt.PaymentTypeID == 6 || receipt.PaymentTypeID == 13)
             {
                 receipt.LastFourDigits = Convert.ToInt32(Request.Form["Receipt.LastFourDigits"]);
             }
            
             if(receipt.PaymentTypeID == 7 || receipt.PaymentTypeID == 8 )
             {
-                receipt.ChequeNumber = Convert.ToInt32(Request.Form["Receipt.ChequeNumber"]);
+                receipt.ChequeNumber = Request.Form["Receipt.ChequeNumber"];
             }
 
             //Invoice
@@ -336,23 +345,19 @@ namespace JAAReceipts.WebApp.Views
                 receipt.CustomerID = Convert.ToString(Request.Form["Receipt.CustomerID"]);
             }
 
+            receipt.IncomeAccountNumber = Convert.ToInt32(GetIncomeAccountNumber(serviceID));
 
-            //if (serviceID == 189 || serviceID == 191)
-            //{
-            //    receipt.CooperateClientID = cooperateClientId;
-            //    receipt.IncomeAccountNumber = Convert.ToInt32(GetIncomeAccountNumber(serviceID, cooperateClientId));
-            //}
-            //else
-            //{
-            //    receipt.IncomeAccountNumber = Convert.ToInt32(GetIncomeAccountNumber(serviceID , null));
-            //}
-           
-                //receipt.IncomeAccountNumber = Convert.ToInt32(GetIncomeAccountNumber(serviceID, cooperateClientId));
+            db.Receipt.Add(receipt);
 
+            db.SaveChanges();
 
-                //var services = form["ServiceID"].Split(',');
+            receipt.ReceiptNumber = GenerateReceiptNumber(receipt.ReceiptID);
 
-                ReceiptItem[] items = new ReceiptItem[ServicesFromView.Count];
+            ReceiptItem[] items = new ReceiptItem[ServicesFromView.Count];
+
+            ServiceRecord[] serviceRecord = new ServiceRecord[ServicesFromView.Count];
+
+            List<ServiceRecord> serviceRecords = new List<ServiceRecord>();
 
             List<ReceiptItem> ReceiptItems = new List<ReceiptItem>();
 
@@ -368,9 +373,21 @@ namespace JAAReceipts.WebApp.Views
 
             bool assetDisposal = false;
 
+            var custID = "";
+
+            Service currentService = new Service();
+
             for (int i = 0; i < ServicesFromView.ToArray().Length; i++)
             {
-                //if (Convert.ToInt32(serv[i]) == 26 || Convert.ToInt32(serv[i]) == 189)
+                custID = GetCUSTID(GetReceiptCategory(Convert.ToInt32(serv[i])));
+
+                var service = GetService(Convert.ToInt32(serv[i]));
+                currentService = service;
+
+                if (service.GCT == true)
+                {
+                    tax.Add(CalculateGCT(Convert.ToInt32(amt[i])));
+                }
                 if (Convert.ToInt32(serv[i]) == 26 || Convert.ToInt32(serv[i]) == 189 || Convert.ToInt32(serv[i]) == 191)
                 {
                     invoice = true;
@@ -381,6 +398,8 @@ namespace JAAReceipts.WebApp.Views
                         ServiceID = Convert.ToInt32(serv[i]),
                         Amount = Convert.ToDecimal(amt[i]) ,
                         AdditionalInformation = Convert.ToString(inf[i])
+                        //CurrencyID = currencyID
+                        
                     };
                 }
 
@@ -394,6 +413,7 @@ namespace JAAReceipts.WebApp.Views
                         ServiceID = Convert.ToInt32(serv[i]),
                         Amount = Convert.ToDecimal(amt[i]) ,
                         AdditionalInformation = Convert.ToString(inf[i])
+                        //CurrencyID = currencyID
                     };
 
                 }
@@ -406,28 +426,110 @@ namespace JAAReceipts.WebApp.Views
                         ServiceID = Convert.ToInt32(serv[i]),
                         Amount = Convert.ToDecimal(amt[i]),
                         Quantity = Convert.ToInt32(qnt[i])
+                        //CurrencyID = currencyID
 
                     };
 
-                }
+                    //if (service.GCT == true)
+                    //{
+                    //    tax.Add( CalculateGCT(Convert.ToInt32( amt[i] )) ) ;
+                    //    serviceRecord[i] = new ServiceRecord
+                    //    {
+                    //        AccountNumber = Convert.ToString(GetIncomeAccountNumber(serviceID)),
+                    //        SubAccount = GetSubAccountForService(GetReceiptCategory(Convert.ToInt32(serv[i]))),
+                    //        Amount = Convert.ToDecimal(amt[i]),
+                    //        DocumentType = "CS",
+                    //        CustomerID = "",
+                    //        TransactionDate = Convert.ToDateTime(DateTime.Now),
+                    //        ReferneceNumber = Convert.ToString(receipt.ReceiptID),
+                    //        TransactionDetails = ""
 
-                ReceiptItems.Add(items[i]);              
+                    //    };
+                    //}
+                    //else
+                    //{
+
+                        serviceRecord[i] = new ServiceRecord
+                        {
+                            AccountNumber = Convert.ToString(GetIncomeAccountNumber(serviceID)),
+                            SubAccount = GetSubAccountForService(GetReceiptCategory(Convert.ToInt32(serv[i]))),
+                            Amount = AdjustAmountForGCT( Convert.ToDecimal(amt[i]) , currentService) ,
+                            DocumentType = "CS",
+                            CustomerID = GetCUSTID(GetReceiptCategory(Convert.ToInt32(serv[i]))),
+                            TransactionDate = Convert.ToDateTime(DateTime.Now),
+                            ReferneceNumber = Convert.ToString(receipt.ReceiptNumber),
+                            TransactionDetails = GenerateTransactionDescription(receipt.ReceiptNumber , receipt.ReceivedFrom , service.Description),
+                            Type = "SVC"
+
+                        };
+
+                    //}
+                    //custID = GetCUSTID(GetReceiptCategory(Convert.ToInt32(serv[i])));
+
+                }              
+
+                ReceiptItems.Add(items[i]);
+                serviceRecords.Add(serviceRecord[i]);
             }
+
+            
+            if(tax.Count > 0 )
+            {
+                hasGCT = true; 
+                gctRecord.AccountNumber = GetGCTIncomeAccount();
+                gctRecord.Amount = tax.Sum();
+                gctRecord.CustomerID = custID;
+                gctRecord.DocumentType = "CS";
+                gctRecord.ReferneceNumber = receipt.ReceiptNumber;
+                gctRecord.SubAccount = GetGCTSubAccount();
+                gctRecord.TransactionDate = Convert.ToDateTime(DateTime.Now);
+                gctRecord.TransactionDetails = "General Consumption Tax";
+                gctRecord.Type = "GCT";
+          
+            }
+
+            bankCodeRecord.AccountNumber = Convert.ToString( receipt.BankAccountNumber );
+            var bank = GetBankCodeObject(bankCodeRecord.AccountNumber);
+            //bankCodeRecord.Amount = receipt.TotalAmount + tax.Sum();
+            bankCodeRecord.Amount = receipt.TotalAmount;
+            bankCodeRecord.CustomerID = custID;
+            bankCodeRecord.DocumentType = "CS";
+            bankCodeRecord.ReferneceNumber = receipt.ReceiptNumber;
+            bankCodeRecord.SubAccount = GetSubAccountForBankCode(bank.BankCodeID);
+            bankCodeRecord.TransactionDate = Convert.ToDateTime(DateTime.Now);
+            bankCodeRecord.TransactionDetails = GenerateTransactionDescription(receipt.ReceiptNumber, receipt.ReceivedFrom, currentService.Description);
+            bankCodeRecord.Type = "BNK";
 
             ServicesFromView.Clear();
             AmountsFromView.Clear();
             QuantitiesFromView.Clear();
             AdditionalInfoFromView.Clear();
+            custID = null;
+            tax.Clear();
+            //currencyIDFromView = null;
 
             if (ModelState.IsValid)
             {
-                db.Receipt.Add(receipt);            
+                //db.Receipt.Add(receipt);            
                 db.ReceiptItem.AddRange(ReceiptItems);
+                db.ServiceRecord.AddRange(serviceRecords);
+                db.BankCodeRecord.Add(bankCodeRecord);
+
+                if (hasGCT == true)
+                {
+                    db.GCTRecord.Add(gctRecord);
+                }
+
                 db.SaveChanges();
 
-                receipt.ReceiptNumber = GenerateReceiptNumber(receipt.ReceiptID);
+                //receipt.ReceiptNumber = GenerateReceiptNumber(receipt.ReceiptID);
 
-                db.SaveChanges();
+                //db.SaveChanges();
+
+                //db.ServiceRecord.AddRange(serviceRecords);
+                //db.BankCodeRecord.Add(bankCodeRecord);
+
+                //db.SaveChanges();
 
                 if (invoice == true)
                 {
@@ -450,60 +552,271 @@ namespace JAAReceipts.WebApp.Views
         }
 
 
+        public List<ReceiptListing> PullReceiptListings()
+        {
+            var listings = (from i in db.ServiceRecord
+                            select new { i.DocumentType , i.TransactionDate , i.ReferneceNumber ,i.CustomerID , i.AccountNumber ,
+                                i.SubAccount , i.TransactionDetails , i.Amount , i.Type})
+                            .Union(from g in db.BankCodeRecord
+                                   select new { g.DocumentType, g.TransactionDate, g.ReferneceNumber, g.CustomerID, g.AccountNumber,
+                                       g.SubAccount, g.TransactionDetails , g.Amount , g.Type})
+                            .Union(from t in db.GCTRecord
+                                   select new { t.DocumentType, t.TransactionDate, t.ReferneceNumber, t.CustomerID, t.AccountNumber,
+                                       t.SubAccount, t.TransactionDetails , t.Amount , t.Type})
+                            .ToList();
+
+
+            List<ReceiptListing> rl = new List<ReceiptListing>();
+
+            ReceiptListing[] rlArray = new ReceiptListing[listings.Count()];
+
+            for (int i = 0; i < listings.ToArray().Length; i++)
+            {
+                //GCT account
+                if (listings[i].Type == "GCT")
+                {
+                    rlArray[i] = new ReceiptListing
+                    {
+                        DocumentType = listings[i].DocumentType,
+                        TransactionDate = listings[i].TransactionDate,
+                        ReferneceNumber = listings[i].ReferneceNumber,
+                        CustomerID = listings[i].CustomerID,
+                        AccountNumber = listings[i].AccountNumber,
+                        SubAccount = listings[i].SubAccount,
+                        TransactionDetails = listings[i].TransactionDetails ,
+                        CreditAmount = listings[i].Amount,
+                        DebitAmount = 0
+                        
+
+                    };
+
+                }
+
+                //Service 
+                if (listings[i].Type == "SVC")
+                {
+                    rlArray[i] = new ReceiptListing
+                    {
+                        DocumentType = listings[i].DocumentType,
+                        TransactionDate = listings[i].TransactionDate,
+                        ReferneceNumber = listings[i].ReferneceNumber,
+                        CustomerID = listings[i].CustomerID,
+                        AccountNumber = listings[i].AccountNumber,
+                        SubAccount = listings[i].SubAccount,
+                        TransactionDetails = listings[i].TransactionDetails,
+                        CreditAmount = listings[i].Amount,
+                        DebitAmount = 0
+
+
+                    };
+                }
+
+                //BankCode
+                if (listings[i].Type == "BNK")
+                {
+                    rlArray[i] = new ReceiptListing
+                    {
+                        DocumentType = listings[i].DocumentType,
+                        TransactionDate = listings[i].TransactionDate,
+                        ReferneceNumber = listings[i].ReferneceNumber,
+                        CustomerID = listings[i].CustomerID,
+                        AccountNumber = listings[i].AccountNumber,
+                        SubAccount = listings[i].SubAccount,
+                        TransactionDetails = listings[i].TransactionDetails,
+                        CreditAmount = 0,
+                        DebitAmount = listings[i].Amount
+
+                    };
+                }
+
+                rl.Add(rlArray[i]);
+
+            }
+
+            //for (int i = 0; i < services.Length; i++)
+            //{
+            //    items[i] = new ReceiptItem
+            //    {
+            //        ReceiptID = receipt.ReceiptID,
+            //        ServiceID = Convert.ToInt32(services[i])
+            //    };
+
+            //    ReceiptItems.Add(items[i]);
+            //}
+
+            return rl;
+            
+        }
+
+
+        public string GetCUSTID(int ReceiptTypeCategory)
+        {
+            var custID = db.CustomerIdentification.FirstOrDefault(i => i.ReceiptTypeCategoryID == ReceiptTypeCategory);
+            return custID.CUSTID; 
+        }
 
         public string GetBankCode(int paymentTypeId)
         {
-            var bankCode = db.BankCode.Where(p => p.PaymentTypeID == paymentTypeId);
+            //All USD goes to this account
 
-
-            BankCode bk = new BankCode();
-
-            foreach(var b in bankCode)
+            //Change to database call 
+            if (currencyIDFromView == 2)
             {
-                bk.BankCodeID = b.BankCodeID;
-                bk.PaymentTypeID = b.PaymentTypeID;
-                bk.BankCodeNumber = b.BankCodeNumber;
-                
+                return "131030";
             }
 
-            return bk.BankCodeNumber.ToString();
+            else
+            {
 
+                var bankCode = db.BankCode.Where(p => p.PaymentTypeID == paymentTypeId);
 
+                BankCode bk = new BankCode();
+
+                foreach (var b in bankCode)
+                {
+                    bk.BankCodeID = b.BankCodeID;
+                    bk.PaymentTypeID = b.PaymentTypeID;
+                    bk.BankCodeNumber = b.BankCodeNumber;
+                }
+
+                return bk.BankCodeNumber.ToString();
+            }
         }
 
-        public long GetIncomeAccountNumber(int serviceID , int? cooperateClientID)
+        public Service GetService (int id)
+        {
+            var service = db.Service.Find(id);
+            return service;
+        }
+
+        public string GetSubAccountForBankCode(int bankCodeID)
+        {
+            var subAccount = db.SubAccountBankCode.FirstOrDefault(i => i.BankCodeID == bankCodeID);
+            return subAccount.SubAccountNumber; 
+        }
+
+        public BankCode GetBankCodeObject(string  AccountNumber)
+        {
+
+            var n = Convert.ToInt64(AccountNumber);
+
+            var bankCode = db.BankCode.FirstOrDefault(i => i.BankCodeNumber == n);
+            return bankCode;
+        }
+
+        public int GetReceiptCategory(int serviceId)
+        {
+            var service= db.Service.Find(serviceId);
+            return service.RecieptTypeID;
+        }
+
+        public string GetSubAccountForService(int ReceiptTypeCategoryId)
+        {
+            var subAccount = db.SubAccount.FirstOrDefault(i => i.ReceiptTypeCategoryId == ReceiptTypeCategoryId);
+
+            return subAccount.SubAccountNumber;
+            
+        }
+
+        public string GetGCTIncomeAccount()
+        {
+            var gctAccount = db.GCTIncomeAccount.Find(1);
+            return gctAccount.AccountNumber;
+        }
+
+        public string GetGCTSubAccount()
+        {
+            var gctSubAccount = db.SubAccountTax.Find(1);
+            return gctSubAccount.SubAccountNumber;
+        }
+
+        public decimal CalculateGCT(decimal amount)
+        {
+            decimal gct = 0.15m;
+
+            var d = AdjustAmountForGCT(amount);
+
+            decimal adjusted = d * gct;
+
+            return adjusted; 
+        }
+
+        public decimal AdjustAmountForGCT(decimal amount)
+        {
+                decimal adjusted = (amount / 1.15m);
+                return adjusted;      
+        }
+
+        public decimal AdjustAmountForGCT(decimal amount , Service service)
+        {
+
+            if (service.GCT == true)
+            {
+
+
+                decimal adjusted = (amount / 1.15m);
+                return adjusted;
+            }
+
+            else
+            {
+                return amount;
+            }
+        }
+
+        public decimal CalculateGCTTotal(decimal amount)
+        {
+            decimal gct = 0.15m;
+
+            decimal adjusted = (amount * gct) + amount;
+
+            return adjusted;
+        }
+
+        public long GetIncomeAccountNumber(int serviceID )
         {
 
             IncomeAccountListing incomeAccount = new IncomeAccountListing();
 
-            
-           if(cooperateClientID != null)
+
+            //   if(cooperateClientID != null)
+            //    {
+            //        var listing = db.IncomeAccountListing.Where(i => i.CooperateClientID == cooperateClientID && i.ServiceID == serviceID);
+
+            //        foreach(var l in listing)
+            //        {
+            //            incomeAccount.CooperateClientID = l.CooperateClientID;
+            //            incomeAccount.IncomeAccountNumber = l.IncomeAccountNumber;
+            //            incomeAccount.ServiceID = l.ServiceID;
+            //            incomeAccount.IncomeAccountListingID = l.IncomeAccountListingID;
+            //        }
+
+            //        return incomeAccount.IncomeAccountNumber;
+            //    }
+            //    else
+            //    {
+            //        var listing = db.IncomeAccountListing.Where(i => i.ServiceID == serviceID && i.CooperateClientID == null);
+            //        foreach (var l in listing)
+            //        {
+            //            incomeAccount.CooperateClientID = l.CooperateClientID;
+            //            incomeAccount.IncomeAccountNumber = l.IncomeAccountNumber;
+            //            incomeAccount.ServiceID = l.ServiceID;
+            //            incomeAccount.IncomeAccountListingID = l.IncomeAccountListingID;
+            //        }
+
+            //        return incomeAccount.IncomeAccountNumber;
+            //    }
+
+            var listing = db.IncomeAccountListing.Where(i => i.ServiceID == serviceID );
+            foreach (var l in listing)
             {
-                var listing = db.IncomeAccountListing.Where(i => i.CooperateClientID == cooperateClientID && i.ServiceID == serviceID);
-
-                foreach(var l in listing)
-                {
-                    incomeAccount.CooperateClientID = l.CooperateClientID;
-                    incomeAccount.IncomeAccountNumber = l.IncomeAccountNumber;
-                    incomeAccount.ServiceID = l.ServiceID;
-                    incomeAccount.IncomeAccountListingID = l.IncomeAccountListingID;
-                }
-
-                return incomeAccount.IncomeAccountNumber;
+                //incomeAccount.CooperateClientID = l.CooperateClientID;
+                incomeAccount.IncomeAccountNumber = l.IncomeAccountNumber;
+                incomeAccount.ServiceID = l.ServiceID;
+                incomeAccount.IncomeAccountListingID = l.IncomeAccountListingID;
             }
-            else
-            {
-                var listing = db.IncomeAccountListing.Where(i => i.ServiceID == serviceID && i.CooperateClientID == null);
-                foreach (var l in listing)
-                {
-                    incomeAccount.CooperateClientID = l.CooperateClientID;
-                    incomeAccount.IncomeAccountNumber = l.IncomeAccountNumber;
-                    incomeAccount.ServiceID = l.ServiceID;
-                    incomeAccount.IncomeAccountListingID = l.IncomeAccountListingID;
-                }
 
-                return incomeAccount.IncomeAccountNumber;
-            }
+            return incomeAccount.IncomeAccountNumber;
 
         }
 
@@ -531,6 +844,14 @@ namespace JAAReceipts.WebApp.Views
             var ReceiptNumber = sb.ToString();
             return ReceiptNumber;                         
         }
+
+        public string GenerateTransactionDescription (string ReceiptNumber , string Customer , string CUSTID)
+        {
+            var sb = new StringBuilder();
+            var details = sb.Append("REC#" + ReceiptNumber + "-" + Customer + "-"  + CUSTID );
+            return details.ToString(); 
+        }
+
 
         // GET: Receipts/Edit/5
         public ActionResult Edit(int? id)
@@ -664,6 +985,19 @@ namespace JAAReceipts.WebApp.Views
             SelectList servicesForcategory = new SelectList(services, "ServiceID", "Description");
 
             return Json(services, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult GetAmountForService2(string serviceID)
+        {
+            var id = int.Parse(serviceID);
+            var service = db.Service.Find(id);
+            if (service.GCT == true)
+            {
+                var adjusted = service.Cost;
+                service.Cost = CalculateGCTTotal(adjusted);
+            }
+            return Json(service, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -810,6 +1144,15 @@ namespace JAAReceipts.WebApp.Views
 
         }
 
+        public static int currencyIDFromView = new int();
+
+        [HttpPost]
+        public void PushCurrencyId(string currencyID)
+        {
+            currencyIDFromView = Convert.ToInt32(currencyID); 
+
+        }
+
         public static List<string> QuantitiesFromView = new List<string>();
 
         [HttpPost]
@@ -832,6 +1175,16 @@ namespace JAAReceipts.WebApp.Views
                 AdditionalInfoFromView.Add(i);
             }
         }
+
+        //[HttpPost]
+        //public JsonResult GetCurrency(string serviceId)
+        //{
+        //    var id = int.Parse(serviceId);
+        //    var service = db.Service.Find(id);
+
+        //    return Json(service.CurrencyID, JsonRequestBehavior.AllowGet);
+
+        //}
 
 
         //[HttpPost]
@@ -917,7 +1270,8 @@ namespace JAAReceipts.WebApp.Views
             //    .Save();
 
 
-            if (Convert.ToInt32(receiptTypeId) == 40 || Convert.ToInt32(receiptTypeId) == 6)
+           if (Convert.ToInt32(receiptTypeId) == 40 || Convert.ToInt32(receiptTypeId) == 6)
+            //if (Convert.ToInt32(receiptTypeId) == 6)
             {
                 CreatePdfInvoice(receipt , email);
             }

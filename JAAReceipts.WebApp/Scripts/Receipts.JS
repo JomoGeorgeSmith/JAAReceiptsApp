@@ -17,7 +17,8 @@
             var obj = { ReceiptTypeID: ReceiptTypeID };
 
             //Invoice
-            if (ReceiptTypeID == 6 || ReceiptTypeID == 40 ) {
+            //if (ReceiptTypeID == 6 || ReceiptTypeID == 40) {
+            if (ReceiptTypeID == 6 ) {
                 $("#QuantityDiv").css("visibility", "hidden")
                 $("#QuantityDiv").css("display", "none")
 
@@ -78,6 +79,9 @@
             //else {
 
             //}
+
+            var currenciesDropDownList = $("#currenciesDropDownList").val();
+
       
             AjaxCall('/Receipts/GetServices', JSON.stringify(obj), 'POST').done(function (response) {
                 if (response.length > 0) {
@@ -91,6 +95,7 @@
 
                     $('#serviceDropDownList').html(options);
 
+                   
                     //Asset Disposal
                     if (ReceiptTypeID == 3) {
                         $('#serviceDropDownList').val(15);
@@ -168,6 +173,14 @@ function SupplyAdditionalInformation() {
 
 }
 
+//var Currency = new Array();
+
+//function SupplyCurrency() {
+//    var currencyId = $('#txtQuantity').val();
+//    Currency.push(currencyId);
+
+//}
+
 
 function PushServiceId() {
         $.ajax(
@@ -179,6 +192,42 @@ function PushServiceId() {
             dataType: "json"
         }
     );
+}
+
+function PushCurrencyId() {
+
+    var currency = $("#currenciesDropDownList").val();
+    var obj = { currencyID: currency };
+    //$.ajax(
+    //    {
+    //        type: "POST",
+    //        url: "/receipts/PushCurrencyId",
+    //        data: JSON.stringify(currency),
+    //        contentType: "application/json; charset=utf-8",
+    //        dataType: "json"
+    //    }
+    //);
+
+
+    AjaxCall('/receipts/PushCurrencyId', JSON.stringify(obj), 'POST').done(function (response) {
+
+        // $("#txtAmount").val(response.Cost);
+
+    }).fail(function (error) {
+        alert(error.StatusText);
+    });
+
+    function AjaxCall(url, data, type) {
+        return $.ajax({
+            url: url,
+            type: type ? type : 'GET',
+            data: data,
+            contentType: 'application/json'
+
+        });
+    }
+
+
 }
 
 function CustomAdd() {
@@ -239,6 +288,8 @@ function CustomSubmit() {
         }
 
     );
+
+    PushCurrencyId();
 }
 
 //var serviceID = $('#serviceDropDownList').val()
@@ -261,6 +312,7 @@ function GetAmountForService() {
         }
 
 
+
     }).fail(function (error) {
         alert(error.StatusText);
     });
@@ -274,7 +326,6 @@ function GetAmountForService() {
 
         });
     }
-
 }
 
 $('#serviceDropDownList').on("change", function (evt) {
@@ -286,19 +337,35 @@ $('#serviceDropDownList').on("change", function (evt) {
 
     var ReceiptTypeID = $('#categoryDropDownList').val();
 
+    GetCurrency();
+
     var obj = { ServiceID: serviceID };
 
     //As long as we arent dealing with Invoices or Asset Disposal 
     if (serviceID != 26 || serviceID != 15) {
 
-        AjaxCall('/Receipts/GetAmountForService', JSON.stringify(obj), 'POST').done(function (response) {
-            if (response.length > 0) {
-                for (var i = 0; i < response.length; i++) {
-                    var cost = response[i].Cost
+        //AjaxCall('/Receipts/GetAmountForService', JSON.stringify(obj), 'POST').done(function (response) {
+        //    if (response.length > 0) {
+        //        for (var i = 0; i < response.length; i++) {
+        //            var cost = response[i].Cost
+        //            $("#txtAmount").val(cost);
+        //            $("#txtQuantity").val("1");
+
+
+        //        }
+        //    }
+
+
+        AjaxCall('/Receipts/GetAmountForService2', JSON.stringify(obj), 'POST').done(function (response) {
+            //if (response.length > 0) {
+                //for (var i = 0; i < response.length; i++) {
+                    var cost = response.Cost
                     $("#txtAmount").val(cost);
                     $("#txtQuantity").val("1");
-                }
-            }
+
+
+                //}
+            //}
 
 
         }).fail(function (error) {
@@ -384,18 +451,28 @@ $('#serviceDropDownList').on("change", function (evt) {
 
 $('#paymentTypeDropDownList').on("change", function (evt) {
     var paymentTypeID = $('#paymentTypeDropDownList').val();
-    $("#txtLastFourDigits").val("");
+    //$("#txtLastFourDigits").val("");
     $("#txtChequeNumber").val("");
+    //$("#txtCreditCardType").val("");
 
-    if (paymentTypeID == 2 || paymentTypeID == 3 || paymentTypeID == 4 || paymentTypeID == 13) {
+    if (paymentTypeID == 2 || paymentTypeID == 3 || paymentTypeID == 4 ||  paymentTypeID == 5 
+        || paymentTypeID == 6 || paymentTypeID == 13) {
         $("#LastFourDigitsDiv").css("visibility", "visible");
-        $("#LastFourDigitsDiv").css("display", "")
+        $("#LastFourDigitsDiv").css("display", "");
         $("#ChequeNumberDiv").css("visibility", "hidden");
         $("#ChequeNumberDiv").css("display", "none");
 
     }
 
-    else if (paymentTypeID == 7 || paymentTypeID == 8 )
+    //else if (paymentTypeID == 4 ) {
+    //    $("#LastFourDigitsDiv").css("visibility", "visible");
+    //    $("#LastFourDigitsDiv").css("display", "");
+    //    $("#ChequeNumberDiv").css("visibility", "hidden");
+    //    $("#ChequeNumberDiv").css("display", "none");
+
+    //}
+
+    else if ( paymentTypeID == 8 )
     {
         $("#ChequeNumberDiv").css("visibility", "visible");
         $("#ChequeNumberDiv").css("display", "")
@@ -567,7 +644,62 @@ $('#txtSendEmail').on("click", function (evt) {
 //    evt.stopImmediatePropagation();
 //});
 
+function GetCurrency()
+{
 
+    var serviceID = $('#serviceDropDownList').val();
+
+
+    var obj = { ServiceID: serviceID };
+
+    AjaxCall('/Receipts/GetAmountForService', JSON.stringify(obj), 'POST').done(function (response) {
+        if (response.length > 0) {
+            for (var i = 0; i < response.length; i++) {
+                var currencyId = response[i].CurrencyID
+                //var currenciesDropDownList = $("#currenciesDropDownList").val();
+                $("#currenciesDropDownList").val(currencyId);
+            }
+        }
+
+
+    }).fail(function (error) {
+        alert(error.StatusText);
+    });
+
+    function AjaxCall(url, data, type) {
+        return $.ajax({
+            url: url,
+            type: type ? type : 'GET',
+            data: data,
+            contentType: 'application/json'
+
+        });
+    }
+
+ 
+
+        // AjaxCall('/Receipts/GetAdditionalAmountForChaeuffeurService', JSON.stringify(obj), 'POST').done(function (response) {
+
+        //    $("#txtAmount").val(response.Cost);
+
+        //}).fail(function (error) {
+        //    alert(error.StatusText);
+        //});
+
+        function AjaxCall(url, data, type) {
+            return $.ajax({
+                url: url,
+                type: type ? type : 'GET',
+                data: data,
+                contentType: 'application/json'
+
+            });
+        }
+
+
+    }
+
+        
 
 function Email() {
 

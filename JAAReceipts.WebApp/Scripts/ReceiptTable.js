@@ -19,7 +19,7 @@ var sum = 0;
         var ReceiptTypeID = $('#categoryDropDownList').val();
         if (ReceiptTypeID == 6) {
 
-            var invoice = "Invoice : "
+            var invoice = "Invoice: "
             cell.html(invoice.concat( txtAdditionalInfo.val() ));
         }
         else {
@@ -39,6 +39,8 @@ var sum = 0;
         //add Amount cell
         var serviceID = $('#serviceDropDownList').val();
         var cell = $(row.insertCell(-1));
+
+
         //cell.html(txtAmount.val());
 
         if (serviceID == 26) {
@@ -71,6 +73,10 @@ var sum = 0;
             $("#lblTotalAmountLabel").css("visibility", "visible")
 
         }
+
+        //Add GCT Cell
+        //var cell = $(row.insertCell(-1));
+        //cell.html("GCT");
 
         //var amount = parseInt(txtAmount.val());
 

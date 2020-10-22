@@ -52,6 +52,14 @@
             </div>
         </div>
 
+
+        @*<div class="col-md-4" style="visibility: hidden; display:none" id="DebitCardTypeDiv">
+            <div class="form-group">
+                @Html.Label("Debit Card Type")
+                @Html.EditorFor(model => model.Receipt.LastFourDigits, new { htmlAttributes = new { @class = "form-control", @id = "txtDebitCardType", @name = "txtDebitCardType" } })
+            </div>
+        </div>*@
+
     </div>
 
     <div class="row">
@@ -59,7 +67,7 @@
         <div class="col-md-4">
             <div class="form-group">
                 @Html.Label("Category")
-                @Html.DropDownListFor(model => model.AllReceiptTypeCategories, new SelectList(Model.AllReceiptTypeCategories, "ReceiptTypeCategoryID", "Description"), "Please Select Category", new { @id = "categoryDropDownList", @class = "form-control" })
+                @Html.DropDownListFor(model => model.AllReceiptTypeCategories, new SelectList(Model.AllReceiptTypeCategories.OrderBy(i => i.Description), "ReceiptTypeCategoryID", "Description"), "Please Select Category", new { @id = "categoryDropDownList", @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.AllReceiptTypeCategories, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -210,6 +218,15 @@
             </div>
         </div>
 
+        <div class="col-md-4" id="CurrencyDiv">
+            <div class="form-group">
+                @Html.Label("Currency")
+                @Html.DropDownListFor(model => model.Currencies, new SelectList(Model.Currencies, "CurrencyID", "CurrencyCode"), "Please Select Currency", new { @id = "currenciesDropDownList", @class = "form-control" })
+                @*@Html.DropDownListFor(model => model.Currencies, Enumerable.Empty<SelectListItem>(), new { @id = "currenciesDropDownList", @class = "form-control" })*@
+                @Html.ValidationMessageFor(model => model.Currencies, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
     </div>
 
 
@@ -292,19 +309,20 @@
                 <thead>
                     <tr>
                         <th>
-                            @* @Html.DisplayNameFor(model => model.ItemsOnReceipt)*@
                             Service
                         </th>
 
                         <th>
-                            @* @Html.DisplayNameFor(model => model.Receipt.PaymentType)*@
                             @Html.Label("Quantity", new { id = "lblSecondColumn" })
                         </th>
 
                         <th>
-                            @*@Html.DisplayNameFor(model => model.Receipt.ReceivedFrom)*@
                             Amount
                         </th>
+
+                        @*<th>                       
+                            GCT
+                        </th>*@
                     </tr>
                 </thead>
 
@@ -314,7 +332,8 @@
                         <th> @Html.Label("Total Amount", htmlAttributes: new { @id = "lblTotalAmountLabel", @style = "visibility: hidden" })</th>
                         <th> </th>
                         @*<th>@Html.LabelFor(model => model.Receipt.TotalAmount, htmlAttributes: new { @class = "control-label col-md-10", @id = "lblTotalLabel" })</th>*@
-                        <th>  @Html.Label("Total", htmlAttributes: new { @id = "lblTotalLabel", @style = "visibility: hidden" }) </th>
+                        <th> @Html.Label("Total", htmlAttributes: new { @id = "lblTotalLabel", @style = "visibility: hidden" }) </th>
+                        @*<th> </th>*@
                     </tr>
 
                 </tfoot>

@@ -20,11 +20,22 @@ namespace JAAReceipts.WebApp.Models
         [UIHint("Currency")]
         public decimal Cost { get; set; }
 
-//#nullable enable
+        public Currency Currency { get; set; }
 
-//        public string? Currency { get; set; }
+        public bool GCT { get; set; }
 
-//#nullable disable
+#nullable enable
+
+
+        public int CurrencyID { get; set; }
+#nullable disable
+
+
+        //#nullable enable
+
+        //        public string? Currency { get; set; }
+
+        //#nullable disable
 
 
 

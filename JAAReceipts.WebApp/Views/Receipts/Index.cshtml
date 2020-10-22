@@ -17,7 +17,7 @@
         </th>
 
         <th>
-           @* @Html.DisplayNameFor(model => model.Receipt.PaymentType)*@
+            @* @Html.DisplayNameFor(model => model.Receipt.PaymentType)*@
             Payment Type
         </th>
         <th>
@@ -25,7 +25,7 @@
             Received From
         </th>
         <th>
-           @* @Html.DisplayNameFor(model => model.Receipt.AdditionalInfo)*@
+            @* @Html.DisplayNameFor(model => model.Receipt.AdditionalInfo)*@
             Additional Information
         </th>
         <th>
@@ -33,7 +33,7 @@
             Bank Account Number
         </th>
         <th>
-           @* @Html.DisplayNameFor(model => model.Receipt.IncomeAccountNumber)*@
+            @* @Html.DisplayNameFor(model => model.Receipt.IncomeAccountNumber)*@
             Income Account Number
         </th>
         <th>
@@ -41,7 +41,7 @@
             Line Of Business Account Number
         </th>
         <th>
-           @* @Html.DisplayNameFor(model => model.Receipt.DocumentType.Description)*@
+            @* @Html.DisplayNameFor(model => model.Receipt.DocumentType.Description)*@
             Document Type
         </th>
         <th>
@@ -49,14 +49,18 @@
             Receipt Code
         </th>
         <th>
-          @* @Html.DisplayNameFor(model => model.Receipt.Date)*@
+            @* @Html.DisplayNameFor(model => model.Receipt.Date)*@
             Date
         </th>
         <th>
             @*@Html.DisplayNameFor(model => model.Receipt.TotalAmount)*@
             Total Amount
         </th>
-        <th></th>
+        <th>
+            @*@Html.DisplayNameFor(model => model.Receipt.TotalAmount)*@
+            Currency
+        </th>
+        @*<th></th>*@
     </tr>
 
 
@@ -95,6 +99,9 @@
     </td>
     <td>
         @Html.DisplayFor(modelItem => item.Receipt.TotalAmount)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Receipt.Currency.CurrencyCode)
     </td>
     <td>
         @Html.ActionLink("Edit", "Edit", new { id = item.Receipt.ReceiptID }) |

@@ -7,13 +7,13 @@ namespace JAAReceipts.WebApp.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.4.4")]
-    public sealed partial class FixingSeed : IMigrationMetadata
+    public sealed partial class init : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(FixingSeed));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(init));
         
         string IMigrationMetadata.Id
         {
-            get { return "202009181601506_FixingSeed"; }
+            get { return "202010092106327_init"; }
         }
         
         string IMigrationMetadata.Source

@@ -30,5 +30,17 @@ namespace JAAReceipts.WebApp.ViewModel
         public DateTime Date { get; set; }
 
         public List<CooperateClients> CoopererateClients { get; set; }
+
+
+        public List<Currency> Currencies { get; set; }
+
+        public List<ServiceRecord> ServiceRecords { get; set; }
+
+        public List<BankCodeRecord> BankCodeRecords { get; set; }
+
+        public List<GCTRecord> GCTRecords { get; set; }
+
+        public List<ReceiptListing> ReceiptListings { get; set; }
+
     }
 }
