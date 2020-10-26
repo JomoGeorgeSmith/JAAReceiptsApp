@@ -606,8 +606,6 @@ namespace JAAReceipts.WebApp.Views
                         TransactionDetails = listings[i].TransactionDetails,
                         CreditAmount = listings[i].Amount,
                         DebitAmount = 0
-
-
                     };
                 }
 

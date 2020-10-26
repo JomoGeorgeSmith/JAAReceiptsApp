@@ -100,14 +100,14 @@ namespace JAAReceipts.WebApp.Migrations
 
             var services = new List<Service>
             {
-                new Service {ServiceID = 1 , RecieptTypeID = 1 , Description = "Learner Driver Standard Manual  10 Lessons" , Cost = 26100.00m , CurrencyID = 1 , GCT = false} ,
-                new Service {ServiceID = 2 , RecieptTypeID = 1 , Description = "Learner Driver Standard  Manual Single Lesson" , Cost = 2500.00m , CurrencyID = 1, GCT = false} ,
-                new Service {ServiceID = 3 , RecieptTypeID = 1 , Description = "Learner Driver Standard Automatic 10 Lesson" , Cost = 22500.00m , CurrencyID = 1, GCT = false} ,
-                new Service {ServiceID = 4 , RecieptTypeID = 1 , Description = "Learner Driver Standard Automatic Single Lesson" , Cost = 2950.00m , CurrencyID = 1, GCT = false} ,
-                new Service {ServiceID = 5 , RecieptTypeID = 1 , Description = "Learner Driver Standard Vehicle Rental For Exam" , Cost = 5000.00m , CurrencyID = 1, GCT = false} ,
-                new Service {ServiceID = 6 , RecieptTypeID = 1 , Description = "Learner Driver Standard Pick up And Drop off One Way" , Cost = 1500.00m , CurrencyID = 1, GCT = false} ,
-                new Service {ServiceID = 7 , RecieptTypeID = 1 , Description = "Learner Driver Standard Registration Fee" , Cost = 500.00m , CurrencyID = 1, GCT = false} ,
-                new Service {ServiceID = 8 , RecieptTypeID = 1 , Description = "Road Code Booklet" , Cost = 500.00m , CurrencyID = 1, GCT = false} ,
+                new Service {ServiceID = 1 , RecieptTypeID = 1 , Description = "Learner Driver Standard Manual  10 Lessons" , Cost = 26100.00m , CurrencyID = 1 , GCT = true} ,
+                new Service {ServiceID = 2 , RecieptTypeID = 1 , Description = "Learner Driver Standard  Manual Single Lesson" , Cost = 2500.00m , CurrencyID = 1, GCT = true} ,
+                new Service {ServiceID = 3 , RecieptTypeID = 1 , Description = "Learner Driver Standard Automatic 10 Lesson" , Cost = 22500.00m , CurrencyID = 1, GCT = true} ,
+                new Service {ServiceID = 4 , RecieptTypeID = 1 , Description = "Learner Driver Standard Automatic Single Lesson" , Cost = 2950.00m , CurrencyID = 1, GCT = true} ,
+                new Service {ServiceID = 5 , RecieptTypeID = 1 , Description = "Learner Driver Standard Vehicle Rental For Exam" , Cost = 5000.00m , CurrencyID = 1, GCT = true} ,
+                new Service {ServiceID = 6 , RecieptTypeID = 1 , Description = "Learner Driver Standard Pick up And Drop off One Way" , Cost = 1500.00m , CurrencyID = 1, GCT = true} ,
+                new Service {ServiceID = 7 , RecieptTypeID = 1 , Description = "Learner Driver Standard Registration Fee" , Cost = 500.00m , CurrencyID = 1, GCT = true} ,
+                new Service {ServiceID = 8 , RecieptTypeID = 1 , Description = "Road Code Booklet" , Cost = 500.00m , CurrencyID = 1, GCT = true} ,
                 new Service {ServiceID = 9 , RecieptTypeID = 1 , Description = "Driver Improvement Program - Individual" , Cost = 11650.00m , CurrencyID = 1, GCT = false} ,
                 new Service {ServiceID = 10 , RecieptTypeID = 1 , Description = "Driver Improvement Program - Company" , Cost = 17475.00m , CurrencyID = 1, GCT = false} ,
                 new Service {ServiceID = 11 , RecieptTypeID = 2 , Description = "Motor Vehicle Fitness Renewal" , Cost = 4500.00m , CurrencyID = 1, GCT = false} ,
@@ -128,10 +128,10 @@ namespace JAAReceipts.WebApp.Migrations
                 new Service {ServiceID = 26 , RecieptTypeID = 6 , Description = "Invoice" , Cost = 0m , CurrencyID = 1},
                 new Service {ServiceID = 158 , RecieptTypeID = 37 , Description = "Wrecker Service" , Cost = 4000m , CurrencyID = 1},
                 new Service {ServiceID = 160 , RecieptTypeID = 5 , Description = "Student Membership" , Cost = 4250.00m , CurrencyID = 1, GCT = true},
-                new Service {ServiceID = 161 , RecieptTypeID = 1 , Description = "Driver Improvement - Driver Assessment" , Cost = 5825.00m , CurrencyID = 1, GCT = false},
-                new Service {ServiceID = 162 , RecieptTypeID = 1 , Description = "Learner Driver Executive Registration fee" , Cost = 500.00m , CurrencyID = 1, GCT = false},
-                new Service {ServiceID = 164 , RecieptTypeID = 1 , Description = "Learner Driver Executive Pick Up and Drop Off" , Cost = 500.00m , CurrencyID = 1, GCT = false},
-                new Service {ServiceID = 165 , RecieptTypeID = 1 , Description = "Learner Driver Executive Automatic/Manual" , Cost = 3262.00m , CurrencyID = 1, GCT = false},
+                new Service {ServiceID = 161 , RecieptTypeID = 1 , Description = "Driver Improvement - Driver Assessment" , Cost = 5825.00m , CurrencyID = 1, GCT = true},
+                new Service {ServiceID = 162 , RecieptTypeID = 1 , Description = "Learner Driver Executive Registration fee" , Cost = 500.00m , CurrencyID = 1, GCT = true},
+                new Service {ServiceID = 164 , RecieptTypeID = 1 , Description = "Learner Driver Executive Pick Up and Drop Off" , Cost = 500.00m , CurrencyID = 1, GCT = true},
+                new Service {ServiceID = 165 , RecieptTypeID = 1 , Description = "Learner Driver Executive Automatic/Manual" , Cost = 3262.00m , CurrencyID = 1, GCT = true},
                 new Service {ServiceID = 166 , RecieptTypeID = 5 , Description = "Towing Service" , Cost = 4000m , CurrencyID = 1 , GCT = true},
                 new Service {ServiceID = 167 , RecieptTypeID = 4 , Description = "Trucking Service" , Cost = 4000m , CurrencyID = 1, GCT = false},
                 new Service {ServiceID = 175 , RecieptTypeID = 2 , Description = "Motor Vehicle Registration Certificate Renewal - 1 year, 1199cc – 2999cc" , Cost = 12600.00m , CurrencyID = 1, GCT = false},
@@ -259,7 +259,9 @@ namespace JAAReceipts.WebApp.Migrations
                 new SubAccountBankCode{SubAccountBankCodeID = 5 , BankCodeID = 8 , SubAccountNumber = "001-00-0" },
                 //BNS Debit card 
                 new SubAccountBankCode{SubAccountBankCodeID = 6 , BankCodeID = 4 , SubAccountNumber = "002-00-0" },
-                new SubAccountBankCode{SubAccountBankCodeID = 7 , BankCodeID = 2 , SubAccountNumber = "001-00-0" }
+                new SubAccountBankCode{SubAccountBankCodeID = 7 , BankCodeID = 2 , SubAccountNumber = "001-00-0" },
+                //Debit NCB
+                new SubAccountBankCode{SubAccountBankCodeID = 8 , BankCodeID = 5 , SubAccountNumber = "001-00-0" }
 
             };
 

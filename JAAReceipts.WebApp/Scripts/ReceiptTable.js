@@ -74,9 +74,13 @@ var sum = 0;
 
         }
 
-        //Add GCT Cell
-        //var cell = $(row.insertCell(-1));
-        //cell.html("GCT");
+        // Add GCT Cell
+        var cell = $(row.insertCell(-1));
+        cell.html(txtAmount.val());
+
+        // Add Total Cell
+        var cell = $(row.insertCell(-1));
+        cell.html(txtAmount.val());
 
         //var amount = parseInt(txtAmount.val());
 
@@ -114,6 +118,10 @@ var sum = 0;
         //ClearBoxes();
     });
 
+
+function GetGCT() {
+
+}
 
 function ClearBoxes() {
     $('#txtAmount').val("");

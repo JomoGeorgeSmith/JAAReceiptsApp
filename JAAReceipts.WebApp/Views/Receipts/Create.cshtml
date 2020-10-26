@@ -320,20 +320,25 @@
                             Amount
                         </th>
 
-                        @*<th>                       
+                        <th>
                             GCT
-                        </th>*@
+                        </th>
+
+                        <th>
+                            Total
+                        </th>
                     </tr>
                 </thead>
 
                 <tfoot>
 
                     <tr>
-                        <th> @Html.Label("Total Amount", htmlAttributes: new { @id = "lblTotalAmountLabel", @style = "visibility: hidden" })</th>
+                        <th>@Html.Label("Total Amount", htmlAttributes: new { @id = "lblTotalAmountLabel", @style = "visibility: hidden" })</th>
                         <th> </th>
                         @*<th>@Html.LabelFor(model => model.Receipt.TotalAmount, htmlAttributes: new { @class = "control-label col-md-10", @id = "lblTotalLabel" })</th>*@
-                        <th> @Html.Label("Total", htmlAttributes: new { @id = "lblTotalLabel", @style = "visibility: hidden" }) </th>
-                        @*<th> </th>*@
+                        <th>@Html.Label("Total", htmlAttributes: new { @id = "lblTotalLabel", @style = "visibility: hidden" }) </th>
+                        <th> </th>
+                        <th> </th>
                     </tr>
 
                 </tfoot>
