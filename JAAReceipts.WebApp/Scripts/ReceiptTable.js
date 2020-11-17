@@ -5,6 +5,9 @@ var sum = 0;
 
         var txtQuantity = $("#txtQuantity");
         var txtAmount = $("#txtAmount");
+        var txtGCTAmount = $("#txtGCTAmount");
+        var txtAmountWithGCT = $("#txtAmountWithGCT");
+        
         var txtAdditionalInfo = $("#AdditionalInfo");
         var service = $("#serviceDropDownList option:selected").text();
 
@@ -60,7 +63,7 @@ var sum = 0;
         else {
 
             cell.html(txtAmount.val());
-            var amount = parseInt(txtAmount.val());
+            var amount = parseFloat(txtAmountWithGCT.val());
 
             var total = amount;
             sum += total;
@@ -76,11 +79,11 @@ var sum = 0;
 
         // Add GCT Cell
         var cell = $(row.insertCell(-1));
-        cell.html(txtAmount.val());
+        cell.html(txtGCTAmount.val());
 
         // Add Total Cell
         var cell = $(row.insertCell(-1));
-        cell.html(txtAmount.val());
+        cell.html(txtAmountWithGCT.val());
 
         //var amount = parseInt(txtAmount.val());
 
@@ -128,7 +131,6 @@ function ClearBoxes() {
     $('#txtQuantity').val("");
     $('#AdditionalInfo').val("");
 }
-
 
 
     function Remove(button) {

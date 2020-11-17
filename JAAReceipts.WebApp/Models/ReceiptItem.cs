@@ -18,12 +18,18 @@ namespace JAAReceipts.WebApp.Models
 
         public int ServiceID { get; set; }
 
+
+
 #nullable enable
 
         [DisplayFormat(DataFormatString = "{0:C}", ApplyFormatInEditMode = true)]
         public decimal? Amount { get; set; }
         public int? Quantity { get; set; }
         public string? AdditionalInformation { get; set; }
+
+        public decimal GCT { get; set; }
+
+        //public decimal GCT { get; set; }
 #nullable disable
     }
 }

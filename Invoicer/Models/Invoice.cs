@@ -30,6 +30,8 @@ namespace Invoicer.Models
         public bool IsInvoice { get; set; }
         public  string Type  { get; set; }
 
+        public decimal GCT { get; set; }
+
         /// <summary>
         /// Do any of the items have a discount specified. If there are no discounts then
         /// the column will be ommited from the invoice.

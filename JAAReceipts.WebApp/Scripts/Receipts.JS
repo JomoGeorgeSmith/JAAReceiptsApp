@@ -292,6 +292,36 @@ function CustomSubmit() {
     PushCurrencyId();
 }
 
+function GenerateBatch() {
+
+    var startDate = $('#txtstartDate').val();
+
+    var endDate = $('#txtendDate').val();
+
+    var obj = { StartDate: startDate , EndDate: endDate };
+
+    AjaxCall('/Receipts/GenerateCSVBatchPost', JSON.stringify(obj), 'POST').done(function (response) {
+
+        alert("File generated and saved to documents");
+
+
+    }).fail(function (error) {
+        alert(error.StatusText);
+    });
+
+    function AjaxCall(url, data, type) {
+        return $.ajax({
+            url: url,
+            type: type ? type : 'GET',
+            data: data,
+            contentType: 'application/json'
+
+        });
+    }
+
+
+}
+
 //var serviceID = $('#serviceDropDownList').val()
 
 function GetAmountForService() {
@@ -340,32 +370,55 @@ $('#serviceDropDownList').on("change", function (evt) {
     GetCurrency();
 
     var obj = { ServiceID: serviceID };
+    //var obj2 = { Amount: amount }
 
     //As long as we arent dealing with Invoices or Asset Disposal 
     if (serviceID != 26 || serviceID != 15) {
 
-        //AjaxCall('/Receipts/GetAmountForService', JSON.stringify(obj), 'POST').done(function (response) {
-        //    if (response.length > 0) {
-        //        for (var i = 0; i < response.length; i++) {
-        //            var cost = response[i].Cost
+        AjaxCall('/Receipts/GetAmountForService', JSON.stringify(obj), 'POST').done(function (response) {
+            if (response.length > 0) {
+                for (var i = 0; i < response.length; i++) {
+                    var cost = response[i].Cost
+
+                    var amount = cost;
+                    var obj2 = { amount: amount };
+
+                    $("#txtAmount").val(cost);
+                    $("#txtQuantity").val("1");
+
+                    if (response[i].GCT == true) {
+
+
+                        AjaxCall('/Receipts/CalculateGCTHttp', JSON.stringify(obj2), 'POST').done(function (response) {
+
+                            var gct = response;
+                            $("#txtGCTAmount").val(gct);
+
+                            var totalWithGCT = parseFloat(gct) + parseFloat(cost);
+                            $("#txtAmountWithGCT").val(totalWithGCT);
+
+                        }).fail(function (error) {
+                            alert(error.StatusText);
+                        });
+
+                    }
+
+                    else {
+                        $("#txtGCTAmount").val(0);
+                    }
+
+            
+                }
+            }
+
+
+        //AjaxCall('/Receipts/GetAmountForService2', JSON.stringify(obj), 'POST').done(function (response) {
+        //            var cost = response.Cost
         //            $("#txtAmount").val(cost);
         //            $("#txtQuantity").val("1");
 
 
-        //        }
-        //    }
-
-
-        AjaxCall('/Receipts/GetAmountForService2', JSON.stringify(obj), 'POST').done(function (response) {
-            //if (response.length > 0) {
-                //for (var i = 0; i < response.length; i++) {
-                    var cost = response.Cost
-                    $("#txtAmount").val(cost);
-                    $("#txtQuantity").val("1");
-
-
-                //}
-            //}
+           
 
 
         }).fail(function (error) {
@@ -727,6 +780,13 @@ function Email() {
     );
 
     alert("Receipt Sent to " + email.toString());
-
-
 }
+
+
+$("#DateId").daterangepicker(
+    {
+        "singleDatePicker": true,
+        "startDate": moment(),
+        "endDate": moment().endOf('year'),
+        "opens": "center"
+    });

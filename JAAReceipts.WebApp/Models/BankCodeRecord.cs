@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace JAAReceipts.WebApp.Models
 {
@@ -16,8 +17,9 @@ namespace JAAReceipts.WebApp.Models
         public string ReferneceNumber { get; set; }
 
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        //[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Display(Name = "Transaction Date")]
+        [Column(TypeName = "datetime")]
         public DateTime TransactionDate { get; set; }
 
         public string CustomerID { get; set; }

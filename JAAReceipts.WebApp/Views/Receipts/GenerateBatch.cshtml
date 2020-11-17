@@ -1,0 +1,71 @@
+﻿@model JAAReceipts.WebApp.ViewModel.BatchModel
+@{
+    ViewBag.Title = "Generate Batch";
+}
+
+<h2>GenerateBatch</h2>
+
+<div class="row">
+
+    <div class="col-md-10">
+        <div class="form-group">
+            @Html.Label("Start Date")
+            @Html.EditorFor(model => model.startDate, new { htmlAttributes = new { @class = "form-control", @id = "txtstartDate" } })
+        </div>
+    </div>
+
+    <div class="col-md-10">
+        <div class="form-group">
+            @Html.Label("End Date")
+            @Html.EditorFor(model => model.endDate, new { htmlAttributes = new { @class = "form-control", @id = "txtendDate" } })
+        </div>
+    </div>
+
+    </div>
+
+<div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+        <input type="submit" value="Create" class="btn btn-default" onclick="GenerateBatch()" />
+    </div>
+</div>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+@Scripts.Render("~/bundles/jqueryui")
+@Styles.Render("~/Content/cssjqryUi")
+@Scripts.Render("~/bundles/jquery")
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('input[type=datetime]').datepicker({
+            dateFormat: "dd/M/yy",
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "-60:+0"
+        });
+
+    });
+
+</script>
+
+
+<link href="https://cdn.jsdelivr.net/npm/gijgo@1.9.6/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+
+@section Scripts {
+    @* @Scripts.Render("~/bundles/bootstrap") *@
+    @* Render the Bootstrap bundle here if you took it out of the main layout *@
+    <script src="https://cdn.jsdelivr.net/npm/gijgo@1.9.6/js/gijgo.min.js" type="text/javascript"></script>
+    <script>
+        $('#txtstartDate').datepicker({
+            uiLibrary: 'bootstrap4'
+        });
+
+        $('#txtendDate').datepicker({
+            uiLibrary: 'bootstrap4'
+        });
+    </script>
+}
+

@@ -83,7 +83,7 @@ namespace JAAReceipts.WebApp.Views
         {
             if (ModelState.IsValid)
             {
-                db.Entry(receiptTypeCategory).State = EntityState.Modified;
+                db.Entry(receiptTypeCategory).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }

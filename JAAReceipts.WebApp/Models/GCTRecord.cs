@@ -20,8 +20,9 @@ namespace JAAReceipts.WebApp.Models
         public string ReferneceNumber { get; set; }
 
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        //[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Display(Name = "Transaction Date")]
+        [Column(TypeName = "datetime")]
         public DateTime TransactionDate { get; set; }
 
         public string CustomerID { get; set; }
@@ -29,6 +30,8 @@ namespace JAAReceipts.WebApp.Models
         public string AccountNumber { get; set; }
 
         public string SubAccount { get; set; }
+
+        public string BankAccountNumber { get; set; }
 
         public string TransactionDetails { get; set; }
 

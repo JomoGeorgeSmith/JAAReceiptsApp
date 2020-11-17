@@ -123,15 +123,17 @@ namespace Invoicer.Services.Impl
             Table table = section.AddTable();
 
             double width = section.PageWidth();
-            double productWidth = Unit.FromPoint(150);
+            double productWidth = Unit.FromPoint(110);
             double numericWidth = (width - productWidth) / (Invoice.HasDiscount ? 5 : 4);
+            double scale = 0.15d;
             table.AddColumn(productWidth);
-            table.AddColumn(ParagraphAlignment.Center, numericWidth);
-            table.AddColumn(ParagraphAlignment.Center, numericWidth);
-            table.AddColumn(ParagraphAlignment.Center, numericWidth);
+            table.AddColumn(ParagraphAlignment.Center, numericWidth - (numericWidth * scale) );
+            table.AddColumn(ParagraphAlignment.Center, numericWidth - (numericWidth * scale));
+            table.AddColumn(ParagraphAlignment.Center, numericWidth - (numericWidth * scale));
             if (Invoice.HasDiscount)
-                table.AddColumn(ParagraphAlignment.Center, numericWidth);
-            table.AddColumn(ParagraphAlignment.Center, numericWidth);
+                table.AddColumn(ParagraphAlignment.Center, numericWidth - (numericWidth * scale));
+            table.AddColumn(ParagraphAlignment.Center, numericWidth - (numericWidth * scale));
+            table.AddColumn(ParagraphAlignment.Center, numericWidth - (numericWidth * scale));
 
             BillingHeader(table);
 
@@ -195,15 +197,18 @@ namespace Invoicer.Services.Impl
 
                 row.Cells[2].AddParagraph("UNIT PRICE", ParagraphAlignment.Center);
 
+                row.Cells[3].AddParagraph("SUB TOTAL", ParagraphAlignment.Center);
+
 
                 if (Invoice.HasDiscount)
                 {
-                    row.Cells[3].AddParagraph("DISCOUNT", ParagraphAlignment.Center);
-                    row.Cells[4].AddParagraph("TOTAL", ParagraphAlignment.Center);
+                    row.Cells[4].AddParagraph("DISCOUNT", ParagraphAlignment.Center);
+                    row.Cells[5].AddParagraph("SUB TOTAL", ParagraphAlignment.Center);
                 }
                 else
                 {
-                    row.Cells[3].AddParagraph("TOTAL", ParagraphAlignment.Center);
+                    row.Cells[4].AddParagraph("GCT", ParagraphAlignment.Center);
+                    row.Cells[5].AddParagraph("TOTAL", ParagraphAlignment.Center);
                 }
 
             }
@@ -283,6 +288,10 @@ namespace Invoicer.Services.Impl
                 cell.VerticalAlignment = VerticalAlignment.Center;
                 cell.AddParagraph(item.Price.ToCurrency(Invoice.Currency), ParagraphAlignment.Center, "H2-9");
 
+                cell = row.Cells[3];
+                cell.VerticalAlignment = VerticalAlignment.Center;
+                cell.AddParagraph(item.Total.ToCurrency(Invoice.Currency), ParagraphAlignment.Center, "H2-9");
+
                 if (Invoice.HasDiscount)
                 {
                     cell = row.Cells[3];
@@ -295,15 +304,18 @@ namespace Invoicer.Services.Impl
                 }
                 else
                 {
-                    cell = row.Cells[3];
+                    cell = row.Cells[4];
                     cell.VerticalAlignment = VerticalAlignment.Center;
-                    cell.AddParagraph(item.Total.ToCurrency(Invoice.Currency), ParagraphAlignment.Center, "H2-9");
+                    cell.AddParagraph(item.GCT.ToCurrency(Invoice.Currency), ParagraphAlignment.Center, "H2-9");
+
+                    var totalWithGCT = item.GCT + item.Total; 
+
+                    cell = row.Cells[5];
+                    cell.VerticalAlignment = VerticalAlignment.Center;
+                    cell.AddParagraph(totalWithGCT.ToCurrency(Invoice.Currency), ParagraphAlignment.Center, "H2-9");
                 }
 
             }
-
-
-
         }
 
         private void BillingTotal(Table table, TotalRow total)
@@ -361,7 +373,7 @@ namespace Invoicer.Services.Impl
             }
             else
             {
-                table.Columns[3].Format.Alignment = ParagraphAlignment.Left;
+                table.Columns[5].Format.Alignment = ParagraphAlignment.Left;
             }
 
             Row row = table.AddRow();
@@ -391,11 +403,11 @@ namespace Invoicer.Services.Impl
             }
             else
             {
-                Cell cell = row.Cells[2];
+                Cell cell = row.Cells[4];
                 cell.Shading.Color = shading;
                 cell.AddParagraph(total.Name, ParagraphAlignment.Left, font);
 
-                cell = row.Cells[3];
+                cell = row.Cells[5];
                 cell.Shading.Color = shading;
                 cell.AddParagraph(total.Value.ToCurrency(Invoice.Currency), ParagraphAlignment.Center, font);
             }

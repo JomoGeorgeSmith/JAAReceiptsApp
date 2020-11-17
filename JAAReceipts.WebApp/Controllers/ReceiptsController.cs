@@ -19,6 +19,11 @@ using Invoicer.Services;
 using System.Reflection.Emit;
 using System.Diagnostics;
 using System.Security.Policy;
+using System.Runtime.CompilerServices;
+using System.IO;
+using CsvHelper;
+using System.Globalization;
+
 
 //using JAAReceipts.WebApp.Migrations;
 
@@ -103,6 +108,14 @@ namespace JAAReceipts.WebApp.Views
            // viewModel.ReceiptListings.AddRange(receiptListing);
 
             return View(receiptListing);
+        }
+
+        public ActionResult GenerateBatch()
+        {
+
+            //GenerateCSVBatch();
+           
+            return View();
         }
 
 
@@ -304,15 +317,10 @@ namespace JAAReceipts.WebApp.Views
             GCTRecord gctRecord = new GCTRecord(); 
             BankCodeRecord bankCodeRecord = new BankCodeRecord();
             var serviceID = Convert.ToInt32(form["ServiceID"]);
-            bool hasGCT = false ; 
-
-            
-
-            //decimal tax = new decimal();
+            bool hasGCT = false ;
 
             List<decimal> tax = new List<decimal>();
   
-
             receipt.Date = Convert.ToDateTime(DateTime.Now);
             receipt.AdditionalInfo = Convert.ToString(Request.Form["Receipt.AdditionalInfo"]);
             receipt.CurrencyID = currencyIDFromView;
@@ -398,8 +406,9 @@ namespace JAAReceipts.WebApp.Views
                         ServiceID = Convert.ToInt32(serv[i]),
                         Amount = Convert.ToDecimal(amt[i]) ,
                         AdditionalInformation = Convert.ToString(inf[i])
-                        //CurrencyID = currencyID
                         
+                        //CurrencyID = currencyID
+
                     };
                 }
 
@@ -425,8 +434,9 @@ namespace JAAReceipts.WebApp.Views
                         ReceiptID = receipt.ReceiptID,
                         ServiceID = Convert.ToInt32(serv[i]),
                         Amount = Convert.ToDecimal(amt[i]),
-                        Quantity = Convert.ToInt32(qnt[i])
-                        //CurrencyID = currencyID
+                        Quantity = Convert.ToInt32(qnt[i]),
+                        GCT = CalculateGCT(Convert.ToInt32(amt[i]))
+
 
                     };
 
@@ -449,17 +459,19 @@ namespace JAAReceipts.WebApp.Views
                     //else
                     //{
 
-                        serviceRecord[i] = new ServiceRecord
-                        {
-                            AccountNumber = Convert.ToString(GetIncomeAccountNumber(serviceID)),
-                            SubAccount = GetSubAccountForService(GetReceiptCategory(Convert.ToInt32(serv[i]))),
-                            Amount = AdjustAmountForGCT( Convert.ToDecimal(amt[i]) , currentService) ,
-                            DocumentType = "CS",
-                            CustomerID = GetCUSTID(GetReceiptCategory(Convert.ToInt32(serv[i]))),
-                            TransactionDate = Convert.ToDateTime(DateTime.Now),
-                            ReferneceNumber = Convert.ToString(receipt.ReceiptNumber),
-                            TransactionDetails = GenerateTransactionDescription(receipt.ReceiptNumber , receipt.ReceivedFrom , service.Description),
-                            Type = "SVC"
+                    serviceRecord[i] = new ServiceRecord
+                    {
+                        AccountNumber = Convert.ToString(GetIncomeAccountNumber(serviceID)),
+                        SubAccount = GetSubAccountForService(GetReceiptCategory(Convert.ToInt32(serv[i]))),
+                        // Amount = AdjustAmountForGCT( Convert.ToDecimal(amt[i]) , currentService) ,
+                        Amount = Convert.ToDecimal(amt[i]),
+                        DocumentType = "CS",
+                        CustomerID = GetCUSTID(GetReceiptCategory(Convert.ToInt32(serv[i]))),
+                        TransactionDate = Convert.ToDateTime(DateTime.Now),
+                        ReferneceNumber = Convert.ToString(receipt.ReceiptNumber),
+                        TransactionDetails = GenerateTransactionDescription(receipt.ReceiptNumber, receipt.ReceivedFrom, service.Description),
+                        Type = "SVC",
+                        BankAccountNumber = Convert.ToString(receipt.BankAccountNumber)
 
                         };
 
@@ -485,12 +497,15 @@ namespace JAAReceipts.WebApp.Views
                 gctRecord.TransactionDate = Convert.ToDateTime(DateTime.Now);
                 gctRecord.TransactionDetails = "General Consumption Tax";
                 gctRecord.Type = "GCT";
-          
+                gctRecord.BankAccountNumber = Convert.ToString(receipt.BankAccountNumber);
+
+
             }
 
             bankCodeRecord.AccountNumber = Convert.ToString( receipt.BankAccountNumber );
             var bank = GetBankCodeObject(bankCodeRecord.AccountNumber);
             //bankCodeRecord.Amount = receipt.TotalAmount + tax.Sum();
+            //bankCodeRecord.Amount = CalculateGCTTotal( receipt.TotalAmount );
             bankCodeRecord.Amount = receipt.TotalAmount;
             bankCodeRecord.CustomerID = custID;
             bankCodeRecord.DocumentType = "CS";
@@ -551,6 +566,273 @@ namespace JAAReceipts.WebApp.Views
             return View(receipt);
         }
 
+        //public List<ReceiptListing> RetrieveBatchDetails(DateTime startDate , DateTime endDate , string bankAccountNumber)
+        //{
+        //    var listings = (from i in db.ServiceRecord
+        //                    select new { i.DocumentType, i.TransactionDate, i.ReferneceNumber, i.CustomerID, i.AccountNumber,
+        //                        i.SubAccount, i.BankAccountNumber,i.TransactionDetails, i.Amount, i.Type }).Where(x => x.TransactionDate >= startDate && x.TransactionDate <= endDate && x.BankAccountNumber == bankAccountNumber )
+        //                     .Union(from t in db.GCTRecord
+        //                           select new { t.DocumentType, t.TransactionDate, t.ReferneceNumber, t.CustomerID, t.AccountNumber,
+        //                               t.SubAccount, t.BankAccountNumber , t.TransactionDetails , t.Amount , t.Type}).Where(x => x.TransactionDate >= startDate && x.TransactionDate <= endDate && x.BankAccountNumber == bankAccountNumber)
+        //                    .ToList();
+
+
+        //    List<ReceiptListing> rl = new List<ReceiptListing>();
+
+        //    ReceiptListing[] rlArray = new ReceiptListing[listings.Count()];
+
+
+        //    for (int i = 0; i < listings.ToArray().Length; i++)
+        //    {
+        //        rlArray[i] = new ReceiptListing
+        //        {
+        //            DocumentType = listings[i].DocumentType,
+        //            TransactionDate = listings[i].TransactionDate,
+        //            ReferneceNumber = listings[i].ReferneceNumber,
+        //            CustomerID = listings[i].CustomerID,
+        //            AccountNumber = listings[i].AccountNumber,
+        //            SubAccount = listings[i].SubAccount,
+        //            TransactionDetails = listings[i].TransactionDetails,
+        //            CreditAmount = listings[i].Amount,
+        //            DebitAmount = 0
+        //        };
+
+        //        rl.Add(rlArray[i]);
+        //    }
+
+        //    return rl;
+        //}
+
+
+        public List<ReceiptListingCSV> RetrieveBatchDetails(DateTime startDate, DateTime endDate, string bankAccountNumber)
+        {
+            var listings = (from i in db.ServiceRecord
+                            select new
+                            {
+                                i.DocumentType,
+                                i.TransactionDate,
+                                i.ReferneceNumber,
+                                i.CustomerID,
+                                i.AccountNumber,
+                                i.SubAccount,
+                                i.BankAccountNumber,
+                                i.TransactionDetails,
+                                i.Amount,
+                                i.Type
+                            }).Where(x => x.TransactionDate >= startDate && x.TransactionDate <= endDate && x.BankAccountNumber == bankAccountNumber)
+                             .Union(from t in db.GCTRecord
+                                    select new
+                                    {
+                                        t.DocumentType,
+                                        t.TransactionDate,
+                                        t.ReferneceNumber,
+                                        t.CustomerID,
+                                        t.AccountNumber,
+                                        t.SubAccount,
+                                        t.BankAccountNumber,
+                                        t.TransactionDetails,
+                                        t.Amount,
+                                        t.Type
+                                    }).Where(x => x.TransactionDate >= startDate && x.TransactionDate <= endDate && x.BankAccountNumber == bankAccountNumber)
+                            .ToList();
+
+
+            List<ReceiptListingCSV> rl = new List<ReceiptListingCSV>();
+
+            ReceiptListingCSV[] rlArray = new ReceiptListingCSV[listings.Count()];
+
+
+            for (int i = 0; i < listings.ToArray().Length; i++)
+            {
+                rlArray[i] = new ReceiptListingCSV
+                {
+                    EntryType = listings[i].DocumentType,
+                    TransactionDate = listings[i].TransactionDate,
+                    ReferneceNumber = listings[i].ReferneceNumber,
+                    CustomerID = listings[i].CustomerID,
+                    AccountNumber = listings[i].AccountNumber,
+                    SubAccount = listings[i].SubAccount,
+                    Description = listings[i].TransactionDetails,
+                    CreditAmount = listings[i].Amount,
+                    DebitAmount = 0,
+                    CATran = "CATran"
+                };
+
+                rl.Add(rlArray[i]);
+            }
+
+            return rl;
+        }
+        public List<BatchHeader> RetrieveBatchHeader(DateTime startDate, DateTime endDate, string bankAccountNumber)
+        {
+            var header = (from x in db.BankCodeRecord
+                          where x.TransactionDate >= startDate && x.TransactionDate <= endDate && x.AccountNumber == bankAccountNumber
+                          let dt = x.TransactionDate
+                          group x by new { y = dt.Year, m = dt.Month, d = dt.Day, x.AccountNumber, x.SubAccount } into g
+                          select new { g.Key.AccountNumber, g.Key.SubAccount, Total = g.Sum(x => x.Amount) }).ToList();
+
+            BatchHeader bh = new BatchHeader();
+            List<BatchHeader> bhList = new List<BatchHeader>();
+
+            if (header.Count > 0)
+            {
+
+                foreach (var i in header)
+                {
+
+                    bh.BankAccount = i.AccountNumber;
+                    bh.BankSubAccount = i.SubAccount;
+                    bh.ControlTotal = i.Total;
+                    bh.BatchDate = startDate;
+                    bh.Batch = "BATCH";
+                    bh.PeriodToPost = "202008";
+                    bh.ReconciliationMode = "B";
+                    bh.BatchHandeling = "B";
+
+                }
+
+
+
+                bhList.Add(bh);
+
+            }
+            return bhList; 
+        }
+
+        public void GenerateCSVForBatchHeader()
+        {
+            var records = RetrieveBatchHeader(new DateTime(2020, 11, 15, 00, 00, 00), new DateTime(2020, 11, 15, 23, 59, 59), "130030");
+
+            using (var writer = new StreamWriter("C:\\Users\\Jomo\\Documents\\file.csv"))
+
+            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+            {
+                csv.WriteRecords(records);
+            }
+        }
+
+        public void GenerateCSVForBatchDetails()
+        {
+           var records =  RetrieveBatchDetails(new DateTime(2020, 11, 15, 00, 00, 00), new DateTime(2020, 11, 15, 23, 59, 59), "130030");
+
+            using (var writer = new StreamWriter("C:\\Users\\Jomo\\Documents\\file.csv"))
+
+            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+            {
+                csv.WriteRecords(records);
+            }
+
+        }
+
+        public void GenerateCSVBatch(DateTime startDate , DateTime endDate , string bankAccountNumber)
+        {
+            var header = RetrieveBatchHeader(startDate, endDate, bankAccountNumber);
+
+            var records = RetrieveBatchDetails(startDate, endDate, bankAccountNumber);
+
+            using (var writer = new StreamWriter("C:\\Users\\Jomo\\Documents\\file.csv"))
+
+            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+            {
+
+                csv.WriteRecords(header);
+            }
+
+            // Append to the file.
+            using (var stream = System.IO.File.Open("C:\\Users\\Jomo\\Documents\\file.csv", FileMode.Append))
+            using (var writer = new StreamWriter(stream))
+            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+            {
+                // Don't write the header again.
+                csv.Configuration.HasHeaderRecord = true;
+                csv.WriteRecords(records);
+            }
+
+        }
+
+        public void GenerateCSVBatch()
+        {
+
+            using (var stream = System.IO.File.Create("C:\\Users\\Jomo\\Documents\\file.csv") );                
+
+            var accountNumbers = db.BankCode.ToList();
+
+            foreach(var i in accountNumbers)
+            {
+
+                var header = RetrieveBatchHeader(new DateTime(2020, 11, 15, 00, 00, 00), new DateTime(2020, 11, 15, 23, 59, 59), Convert.ToString( i.BankCodeNumber) );
+
+                var records = RetrieveBatchDetails(new DateTime(2020, 11, 15, 00, 00, 00), new DateTime(2020, 11, 15, 23, 59, 59), Convert.ToString(i.BankCodeNumber));
+
+                using (var stream = System.IO.File.Open("C:\\Users\\Jomo\\Documents\\file.csv", FileMode.Append))
+                using (var writer = new StreamWriter(stream))
+                using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+                {
+                    // Don't write the header again.
+                    csv.Configuration.HasHeaderRecord = true;
+                    if (header.Count >  0)
+                    {
+                        csv.WriteRecords(header);
+                    }
+
+                    if (records.Count > 0)
+                    {
+                        csv.WriteRecords(records);
+
+                    }
+                }
+            }
+
+            //var header = RetrieveBatchHeader(new DateTime(2020, 11, 15, 00, 00, 00), new DateTime(2020, 11, 15, 23, 59, 59), "130030");
+
+            //var records = RetrieveBatchDetails(new DateTime(2020, 11, 15, 00, 00, 00), new DateTime(2020, 11, 15, 23, 59, 59), "130030");
+
+            //using (var writer = new StreamWriter("C:\\Users\\Jomo\\Documents\\file.csv"))
+
+            //using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+            //{
+
+            //    csv.WriteRecords(header);
+            //}
+
+
+            // Append to the file.
+            //using (var stream = System.IO.File.Open("C:\\Users\\Jomo\\Documents\\file.csv", FileMode.Append))
+            //using (var writer = new StreamWriter(stream))
+            //using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+            //{
+            //    // Don't write the header again.
+            //    csv.Configuration.HasHeaderRecord = true;
+            //    csv.WriteRecords(records);
+            //}
+
+        }
+
+        //public void GenerateCSVBatch()
+        //{
+        //    var header = RetrieveBatchHeader(new DateTime(2020, 11, 15, 00, 00, 00), new DateTime(2020, 11, 15, 23, 59, 59), "130030");
+
+        //    var records = RetrieveBatchDetails(new DateTime(2020, 11, 15, 00, 00, 00), new DateTime(2020, 11, 15, 23, 59, 59), "130030");
+
+        //    using (var writer = new StreamWriter("C:\\Users\\Jomo\\Documents\\file.csv"))
+
+        //    using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+        //    {
+
+        //        csv.WriteRecords(header);
+        //    }
+
+        //    // Append to the file.
+        //    using (var stream = System.IO.File.Open("C:\\Users\\Jomo\\Documents\\file.csv", FileMode.Append))
+        //    using (var writer = new StreamWriter(stream))
+        //    using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+        //    {
+        //        // Don't write the header again.
+        //        csv.Configuration.HasHeaderRecord = true;
+        //        csv.WriteRecords(records);
+        //    }
+
+        //}
 
         public List<ReceiptListing> PullReceiptListings()
         {
@@ -564,7 +846,6 @@ namespace JAAReceipts.WebApp.Views
                                    select new { t.DocumentType, t.TransactionDate, t.ReferneceNumber, t.CustomerID, t.AccountNumber,
                                        t.SubAccount, t.TransactionDetails , t.Amount , t.Type})
                             .ToList();
-
 
             List<ReceiptListing> rl = new List<ReceiptListing>();
 
@@ -586,8 +867,7 @@ namespace JAAReceipts.WebApp.Views
                         TransactionDetails = listings[i].TransactionDetails ,
                         CreditAmount = listings[i].Amount,
                         DebitAmount = 0
-                        
-
+                       
                     };
 
                 }
@@ -730,13 +1010,45 @@ namespace JAAReceipts.WebApp.Views
 
         public decimal CalculateGCT(decimal amount)
         {
+            //decimal gct = 0.15m;
+
+            //var d = AdjustAmountForGCT(amount);
+
+            //decimal adjusted = d * gct;
+
+            //return adjusted; 
+
             decimal gct = 0.15m;
 
-            var d = AdjustAmountForGCT(amount);
+            var d = amount;
 
             decimal adjusted = d * gct;
 
-            return adjusted; 
+            return adjusted;
+        }
+
+        public decimal CalculateGCT2(decimal amount , Service service)
+        {
+
+            decimal gct = 0.15m;
+
+            if (service.GCT == true)
+            {
+                var d = amount;
+
+                decimal adjusted = d * gct;
+
+                return adjusted;
+            }
+
+            else
+            {
+                return 0m;
+
+            }
+          
+
+   
         }
 
         public decimal AdjustAmountForGCT(decimal amount)
@@ -841,6 +1153,18 @@ namespace JAAReceipts.WebApp.Views
             sb.Append(year + month + day + receiptId.ToString());
             var ReceiptNumber = sb.ToString();
             return ReceiptNumber;                         
+        }
+
+        public string GenerateCVSFileName()
+        {
+            var year = DateTime.Now.ToString(("yyyy"));
+            var month = DateTime.Now.ToString(("MM"));
+            var day = DateTime.Now.ToString(("dd"));
+
+            var sb = new StringBuilder();
+            sb.Append(year + month + day + "BatchFile");
+            var fileName = sb.ToString();
+            return fileName;
         }
 
         public string GenerateTransactionDescription (string ReceiptNumber , string Customer , string CUSTID)
@@ -1071,6 +1395,19 @@ namespace JAAReceipts.WebApp.Views
             }
 
         }
+        [HttpPost]
+        public JsonResult CalculateGCTHttp(decimal amount)
+        {
+        
+            decimal gct = 0.15m;
+
+            var d = amount;
+
+            decimal adjusted = d * gct;
+
+            
+            return Json(adjusted, JsonRequestBehavior.AllowGet);
+        }
 
         [HttpPost]
         public JsonResult GetAdditionalAmountForNormalValetService(string additionalKilometeres)
@@ -1215,6 +1552,55 @@ namespace JAAReceipts.WebApp.Views
         //}
 
         [HttpPost]
+        public void GenerateCSVBatchPost(string startDate , string endDate)
+        {
+
+            var fileName = GenerateCVSFileName();
+            var path = "C:\\Users\\Jomo\\Documents\\" + fileName + ".csv";
+
+            using (var stream = System.IO.File.Create(path));
+
+            var accountNumbers = db.BankCode.DistinctBy(c => c.BankCodeNumber ).ToList();
+
+            //var list = accountNumbers.Select(x => x.BankCodeNumber).Distinct().ToList();
+
+            foreach (var i in accountNumbers)
+            {
+
+                var header = RetrieveBatchHeader(Convert.ToDateTime (startDate).AddHours(00).AddMinutes(00).AddSeconds(00), Convert.ToDateTime(endDate).AddHours(23).AddMinutes(59).AddSeconds(59), Convert.ToString(i.BankCodeNumber));
+
+                var records = RetrieveBatchDetails(Convert.ToDateTime(startDate).AddHours(00).AddMinutes(00).AddSeconds(00), Convert.ToDateTime(endDate).AddHours(23).AddMinutes(59).AddSeconds(59), Convert.ToString(i.BankCodeNumber));
+
+                using (var stream = System.IO.File.Open(path, FileMode.Append))
+                using (var writer = new StreamWriter(stream))
+                using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+                {
+                    //// Don't write the header again.
+                    csv.Configuration.HasHeaderRecord = true;
+                    if (header.Count > 0)
+                    {
+                        csv.Configuration.HasHeaderRecord = true;
+                        csv.WriteRecords(header);
+                    }
+
+
+                }
+                using (var stream = System.IO.File.Open(path, FileMode.Append))
+                using (var writer = new StreamWriter(stream))
+                using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+                {
+                    if (records.Count > 0)
+                    {
+                        csv.Configuration.HasHeaderRecord = true;
+                        csv.WriteRecords(records);
+
+                    }
+
+                }
+            }
+        }
+
+        [HttpPost]
         public void Email(string receiptId , string receiptTypeId , string email)
         {
             var id = Convert.ToInt32(receiptId);
@@ -1316,7 +1702,7 @@ namespace JAAReceipts.WebApp.Views
 
             foreach (var i in receipt.ReceiptItems)
             {
-                items.Add(ItemRow.Make(i.Service.Description, " ", (decimal)i.Quantity, 0, i.Service.Cost, (decimal)i.Amount));
+                items.Add(ItemRow.Make(i.Service.Description, " ", (decimal)i.Quantity, 0, i.Service.Cost, (decimal)i.Amount , (decimal)i.GCT ));
             }
             pdf.Items(items);
 
