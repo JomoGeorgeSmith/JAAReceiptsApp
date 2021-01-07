@@ -35,6 +35,7 @@ var sum = 0;
         if (ReceiptTypeID == 6 || ReceiptTypeID == 3) {
             cell.html(txtAdditionalInfo.val());
         }
+
         else {
             cell.html(txtQuantity.val());
         }
@@ -42,9 +43,6 @@ var sum = 0;
         //add Amount cell
         var serviceID = $('#serviceDropDownList').val();
         var cell = $(row.insertCell(-1));
-
-
-        //cell.html(txtAmount.val());
 
         if (serviceID == 26) {
 
@@ -83,7 +81,18 @@ var sum = 0;
 
         // Add Total Cell
         var cell = $(row.insertCell(-1));
-        cell.html(txtAmountWithGCT.val());
+
+        //AssetDisposal
+        if (serviceID == 15) {
+            // parseInt(txtAmount.val());
+            cell.html(txtAmount.val());
+
+        }
+
+        else {
+
+            cell.html(txtAmountWithGCT.val());
+        }
 
         //var amount = parseInt(txtAmount.val());
 

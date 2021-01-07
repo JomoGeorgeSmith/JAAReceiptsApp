@@ -17,7 +17,7 @@
             var obj = { ReceiptTypeID: ReceiptTypeID };
 
             //Invoice
-            //if (ReceiptTypeID == 6 || ReceiptTypeID == 40) {
+
             if (ReceiptTypeID == 6 ) {
                 $("#QuantityDiv").css("visibility", "hidden")
                 $("#QuantityDiv").css("display", "none")
@@ -38,6 +38,25 @@
                 //$("#cooperateClientDiv").css("display", "")
             }
 
+            //Wrecker
+            else if (ReceiptTypeID == 37) {
+
+                $("#ServiceDiv").css("visibility", "visible")
+                $("#ServiceDiv").css("display", "")
+
+                $("#QuantityDiv").css("visibility", "hidden")
+                $("#QuantityDiv").css("display", "none")
+
+
+                $("#AdditionalInfoDiv").css("visibility", "hidden")
+                $("#AdditionalInfoDiv").css("display", "none")
+
+               // $('#serviceDropDownList').val(158);
+
+                GetAmountForWreckerService()
+            }
+
+                //Asset Disposal 
             else if (ReceiptTypeID == 3)
             {
 
@@ -52,7 +71,11 @@
 
                 $("#lblAdditionalInfo").text("Additional Info");
                 $("#lblSecondColumn").text("Additonal Info");
+
+                $("#CustomerIDDiv").css("visibility", "hidden")
+                $("#CustomerIDDiv").css("display", "none")
             }
+
             else {
 
                 $("#ServiceDiv").css("visibility", "visible")
@@ -64,7 +87,6 @@
                 $("#AdditionalInfoDiv").css("visibility", "hidden")
                 $("#AdditionalInfoDiv").css("display", "none")
 
-
                 $("#CustomerIDDiv").css("visibility", "hidden")
                 $("#CustomerIDDiv").css("display", "none")
 
@@ -72,13 +94,6 @@
                 $("#cooperateClientDiv").css("display", "none")
             }
 
-            //if (true) {
-
-            //}
-
-            //else {
-
-            //}
 
             var currenciesDropDownList = $("#currenciesDropDownList").val();
 
@@ -324,6 +339,69 @@ function GenerateBatch() {
 
 //var serviceID = $('#serviceDropDownList').val()
 
+
+function GetAmountForWreckerService() {
+
+    //var serviceID = $('#serviceDropDownList').val();
+    var serviceID = 158
+    $("#txtQuantity").val("");
+    $("#txtAmount").val("");
+
+    var obj = { ServiceID: serviceID };
+
+    AjaxCall('/Receipts/GetAmountForService', JSON.stringify(obj), 'POST').done(function (response) {
+        if (response.length > 0) {
+            for (var i = 0; i < response.length; i++) {
+
+                var cost = response[i].Cost
+                $("#txtAmount").val(cost);
+                $("#txtQuantity").val("1");
+
+                var currencyId = response[i].CurrencyID
+
+                $("#currenciesDropDownList").val(currencyId);
+
+                var amount = cost;
+                var obj2 = { amount: amount };
+
+                if (response[i].GCT == true) {
+
+                    AjaxCall('/Receipts/CalculateGCTHttp', JSON.stringify(obj2), 'POST').done(function (response) {
+
+                        var gct = response;
+                        //$("#txtGCTAmount").val(gct);
+                        $("#txtGCTAmount").val(parseFloat(gct).toFixed(2));
+
+                        //var totalWithGCT = parseFloat(gct) + parseFloat(cost);
+                        var totalWithGCT = parseFloat( parseFloat(gct).toFixed(2) ) + parseFloat(cost);
+                        $("#txtAmountWithGCT").val(totalWithGCT);
+
+                    }).fail(function (error) {
+                        alert(error.StatusText);
+                    });
+
+                }
+
+            }
+        }
+
+    }).fail(function (error) {
+        alert(error.StatusText);
+    });
+
+    function AjaxCall(url, data, type) {
+        return $.ajax({
+            url: url,
+            type: type ? type : 'GET',
+            data: data,
+            contentType: 'application/json'
+
+        });
+    }
+
+
+}
+
 function GetAmountForService() {
 
     var serviceID = $('#serviceDropDownList').val();
@@ -358,6 +436,27 @@ function GetAmountForService() {
     }
 }
 
+
+
+
+$('#txtAmount').on("change", function (evt) {
+
+    var serviceID = $('#serviceDropDownList').val();
+
+    //Asset Disposal
+    if (serviceID == 15) {
+
+        $("#txtGCTAmount").val(0);
+
+        $("#txtAmountWithGCT").val(parseFloat($("#txtAmount").val()));
+
+        //$("#txtQuantity").val("1");
+
+    }
+
+    evt.stopImmediatePropagation();
+});
+
 $('#serviceDropDownList').on("change", function (evt) {
     var serviceID = $('#serviceDropDownList').val();
     $("#txtQuantity").val("");
@@ -388,7 +487,6 @@ $('#serviceDropDownList').on("change", function (evt) {
 
                     if (response[i].GCT == true) {
 
-
                         AjaxCall('/Receipts/CalculateGCTHttp', JSON.stringify(obj2), 'POST').done(function (response) {
 
                             var gct = response;
@@ -402,9 +500,16 @@ $('#serviceDropDownList').on("change", function (evt) {
                         });
 
                     }
+                    //if (response[i].ServiceID == 15) {
+                    //    $("#txtGCTAmount").val(0);
+
+                    //    //$("#txtAmountWithGCT").val(parseFloat($("#txtAmount").val()));
+                    //}
 
                     else {
                         $("#txtGCTAmount").val(0);
+
+                        $("#txtAmountWithGCT").val(parseFloat(cost));
                     }
 
             
@@ -436,6 +541,7 @@ $('#serviceDropDownList').on("change", function (evt) {
         }
 
     }
+
 
     if (serviceID == 1 || serviceID == 3 ) {
         $("#QuantityDiv").css("visibility", "hidden");

@@ -29,7 +29,7 @@ namespace JAAReceipts.WebApp.Migrations
                 {
                     new ReceiptTypeCategory { ReceiptTypeCategoryID = 1, Description = "Driving Academy"} ,
                     new ReceiptTypeCategory { ReceiptTypeCategoryID = 2, Description = "Motor Vehicle Fitness & Registration - JAA Member "} ,
-                    new ReceiptTypeCategory { ReceiptTypeCategoryID = 3, Description = "Asset Desposal"} ,
+                    new ReceiptTypeCategory { ReceiptTypeCategoryID = 3, Description = "Asset Disposal"} ,
                     new ReceiptTypeCategory { ReceiptTypeCategoryID = 4, Description = "Transport"},
                     new ReceiptTypeCategory { ReceiptTypeCategoryID = 5, Description = "Membership"},
                     new ReceiptTypeCategory { ReceiptTypeCategoryID = 6, Description = "Invoices"} ,
@@ -126,7 +126,7 @@ namespace JAAReceipts.WebApp.Migrations
                 new Service {ServiceID = 24 , RecieptTypeID = 5 , Description = "Silver Card Membership" , Cost = 2950.00m , CurrencyID = 1, GCT = true},
                 new Service {ServiceID = 25 , RecieptTypeID = 5 , Description = "Membership Renewal" , Cost = 0m , CurrencyID = 1, GCT = true},
                 new Service {ServiceID = 26 , RecieptTypeID = 6 , Description = "Invoice" , Cost = 0m , CurrencyID = 1},
-                new Service {ServiceID = 158 , RecieptTypeID = 37 , Description = "Wrecker Service" , Cost = 4000m , CurrencyID = 1},
+                new Service {ServiceID = 158 , RecieptTypeID = 37 , Description = "Wrecker Service" , Cost = 3478.26m , CurrencyID = 1 ,GCT = true},
                 new Service {ServiceID = 160 , RecieptTypeID = 5 , Description = "Student Membership" , Cost = 4250.00m , CurrencyID = 1, GCT = true},
                 new Service {ServiceID = 161 , RecieptTypeID = 1 , Description = "Driver Improvement - Driver Assessment" , Cost = 5825.00m , CurrencyID = 1, GCT = true},
                 new Service {ServiceID = 162 , RecieptTypeID = 1 , Description = "Learner Driver Executive Registration fee" , Cost = 500.00m , CurrencyID = 1, GCT = true},
@@ -234,7 +234,9 @@ namespace JAAReceipts.WebApp.Migrations
                 new SubAccount{SubAccountID = 3 , ReceiptTypeCategoryId = 4 , SubAccountNumber = "028-17-0" },
                 new SubAccount{SubAccountID = 4 , ReceiptTypeCategoryId = 2 , SubAccountNumber = "000-00-0" },
                 new SubAccount{SubAccountID = 5 , ReceiptTypeCategoryId = 39 , SubAccountNumber = "000-00-0" },
-                new SubAccount{SubAccountID = 6 , ReceiptTypeCategoryId = 38 , SubAccountNumber = "028-16-0" }
+                new SubAccount{SubAccountID = 6 , ReceiptTypeCategoryId = 38 , SubAccountNumber = "028-16-0" },
+                new SubAccount{SubAccountID = 7 , ReceiptTypeCategoryId = 3 , SubAccountNumber = "000-00-0" },
+                new SubAccount{SubAccountID = 8 , ReceiptTypeCategoryId = 37 , SubAccountNumber = "028-10-0" }
             };
 
             subAccount.ForEach(i => context.SubAccount.AddOrUpdate(i));
@@ -353,6 +355,8 @@ namespace JAAReceipts.WebApp.Migrations
                 new CustomerIdentification{CustomerIdentificationID = 4 , ReceiptTypeCategoryID = 4 , CUSTID = ""},
                 new CustomerIdentification{CustomerIdentificationID = 5 , ReceiptTypeCategoryID = 5 , CUSTID = "CSHMSUB"},
                 new CustomerIdentification{CustomerIdentificationID = 6 , ReceiptTypeCategoryID = 38 , CUSTID = "CSHMSUB"},
+                new CustomerIdentification{CustomerIdentificationID = 7 , ReceiptTypeCategoryID = 3 , CUSTID = ""} ,
+                new CustomerIdentification{CustomerIdentificationID = 8 , ReceiptTypeCategoryID = 37 , CUSTID = "CSHWRE"}
 
             };
 
