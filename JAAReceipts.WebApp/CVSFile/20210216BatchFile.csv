@@ -1,0 +1,5 @@
+Batch,BatchNumber,PeriodToPost,ReconciliationMode,BatchDate,BatchHandeling,ControlTotal,BankAccount,BankSubAccount
+BATCH,,202008,B,02/16/2021 00:00:00,B,9775.00,130030,001-00-0
+CATran,EntryType,AccountNumber,SubAccount,Description,ReferneceNumber,CustomerID,VendorID,TransactionDate,DebitAmount,CreditAmount,ReconciliationStatus,ClearDate
+CATran,CS,420059,028-10-0,REC#2021021610177-tuesday test 1-Platinum Card Membership,2021021610177,CSHMSUB,,02/16/2021 14:36:57,0,8500.00,,
+CATran,CS,228050,001-00-0,General Consumption Tax,2021021610177,CSHMSUB,,02/16/2021 14:36:57,0,1275.00,,

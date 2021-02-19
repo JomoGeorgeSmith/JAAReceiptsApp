@@ -317,7 +317,46 @@ function GenerateBatch() {
 
     AjaxCall('/Receipts/GenerateCSVBatchPost', JSON.stringify(obj), 'POST').done(function (response) {
 
-        alert("File generated and saved to documents");
+        //alert("File generated, click download to save document.");
+
+
+    }).fail(function (error) {
+        alert(error.StatusText);
+    });
+
+    function AjaxCall(url, data, type) {
+        return $.ajax({
+            url: url,
+            type: type ? type : 'GET',
+            data: data,
+            contentType: 'application/json',
+            success: function (returnValue) {
+            window.location = "/Receipts/DownloadFile2";
+            }
+
+        });
+    }
+
+
+}
+
+function DownloadFile() {
+
+    //var startDate = $('#txtstartDate').val();
+
+    //var endDate = $('#txtendDate').val();
+
+    //var obj = { StartDate: startDate, EndDate: endDate };
+
+      var obj = {  };
+
+    AjaxCall('/Receipts/DownloadFile', JSON.stringify(obj), 'POST').done(function (response) {
+
+        //alert("File generated and saved to documents");
+
+
+
+        
 
 
     }).fail(function (error) {
@@ -336,6 +375,8 @@ function GenerateBatch() {
 
 
 }
+
+
 
 //var serviceID = $('#serviceDropDownList').val()
 
@@ -395,6 +436,70 @@ function GetAmountForWreckerService() {
             type: type ? type : 'GET',
             data: data,
             contentType: 'application/json'
+
+        });
+    }
+
+
+}
+
+function NewDownload() {
+
+    //$.ajax({
+    //    type: "POST",
+    //    url: '@Url.Action("ExportCSV","Receipts")', //call your controller and action
+    //    contentType: "application/json; charset=utf-8",
+    //    dataType: "json",
+    //}).done(function (data) {
+    //    //console.log(data.result);
+
+    //    //get the file name for download
+    //    if (data.fileName != "") {
+    //        //use window.location.href for redirect to download action for download the file
+    //        var ref = '@Url.RouteUrl(new { Controller = "Receipts", Action = "Download" }) /? file ='+ data.fileName;
+    //        window.location.href = ref;
+    //    }
+    //});
+
+
+    var obj = {  };
+
+    AjaxCall('/Receipts/ExportCSV', JSON.stringify(obj), 'POST').done(function (response) {
+        if (response.length > 0) {
+            for (var i = 0; i < response.length; i++) {
+
+
+            }
+        }
+
+    }).done(function (data) {
+
+        //get the file name for download
+        if (data.fileName != "") {
+
+
+            //var file = data.fileName;
+
+            //var obj2 = { file: file };
+
+            //window.location.href = "/Receipts/DownloadFile";
+
+            //$('#downloadButton').html('');
+
+
+        }
+
+    });
+
+    function AjaxCall(url, data, type) {
+        return $.ajax({
+            url: url,
+            type: type ? type : 'GET',
+            data: data,
+            contentType: 'application/json',
+            success: function (returnValue) {
+                window.location = "/Receipts/DownloadFile2";
+            }
 
         });
     }
@@ -880,7 +985,10 @@ function Email() {
             url: "/Receipts/Email",
             data: JSON.stringify(obj),
             contentType: "application/json; charset=utf-8",
-            dataType: "json"
+            dataType: "json",
+            //success: function (returnValue) {
+            //    alert("Receipt Sent to " + email.toString());
+            //}
         }
 
     );

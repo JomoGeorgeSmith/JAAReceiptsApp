@@ -16,7 +16,7 @@ namespace Invoicer.Helpers
         {
             var fromAddress = new MailAddress("jomogeorgesmith@gmail.com", "From Name");
             var toAddress = new MailAddress(sendingAddress, "To Name");
-            const string fromPassword = "Tsuda5!!snes9x";
+            const string fromPassword = "";
             const string subject = "test";
             const string body = "Hey now!!";
 
@@ -59,7 +59,7 @@ namespace Invoicer.Helpers
                 SmtpServer.Port = 587;
                 //SmtpServer.Port = 25;
                 SmtpServer.UseDefaultCredentials = false;
-                SmtpServer.Credentials = new System.Net.NetworkCredential("champloobaby@gmail.com", "Tsuda5!!snes9x");
+                SmtpServer.Credentials = new System.Net.NetworkCredential("jaareceiptsja@gmail.com", "jaareceiptsja123!");
                 SmtpServer.EnableSsl = true;
 
                 SmtpServer.Send(mail);

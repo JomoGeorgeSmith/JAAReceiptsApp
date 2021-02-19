@@ -23,6 +23,11 @@ using System.Runtime.CompilerServices;
 using System.IO;
 using CsvHelper;
 using System.Globalization;
+using System.Reflection;
+using System.Drawing;
+using System.Threading;
+using System.Web;
+
 
 
 //using JAAReceipts.WebApp.Migrations;
@@ -713,9 +718,15 @@ namespace JAAReceipts.WebApp.Views
 
         public void GenerateCSVForBatchHeader()
         {
+
+            string subfoldername = "Documents";
+            string filename = "file.csv";
+            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, subfoldername, filename);
+
             var records = RetrieveBatchHeader(new DateTime(2020, 11, 15, 00, 00, 00), new DateTime(2020, 11, 15, 23, 59, 59), "130030");
 
-            using (var writer = new StreamWriter("C:\\Users\\Jomo\\Documents\\file.csv"))
+            //using (var writer = new StreamWriter("C:\\Users\\Jomo\\Documents\\file.csv"))
+            using (var writer = new StreamWriter(path))
 
             using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
             {
@@ -725,9 +736,14 @@ namespace JAAReceipts.WebApp.Views
 
         public void GenerateCSVForBatchDetails()
         {
-           var records =  RetrieveBatchDetails(new DateTime(2020, 11, 15, 00, 00, 00), new DateTime(2020, 11, 15, 23, 59, 59), "130030");
+            string subfoldername = "Documents";
+            string filename = "file.csv";
+            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, subfoldername, filename);
 
-            using (var writer = new StreamWriter("C:\\Users\\Jomo\\Documents\\file.csv"))
+            var records =  RetrieveBatchDetails(new DateTime(2020, 11, 15, 00, 00, 00), new DateTime(2020, 11, 15, 23, 59, 59), "130030");
+
+            //using (var writer = new StreamWriter("C:\\Users\\Jomo\\Documents\\file.csv"))
+            using (var writer = new StreamWriter(path))
 
             using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
             {
@@ -738,11 +754,18 @@ namespace JAAReceipts.WebApp.Views
 
         public void GenerateCSVBatch(DateTime startDate , DateTime endDate , string bankAccountNumber)
         {
+
+            string subfoldername = "Documents";
+            string filename = "file.csv";
+            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, subfoldername, filename);
+
+
             var header = RetrieveBatchHeader(startDate, endDate, bankAccountNumber);
 
             var records = RetrieveBatchDetails(startDate, endDate, bankAccountNumber);
 
-            using (var writer = new StreamWriter("C:\\Users\\Jomo\\Documents\\file.csv"))
+            //using (var writer = new StreamWriter("C:\\Users\\Jomo\\Documents\\file.csv"))
+            using (var writer = new StreamWriter(path))
 
             using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
             {
@@ -751,7 +774,8 @@ namespace JAAReceipts.WebApp.Views
             }
 
             // Append to the file.
-            using (var stream = System.IO.File.Open("C:\\Users\\Jomo\\Documents\\file.csv", FileMode.Append))
+            //using (var stream = System.IO.File.Open("C:\\Users\\Jomo\\Documents\\file.csv", FileMode.Append))
+            using (var stream = System.IO.File.Open(path, FileMode.Append))
             using (var writer = new StreamWriter(stream))
             using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
             {
@@ -764,8 +788,13 @@ namespace JAAReceipts.WebApp.Views
 
         public void GenerateCSVBatch()
         {
+            string subfoldername = "Documents";
+            string filename = "file.csv";
+            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, subfoldername, filename);
 
-            using (var stream = System.IO.File.Create("C:\\Users\\Jomo\\Documents\\file.csv") );                
+            //using (var stream = System.IO.File.Create("C:\\Users\\Jomo\\Documents\\file.csv") );    
+
+            using (var stream = System.IO.File.Create(path)) ;
 
             var accountNumbers = db.BankCode.ToList();
 
@@ -776,7 +805,8 @@ namespace JAAReceipts.WebApp.Views
 
                 var records = RetrieveBatchDetails(new DateTime(2020, 11, 15, 00, 00, 00), new DateTime(2020, 11, 15, 23, 59, 59), Convert.ToString(i.BankCodeNumber));
 
-                using (var stream = System.IO.File.Open("C:\\Users\\Jomo\\Documents\\file.csv", FileMode.Append))
+                //using (var stream = System.IO.File.Open("C:\\Users\\Jomo\\Documents\\file.csv", FileMode.Append))
+                using (var stream = System.IO.File.Open(path, FileMode.Append))
                 using (var writer = new StreamWriter(stream))
                 using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
                 {
@@ -1179,6 +1209,19 @@ namespace JAAReceipts.WebApp.Views
             return fileName;
         }
 
+        [HttpGet]
+        public string GenerateCVSFileNameAJAX()
+        {
+            var year = DateTime.Now.ToString(("yyyy"));
+            var month = DateTime.Now.ToString(("MM"));
+            var day = DateTime.Now.ToString(("dd"));
+
+            var sb = new StringBuilder();
+            sb.Append(year + month + day + "BatchFile");
+            var fileName = sb.ToString();
+            return fileName + ".csv";
+        }
+
         public string GenerateTransactionDescription (string ReceiptNumber , string Customer , string CUSTID)
         {
             var sb = new StringBuilder();
@@ -1523,63 +1566,31 @@ namespace JAAReceipts.WebApp.Views
             }
         }
 
-        //[HttpPost]
-        //public JsonResult GetCurrency(string serviceId)
-        //{
-        //    var id = int.Parse(serviceId);
-        //    var service = db.Service.Find(id);
-
-        //    return Json(service.CurrencyID, JsonRequestBehavior.AllowGet);
-
-        //}
 
 
-        //[HttpPost]
-        //public void Email()
-        //{
-
-        //    new InvoicerApi(SizeOption.A4, OrientationOption.Landscape, "£")
-        //        .TextColor("#CC0000")
-        //        .BackColor("#FFD6CC")
-        //        .Image(@"..\..\images\vodafone.jpg", 125, 27)
-        //        .Company(Address.Make("FROM", new string[] { "Vodafone Limited", "Vodafone House", "The Connection", "Newbury", "Berkshire RG14 2FN" }, "1471587", "569953277"))
-        //        .Client(Address.Make("BILLING TO", new string[] { "Isabella Marsh", "Overton Circle", "Little Welland", "Worcester", "WR## 2DJ" }))
-        //        .Items(new List<ItemRow> {
-        //            ItemRow.Make("Nexus 6", "Midnight Blue", (decimal)1, 20, (decimal)166.66, (decimal)199.99),
-        //            ItemRow.Make("24 Months (£22.50pm)", "100 minutes, Unlimited texts, 100 MB data 3G plan with 3GB of UK Wi-Fi", (decimal)1, 20, (decimal)360.00, (decimal)432.00),
-        //            ItemRow.Make("Special Offer", "Free case (blue)", (decimal)1, 0, (decimal)0, (decimal)0),
-        //        })
-        //        .Totals(new List<TotalRow> {
-        //            TotalRow.Make("Sub Total", (decimal)526.66),
-        //            TotalRow.Make("VAT @ 20%", (decimal)105.33),
-        //            TotalRow.Make("Total", (decimal)631.99, true),
-        //        })
-        //        .Details(new List<DetailRow> {
-        //            DetailRow.Make("PAYMENT INFORMATION", "Make all cheques payable to Vodafone UK Limited.", "", "If you have any questions concerning this invoice, contact our sales department at sales@vodafone.co.uk.", "", "Thank you for your business.")
-        //        })
-        //        .Footer("http://www.vodafone.co.uk")
-        //        .Save();
-
-
-        //}
 
         [HttpPost]
-        public void GenerateCSVBatchPost(string startDate , string endDate)
+        public void GenerateCSVBatchPost(string startDate, string endDate)
         {
 
             var fileName = GenerateCVSFileName();
-            var path = "C:\\Users\\Jomo\\Documents\\" + fileName + ".csv";
+            string subfoldername = "CVSFile";
+            string filename = fileName;
 
-            using (var stream = System.IO.File.Create(path));
+            string p = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, subfoldername, filename);
 
-            var accountNumbers = db.BankCode.DistinctBy(c => c.BankCodeNumber ).ToList();
+            var path = p + ".csv";
+
+            using (var stream = System.IO.File.Create(path)) ;
+
+            var accountNumbers = db.BankCode.DistinctBy(c => c.BankCodeNumber).ToList();
 
             //var list = accountNumbers.Select(x => x.BankCodeNumber).Distinct().ToList();
 
             foreach (var i in accountNumbers)
             {
 
-                var header = RetrieveBatchHeader(Convert.ToDateTime (startDate).AddHours(00).AddMinutes(00).AddSeconds(00), Convert.ToDateTime(endDate).AddHours(23).AddMinutes(59).AddSeconds(59), Convert.ToString(i.BankCodeNumber));
+                var header = RetrieveBatchHeader(Convert.ToDateTime(startDate).AddHours(00).AddMinutes(00).AddSeconds(00), Convert.ToDateTime(endDate).AddHours(23).AddMinutes(59).AddSeconds(59), Convert.ToString(i.BankCodeNumber));
 
                 var records = RetrieveBatchDetails(Convert.ToDateTime(startDate).AddHours(00).AddMinutes(00).AddSeconds(00), Convert.ToDateTime(endDate).AddHours(23).AddMinutes(59).AddSeconds(59), Convert.ToString(i.BankCodeNumber));
 
@@ -1609,7 +1620,66 @@ namespace JAAReceipts.WebApp.Views
                     }
 
                 }
+
             }
+
+            DownloadFile();
+
+        }
+
+
+
+        [HttpPost]
+        public JsonResult ExportCSV()
+        {
+            var fileName = GenerateCVSFileName();
+
+            string sub = "CVSFile";
+
+            string filename = fileName + ".csv";
+
+            string p = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, sub,  filename);
+
+            var path = p + ".csv";
+
+            //return the Excel file name
+            return Json(new { fileName = filename, errorMessage = "" });
+        }
+
+
+        public FileResult DownloadFile()
+        {
+
+            var f = GenerateCVSFileName();
+
+            string fileName = f + ".csv";
+
+            //Build the File Path.
+            string path = Server.MapPath("~/CVSFile/") + fileName;
+
+            //Read the File data into Byte Array.
+            byte[] bytes = System.IO.File.ReadAllBytes(path);
+
+            //Send the File to Download.
+            return File(bytes, "application/octet-stream", fileName);
+        }
+
+        [HttpGet]
+        public FileResult DownloadFile2()
+        {
+
+            var f = GenerateCVSFileName();
+
+            string fileName = f + ".csv";
+
+            //Build the File Path.
+            string path = Server.MapPath("~/CVSFile/") + fileName;
+
+            //Read the File data into Byte Array.
+            byte[] bytes = System.IO.File.ReadAllBytes(path);
+
+            //Send the File to Download.
+            return File(bytes, "application/octet-stream", fileName);
         }
 
         [HttpPost]
@@ -1683,8 +1753,16 @@ namespace JAAReceipts.WebApp.Views
 
         }
 
+
         public void CreatePdfNormal(Receipt receipt , string email)
         {
+            //AppDomain.CurrentDomain.BaseDirectory will give you the root folder
+            //Here you need to provide the subfoldername where your file exists
+            //You need to change this as per your design
+            string subfoldername = "images";
+            //Your fileName
+            string filename = "JAA-New-logo-copy-web-black-1.png";
+            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, subfoldername, filename);
 
             var pdf = new InvoicerApi(SizeOption.A4, OrientationOption.Landscape, "$");
             pdf.BillingDate(receipt.Date);
@@ -1701,10 +1779,16 @@ namespace JAAReceipts.WebApp.Views
                 
             };
 
+            var image =  Properties.Resource1.JAA_New_logo_copy_web_black_1;
+    
+
+           
             pdf.Company(add);
             pdf.TextColor("#000000");
             pdf.BackColor("#ffffff");
-            pdf.Image(@"C:\Users\Jomo\source\repos\JAAReceipts\JAAReceipts.WebApp\images\JAA-New-logo-copy-web-black-1.png", 125, 27);
+
+            //pdf.Image(@"C:\Users\Jomo\source\repos\JAAReceipts\JAAReceipts.WebApp\images\JAA-New-logo-copy-web-black-1.png", 125, 27);
+            pdf.Image(path, 125, 27);
             pdf.Company(Address.Make("Received From", new string[] { receipt.ReceivedFrom }, "1471587", "569953277"));
             pdf.Client(Address.Make("", new string[] { "" }));
 
@@ -1730,7 +1814,16 @@ namespace JAAReceipts.WebApp.Views
 
         public void CreatePdfInvoice(Receipt receipt, string email)
         {
-            
+
+
+            //AppDomain.CurrentDomain.BaseDirectory will give you the root folder
+            //Here you need to provide the subfoldername where your file exists
+            //You need to change this as per your design
+            string subfoldername = "images";
+            //Your fileName
+            string filename = "JAA-New-logo-copy-web-black-1.png";
+            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, subfoldername, filename);
+
             var pdf = new InvoicerApi("Invoice" ,SizeOption.A4, OrientationOption.Landscape , "$");
             pdf.BillingDate(receipt.Date);
             pdf.Reference(receipt.ReceiptNumber);
@@ -1747,7 +1840,8 @@ namespace JAAReceipts.WebApp.Views
             pdf.Company(add);
             pdf.TextColor("#000000");
             pdf.BackColor("#ffffff");
-            pdf.Image(@"C:\Users\Jomo\source\repos\JAAReceipts\JAAReceipts.WebApp\images\JAA-New-logo-copy-web-black-1.png", 125, 27);
+            //pdf.Image(@"C:\Users\Jomo\source\repos\JAAReceipts\JAAReceipts.WebApp\images\JAA-New-logo-copy-web-black-1.png", 125, 27);
+            pdf.Image(path, 125, 27);
             pdf.Company(Address.Make("Received From", new string[] { receipt.ReceivedFrom }, "1471587", "569953277"));
             pdf.Client(Address.Make("", new string[] { "" }));
 
@@ -1773,10 +1867,22 @@ namespace JAAReceipts.WebApp.Views
 
         public void CreatePdfAssetDisposal(Receipt receipt, string email)
         {
+
+
+            //AppDomain.CurrentDomain.BaseDirectory will give you the root folder
+            //Here you need to provide the subfoldername where your file exists
+            //You need to change this as per your design
+            string subfoldername = "images";
+            //Your fileName
+            string filename = "JAA-New-logo-copy-web-black-1.png";
+            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, subfoldername, filename);
+
+
             var pdf = new InvoicerApi("AssetDisposal",SizeOption.A4, OrientationOption.Landscape, "$");
             pdf.TextColor("#000000");
             pdf.BackColor("#ffffff");
-            pdf.Image(@"C:\Users\Jomo\source\repos\JAAReceipts\JAAReceipts.WebApp\images\JAA-New-logo-copy-web-black-1.png", 125, 27);
+            //pdf.Image(@"C:\Users\Jomo\source\repos\JAAReceipts\JAAReceipts.WebApp\images\JAA-New-logo-copy-web-black-1.png", 125, 27);
+            pdf.Image(path, 125, 27);
             pdf.Company(Address.Make("Received From", new string[] { receipt.ReceivedFrom }, "1471587", "569953277"));
             pdf.Client(Address.Make("", new string[] { "" }));
 
