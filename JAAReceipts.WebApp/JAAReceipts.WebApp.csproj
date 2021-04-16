@@ -255,6 +255,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\ContactController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Data\JAAReceiptsContext.cs" />
@@ -262,9 +263,29 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202010092106327_init.cs" />
-    <Compile Include="Migrations\202010092106327_init.designer.cs">
-      <DependentUpon>202010092106327_init.cs</DependentUpon>
+    <Compile Include="Migrations\202103132132373_ConditionanValidation6.cs" />
+    <Compile Include="Migrations\202103132132373_ConditionanValidation6.designer.cs">
+      <DependentUpon>202103132132373_ConditionanValidation6.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202103132135148_ConditionanValidation61.cs" />
+    <Compile Include="Migrations\202103132135148_ConditionanValidation61.designer.cs">
+      <DependentUpon>202103132135148_ConditionanValidation61.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202103132142154_ConditionanValidation62.cs" />
+    <Compile Include="Migrations\202103132142154_ConditionanValidation62.designer.cs">
+      <DependentUpon>202103132142154_ConditionanValidation62.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202103141716572_ConditionanValidation7.cs" />
+    <Compile Include="Migrations\202103141716572_ConditionanValidation7.designer.cs">
+      <DependentUpon>202103141716572_ConditionanValidation7.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202103141740417_ConditionanValidation8.cs" />
+    <Compile Include="Migrations\202103141740417_ConditionanValidation8.designer.cs">
+      <DependentUpon>202103141740417_ConditionanValidation8.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202103141947228_ConditionanValidation81.cs" />
+    <Compile Include="Migrations\202103141947228_ConditionanValidation81.designer.cs">
+      <DependentUpon>202103141947228_ConditionanValidation81.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\BankCode.cs" />
@@ -300,7 +321,9 @@
       <DependentUpon>Resource1.resx</DependentUpon>
     </Compile>
     <Compile Include="Utility\PDFHelper.cs" />
+    <Compile Include="Utility\RequiredIfAttribute.cs" />
     <Compile Include="ViewModel\BatchModel.cs" />
+    <Compile Include="ViewModel\ContactViewModel.cs" />
     <Compile Include="ViewModel\ReceiptViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -369,6 +392,7 @@
     <Content Include="Scripts\bootstrap-select.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\Contact.js" />
     <Content Include="Scripts\i18n\defaults-am_ET.js" />
     <Content Include="Scripts\i18n\defaults-am_ET.min.js" />
     <Content Include="Scripts\i18n\defaults-ar_AR.js" />
@@ -491,6 +515,24 @@
     <Content Include="Scripts\bootstrap-select.min.js.map" />
     <Content Include="Scripts\bootstrap-select.js.map" />
     <Content Include="Content\bootstrap-select.css.map" />
+    <EmbeddedResource Include="Migrations\202103132132373_ConditionanValidation6.resx">
+      <DependentUpon>202103132132373_ConditionanValidation6.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202103132135148_ConditionanValidation61.resx">
+      <DependentUpon>202103132135148_ConditionanValidation61.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202103132142154_ConditionanValidation62.resx">
+      <DependentUpon>202103132142154_ConditionanValidation62.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202103141716572_ConditionanValidation7.resx">
+      <DependentUpon>202103141716572_ConditionanValidation7.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202103141740417_ConditionanValidation8.resx">
+      <DependentUpon>202103141740417_ConditionanValidation8.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202103141947228_ConditionanValidation81.resx">
+      <DependentUpon>202103141947228_ConditionanValidation81.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resource1.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource1.Designer.cs</LastGenOutput>
@@ -501,10 +543,10 @@
     <Content Include="Scripts\jquery-3.4.1.min.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.js" />
-    <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery-ui-1.12.1.js" />
     <Content Include="Scripts\jquery-ui-1.12.1.min.js" />
     <Content Include="Scripts\jquery.datetimepicker.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -512,6 +554,8 @@
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\Receipts.JS" />
     <Content Include="Scripts\ReceiptTable.js" />
+    <Content Include="Scripts\Validation-Contact.js" />
+    <Content Include="Scripts\Validation.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -544,6 +588,8 @@
     <Content Include="Views\Test\Test.cshtml" />
     <Content Include="Views\Test\View.cshtml" />
     <Content Include="Views\Test\Index.cshtml" />
+    <Content Include="Views\Contact\Contact.cshtml" />
+    <Content Include="Views\Contact\ThankYou.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -569,11 +615,6 @@
       <Project>{e5ba227e-4afe-448a-b879-a2784b3fc97c}</Project>
       <Name>Invoicer</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\202010092106327_init.resx">
-      <DependentUpon>202010092106327_init.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

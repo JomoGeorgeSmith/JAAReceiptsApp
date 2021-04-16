@@ -7,13 +7,13 @@ namespace JAAReceipts.WebApp.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.4.4")]
-    public sealed partial class init : IMigrationMetadata
+    public sealed partial class ConditionanValidation61 : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(init));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(ConditionanValidation61));
         
         string IMigrationMetadata.Id
         {
-            get { return "202010092106327_init"; }
+            get { return "202103132135148_ConditionanValidation61"; }
         }
         
         string IMigrationMetadata.Source

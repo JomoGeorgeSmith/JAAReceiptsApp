@@ -1,0 +1,5 @@
+Batch,BatchNumber,PeriodToPost,ReconciliationMode,BatchDate,BatchHandeling,ControlTotal,BankAccount,BankSubAccount
+BATCH,,202008,B,02/19/2021 00:00:00,B,2875.00,130030,001-00-0
+CATran,EntryType,AccountNumber,SubAccount,Description,ReferneceNumber,CustomerID,VendorID,TransactionDate,DebitAmount,CreditAmount,ReconciliationStatus,ClearDate
+CATran,CS,424310,028-14-0,REC#2021021910179-Test Friday 1-Learner Driver Standard  Manual Single Lesson,2021021910179,CSHDRVA,,02/19/2021 13:35:40,0,2500.00,,
+CATran,CS,228050,001-00-0,General Consumption Tax,2021021910179,CSHDRVA,,02/19/2021 13:35:40,0,375.00,,

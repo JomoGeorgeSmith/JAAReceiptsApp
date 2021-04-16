@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JAAReceipts.WebApp", "JAARe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Invoicer", "Invoicer\Invoicer.csproj", "{E5BA227E-4AFE-448A-B879-A2784B3FC97C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAppJaa", "WebAppJaa\WebAppJaa.csproj", "{E7543D88-A031-4243-9290-B888F313B597}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{E5BA227E-4AFE-448A-B879-A2784B3FC97C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E5BA227E-4AFE-448A-B879-A2784B3FC97C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E5BA227E-4AFE-448A-B879-A2784B3FC97C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7543D88-A031-4243-9290-B888F313B597}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7543D88-A031-4243-9290-B888F313B597}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7543D88-A031-4243-9290-B888F313B597}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7543D88-A031-4243-9290-B888F313B597}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

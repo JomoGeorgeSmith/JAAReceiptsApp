@@ -10,6 +10,8 @@ namespace JAAReceipts.WebApp.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
+
+        //[Required(ErrorMessage = "You must select a payment type")]
         public int PaymentTypeID { get; set; }
 
         public string Description { get; set; }

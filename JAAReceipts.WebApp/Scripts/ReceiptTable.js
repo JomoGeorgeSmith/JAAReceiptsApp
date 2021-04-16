@@ -1,13 +1,15 @@
 ﻿//<script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
 
 var sum = 0;
-    $("body").on("click", "#btnAdd", function (evt) {
+$("body").on("click", "#btnAdd", function (evt) {
+
+    if ($("form").valid()) {
 
         var txtQuantity = $("#txtQuantity");
         var txtAmount = $("#txtAmount");
         var txtGCTAmount = $("#txtGCTAmount");
         var txtAmountWithGCT = $("#txtAmountWithGCT");
-        
+
         var txtAdditionalInfo = $("#AdditionalInfo");
         var service = $("#serviceDropDownList option:selected").text();
 
@@ -23,7 +25,7 @@ var sum = 0;
         if (ReceiptTypeID == 6) {
 
             var invoice = "Invoice: "
-            cell.html(invoice.concat( txtAdditionalInfo.val() ));
+            cell.html(invoice.concat(txtAdditionalInfo.val()));
         }
         else {
             cell.html(service);
@@ -98,13 +100,13 @@ var sum = 0;
 
         //var total = amount;
         //sum += total;
-             
+
         //$("#txtTotalAmount").val(sum);
         //$("#lblTotalLabel").val(sum.toString());
         //$("#lblTotalLabel").text(sum.toString());
         //$("#lblTotalLabel").css("visibility", "visible")
         //$("#lblTotalAmountLabel").css("visibility", "visible")
-        
+
 
         ////Add Name cell.
         //var cell = $(row.insertCell(-1));
@@ -125,16 +127,34 @@ var sum = 0;
         //Clear the TextBoxes.
         //txtName.val("");
         //txtCountry.val("");
-        
+
         evt.stopImmediatePropagation();
-        //ClearBoxes();
+    }
+  
+    //ClearForm();
+
     });
 
 
-function GetGCT() {
+function ClearForm() {
+
+    $("#txtAmount").val("");
+    $("#serviceDropDownList").val("");
+    $("#txtQuantity").val("");
+    $("#currenciesDropDownList").val("");
+    $("#txtHours").val("");
+    $("#txtKm").val("");
+    $("#categoryDropDownList").val("");
+    $("#serviceDropDownList").empty();
+    //$("#serviceDropDownList").html('');
+
+    if ($('#serviceDropDownList').val() != 26) {
+        $("#AdditionalInfo").val("");
+    }
+
+
 
 }
-
 function ClearBoxes() {
     $('#txtAmount').val("");
     $('#txtQuantity').val("");

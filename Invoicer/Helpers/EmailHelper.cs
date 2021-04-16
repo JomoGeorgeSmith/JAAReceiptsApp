@@ -71,5 +71,36 @@ namespace Invoicer.Helpers
             }
         }
 
+
+        public void SendFromContactPage(string body , string name,  string senderEmail)
+        {
+            try
+            {
+                MailMessage mail = new MailMessage();
+                SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
+                mail.From = new MailAddress("champloobaby@gmail.com");
+                mail.To.Add("champloobaby@gmail.com");
+                mail.Subject = name + " " + "Report" + " " + senderEmail;
+                mail.Body = body;
+
+                //System.Net.Mail.Attachment attachment;
+                //attachment = new System.Net.Mail.Attachment(filename);
+                //mail.Attachments.Add(attachment);
+
+                SmtpServer.Port = 587;
+                //SmtpServer.Port = 25;
+                SmtpServer.UseDefaultCredentials = false;
+                SmtpServer.Credentials = new System.Net.NetworkCredential("jaareceiptsja@gmail.com", "jaareceiptsja123!");
+                SmtpServer.EnableSsl = true;
+
+                SmtpServer.Send(mail);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+        }
+
     }
 }

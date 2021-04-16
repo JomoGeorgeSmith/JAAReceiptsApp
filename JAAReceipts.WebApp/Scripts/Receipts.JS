@@ -100,6 +100,11 @@
       
             AjaxCall('/Receipts/GetServices', JSON.stringify(obj), 'POST').done(function (response) {
                 if (response.length > 0) {
+
+                    //go here 
+
+                    //$("#serviceDropDownList").attr("disabled", "");
+                    $("#serviceDropDownList").prop("disabled", false); 
                     $('#serviceDropDownList').html('');
                     var options = '';
                     options += '<option value="Select">Select</option>';
@@ -245,66 +250,141 @@ function PushCurrencyId() {
 
 }
 
+function lockClient() {
+
+    //Disabling recipient and payment type (along with text boxes associated with said payment type.) 
+
+
+    $("#txtReceivedFrom").attr("readonly", "true");
+
+    $("#paymentTypeDropDownList").attr("readonly", "true");
+
+    //$("#serviceDropDownList").attr("readonly", "true");
+
+    if ($("#paymentTypeDropDownList").val() == 2 ||
+        $("#paymentTypeDropDownList").val() == 3 ||
+        $("#paymentTypeDropDownList").val() == 4 ||
+        $("#paymentTypeDropDownList").val() == 5 ||
+        $("#paymentTypeDropDownList").val() == 6 ||
+        $("#paymentTypeDropDownList").val() == 8) {
+
+        //$("#txtLastFourDigits").attr("disabled", "disabled");
+        $("#txtLastFourDigits").attr("readonly", "true");
+
+    }
+
+}
+
+function ClearForm() {
+
+    $("#txtReceivedFrom").val("");
+    $("#txtAmount").val("");
+    $("#serviceDropDownList").val("");
+    $("#txtQuantity").val("");
+    $("#currenciesDropDownList").val("");
+    $("#txtHours").val("");
+    $("#txtKm").val("");
+    $("#categoryDropDownList").val("");
+    //$("#serviceDropDownList").empty();
+    $("#serviceDropDownList").html('');
+
+
+    if ($('#serviceDropDownList').val() != 26) {
+        $("#AdditionalInfo").val("");
+    }
+
+
+
+    //category 
+    //service 
+    //quantity
+    //amount
+    //currency
+    //additional info (unless invoice)
+
+
+
+}
+
 function CustomAdd() {
+    event.preventDefault();
+    if ($("form").valid()) {
 
-    //var serviceID = $('#serviceDropDownList').val();
+        //enable 
+       // $('#btnSubmit').disabled == false
+        document.getElementById("btnSubmit").disabled = false;
 
-    //if (serviceID == 6) {
-    //    SupplyInvoiceAmount();
-    //}
-    //else {
-    //    SupplyServiceAmount();
-    //}
-    SupplyServiceAmount();
-    SupplyServiceId();
-    SupplyQuantity();
-    SupplyAdditionalInformation();
-    //ClearBoxes();    
+        SupplyServiceAmount();
+        SupplyServiceId();
+        SupplyQuantity();
+        SupplyAdditionalInformation();
+        lockClient();
+        //ClearForm();
+
+    }
+
+
+
+    else {
+        alert("Please check the form.");
+    }
+    
 }
 
 
+
 function CustomSubmit() {
-    $.ajax(
-        {
-            type: "POST",
-            url: "/receipts/PushServiceId",
-            data: JSON.stringify(services),
-            contentType: "application/json; charset=utf-8",
-            dataType: "json"
-        }
-    );
 
-    $.ajax(
-        {
-            type: "POST",
-            url: "/receipts/PushAmount",
-            data: JSON.stringify(amounts),
-            contentType: "application/json; charset=utf-8",
-            dataType: "json"
-        }
-    );
-    $.ajax(
-        {
-            type: "POST",
-            url: "/receipts/PushQuantities",
-            data: JSON.stringify(quantitites),
-            contentType: "application/json; charset=utf-8",
-            dataType: "json"
-        }
 
-    );
-    $.ajax(
-        {
-            type: "POST",
-            url: "/receipts/PushAdditionalInfo",
-            data: JSON.stringify(AdditionalInformations),
-            contentType: "application/json; charset=utf-8",
-            dataType: "json"
-        }
+    
+    //if ($("form").valid()) {
 
-    );
+        $.ajax(
+            {
+                type: "POST",
+                url: "/receipts/PushServiceId",
+                data: JSON.stringify(services),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json"
+            }
+        );
 
-    PushCurrencyId();
+        $.ajax(
+            {
+                type: "POST",
+                url: "/receipts/PushAmount",
+                data: JSON.stringify(amounts),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json"
+            }
+        );
+        $.ajax(
+            {
+                type: "POST",
+                url: "/receipts/PushQuantities",
+                data: JSON.stringify(quantitites),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json"
+            }
+
+        );
+        $.ajax(
+            {
+                type: "POST",
+                url: "/receipts/PushAdditionalInfo",
+                data: JSON.stringify(AdditionalInformations),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json"
+            }
+
+        );
+
+        PushCurrencyId();
+    //}
+
+    //else {
+    //    alert ("Please ensure you filled out the form properly.")
+    //}
 }
 
 function GenerateBatch() {
@@ -540,9 +620,6 @@ function GetAmountForService() {
         });
     }
 }
-
-
-
 
 $('#txtAmount').on("change", function (evt) {
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel.DataAnnotations;
+using JAAReceipts.WebApp.Utility;
 
 namespace JAAReceipts.WebApp.Models
 {
@@ -25,6 +26,7 @@ namespace JAAReceipts.WebApp.Models
         [DisplayFormat(DataFormatString = "{0:C}", ApplyFormatInEditMode = true)]
         public decimal? Amount { get; set; }
         public int? Quantity { get; set; }
+
         public string? AdditionalInformation { get; set; }
 
         public decimal GCT { get; set; }
